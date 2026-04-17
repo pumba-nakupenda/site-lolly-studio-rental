@@ -50,7 +50,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-surface text-on-surface antialiased">
+      <body className="min-h-screen bg-surface text-on-surface antialiased overflow-x-hidden">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-primary-fixed focus:text-on-primary-fixed focus:px-6 focus:py-3 focus:font-bold focus:uppercase focus:text-xs focus:tracking-widest">
           Aller au contenu principal
         </a>

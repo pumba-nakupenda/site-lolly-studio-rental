@@ -63,22 +63,20 @@ export default function AboutPage() {
       <Navbar />
       <main id="main-content" className="min-h-screen">
         {/* Hero */}
-        <section className="px-6 md:px-12 pt-24 pb-32">
-          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-12 items-end">
-            <div className="col-span-12 md:col-span-7">
+        <section className="px-6 md:px-12 pt-14 pb-20 md:pt-24 md:pb-32">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-end">
+            <div className="md:col-span-7">
               <span className="text-[0.75rem] uppercase tracking-[0.2em] text-secondary mb-4 block">
                 Notre ADN
               </span>
-              <h1 className="text-[3.5rem] md:text-[5.5rem] font-black leading-[0.9] tracking-[-0.04em] uppercase mb-8">
-                Plus qu&apos;une agence,
-                <br />
-                <span className="text-primary-fixed-dim">partenaire</span>
-                <br />
+              <h1 className="text-[1.85rem] md:text-[5.5rem] font-black leading-[1] md:leading-[0.9] tracking-[-0.02em] md:tracking-[-0.04em] uppercase mb-8">
+                Plus qu&apos;une agence,{" "}
+                <span className="text-primary-fixed-dim">partenaire</span>{" "}
                 d&apos;exception.
               </h1>
             </div>
-            <div className="col-span-12 md:col-span-5">
-              <p className="text-lg text-secondary leading-relaxed border-l border-outline-variant pl-8 py-2">
+            <div className="md:col-span-5">
+              <p className="text-base md:text-lg text-secondary leading-relaxed border-l border-outline-variant pl-6 md:pl-8 py-2">
                 Nous croyons au pouvoir des idées qui bousculent le statu quo et
                 aux images qui impriment une vision durable.
               </p>
@@ -87,16 +85,16 @@ export default function AboutPage() {
         </section>
 
         {/* Origin Story */}
-        <section className="bg-surface-container-lowest py-32 px-6 md:px-12">
-          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-16 items-center">
-            <div className="col-span-12 md:col-span-5">
+        <section className="bg-surface-container-lowest py-20 md:py-32 px-6 md:px-12">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
+            <div className="md:col-span-5">
               <img
                 className="w-full aspect-[3/4] object-cover grayscale"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzTY6QurhWPMM8U4yzIRuPUzF59WrHEmD-XLF-dM6yOxmI33fQkrAdUXE5A8JpHd4HD1hHLXCB0DbkIGS4YaF0sxGlvncKtfodfWbWhi3mw0w0aVodXhHjXww0wTIGpRwWQG-txpOIDAwuRcUzBYJ7gRR5mglsdGMLtJG44QKXpjvEQAm98dzT1DDeJaNQxoJ6UAP5HICpnKClDhKWD_zvt4JwQGXDHBc2Y9owjgB_tE2UwGbkTpXmpqLJ9jnsbmQXIcpIFa6aB80"
                 alt="Espace LOLLY"
               />
             </div>
-            <div className="col-span-12 md:col-span-7 md:col-start-6">
+            <div className="md:col-span-7 md:col-start-6">
               <span className="text-xs uppercase tracking-[0.2em] text-primary mb-6 block">
                 Genèse &amp; Vision
               </span>
@@ -129,13 +127,13 @@ export default function AboutPage() {
         </section>
 
         {/* Values */}
-        <section className="px-6 md:px-12 py-32">
+        <section className="px-6 md:px-12 py-20 md:py-32">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-20">
+            <div className="mb-12 md:mb-20">
               <span className="text-xs uppercase tracking-[0.2em] text-primary mb-4 block">
                 Notre Croyance
               </span>
-              <h2 className="text-4xl md:text-6xl font-bold tracking-tight uppercase max-w-3xl">
+              <h2 className="text-3xl md:text-6xl font-bold tracking-tight uppercase max-w-3xl leading-tight">
                 Plus qu&apos;un slogan, c&apos;est notre boussole.
               </h2>
             </div>
@@ -143,9 +141,9 @@ export default function AboutPage() {
               {values.map((v) => (
                 <div
                   key={v.title}
-                  className="p-12 border-r border-b border-outline-variant/15 group hover:bg-primary-container transition-colors duration-500"
+                  className="p-6 md:p-12 border-r border-b border-outline-variant/15 group hover:bg-primary-container transition-colors duration-500"
                 >
-                  <h3 className="text-2xl font-bold mb-4 group-hover:text-on-primary-container">
+                  <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 group-hover:text-on-primary-container">
                     {v.title}
                   </h3>
                   <p className="text-sm text-on-surface-variant group-hover:text-on-primary-container leading-relaxed">
@@ -158,25 +156,25 @@ export default function AboutPage() {
         </section>
 
         {/* Founder */}
-        <section className="bg-on-surface text-white py-32 px-6 md:px-12">
-          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-16 items-center">
-            <div className="col-span-12 md:col-span-5">
+        <section className="bg-on-surface text-white py-20 md:py-32 px-6 md:px-12">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
+            <div className="md:col-span-5">
               <div className="aspect-square bg-surface/10 flex items-center justify-center">
                 <div className="text-center">
-                  <span className="text-[8rem] font-black text-primary-fixed leading-none block">
+                  <span className="text-[5rem] md:text-[8rem] font-black text-primary-fixed leading-none block">
                     AG
                   </span>
                 </div>
               </div>
             </div>
-            <div className="col-span-12 md:col-span-7 md:col-start-6">
+            <div className="md:col-span-7 md:col-start-6">
               <h3 className="text-3xl font-black uppercase tracking-tighter mb-2">
                 Amadou Mbaye GUEYE
               </h3>
               <p className="text-primary-fixed text-sm uppercase tracking-widest mb-8">
                 Founder &amp; Chief Visionary
               </p>
-              <blockquote className="text-2xl font-light text-surface-dim leading-relaxed mb-8 border-l-2 border-primary-fixed pl-8">
+              <blockquote className="text-xl md:text-2xl font-light text-surface-dim leading-relaxed mb-8 border-l-2 border-primary-fixed pl-6 md:pl-8">
                 &ldquo;Notre héritage sera l&apos;autonomie des talents que nous
                 formons.&rdquo;
               </blockquote>
@@ -190,13 +188,13 @@ export default function AboutPage() {
         </section>
 
         {/* Ecosystem */}
-        <section className="py-32 px-6 md:px-12">
+        <section className="py-20 md:py-32 px-6 md:px-12">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-20">
+            <div className="mb-12 md:mb-20">
               <span className="text-xs uppercase tracking-[0.2em] text-primary mb-4 block">
                 Notre Écosystème
               </span>
-              <h2 className="text-4xl md:text-6xl font-bold tracking-tight uppercase">
+              <h2 className="text-3xl md:text-6xl font-bold tracking-tight uppercase leading-tight">
                 Capacités Intégrales
               </h2>
             </div>
@@ -204,7 +202,7 @@ export default function AboutPage() {
               {ecosystem.map((e, idx) => (
                 <div
                   key={e.title}
-                  className={`p-10 border border-outline-variant/15 hover:border-primary-fixed transition-colors ${
+                  className={`p-6 md:p-10 border border-outline-variant/15 hover:border-primary-fixed transition-colors ${
                     idx === 0 ? "md:col-span-7" : "md:col-span-5"
                   } ${idx === 2 ? "md:col-span-12" : ""}`}
                 >
@@ -234,12 +232,12 @@ export default function AboutPage() {
         </section>
 
         {/* Vision 2030 CTA */}
-        <section className="bg-primary-fixed py-32 px-6 md:px-12 text-center">
+        <section className="bg-primary-fixed py-20 md:py-32 px-6 md:px-12 text-center">
           <div className="max-w-4xl mx-auto">
             <span className="text-xs font-bold tracking-[0.3em] uppercase text-on-primary-fixed/60 mb-4 block">
               Horizon 2030
             </span>
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-on-primary-fixed mb-8 leading-tight">
+            <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tighter text-on-primary-fixed mb-8 leading-tight">
               Bâtir l&apos;élite créative du continent.
             </h2>
             <p className="text-lg text-on-primary-fixed/80 mb-12 max-w-2xl mx-auto">

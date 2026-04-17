@@ -98,8 +98,8 @@ function ContactPageInner() {
         </section>
 
         {/* Form & Info Grid */}
-        <section className="px-4 md:px-12 pb-10 md:pb-32">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24">
+        <section className="px-4 md:px-12 pb-20 md:pb-32">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
             {/* Inquiry Form */}
             <div className="lg:col-span-7 bg-surface-container-lowest p-6 md:p-12 shadow-[0px_24px_48px_-12px_rgba(12,15,15,0.04)]">
               <h2 className="text-xl md:text-2xl font-bold mb-8 md:mb-12 uppercase tracking-tighter">
@@ -299,7 +299,7 @@ function ContactPageInner() {
                 <p className="text-xs uppercase tracking-widest text-primary font-bold mb-4">
                   Suivez-nous &mdash; @lolly_agency
                 </p>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex gap-4">
                   {[
                     {
                       label: "LinkedIn",
@@ -355,9 +355,9 @@ function ContactPageInner() {
         </section>
 
         {/* Map Section */}
-        <section className="px-4 md:px-12 pb-12 md:pb-32">
+        <section className="px-4 md:px-12 pb-20 md:pb-32">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-0">
-            <div className="md:col-span-5 bg-on-surface text-surface p-6 md:p-12 flex flex-col justify-end min-h-[180px] md:min-h-[300px]">
+            <div className="md:col-span-5 bg-on-surface text-surface p-8 md:p-12 flex flex-col justify-end min-h-[240px] md:min-h-[300px]">
               <h4 className="text-xl md:text-2xl font-black uppercase tracking-tighter mb-4">
                 LOLLY SAS
               </h4>
@@ -368,7 +368,7 @@ function ContactPageInner() {
                 Si&egrave;ge Social
               </p>
             </div>
-            <div className="md:col-span-7 h-[220px] md:h-[400px] bg-surface-container">
+            <div className="md:col-span-7 h-[300px] md:h-[400px]">
               <iframe
                 src="https://maps.google.com/maps?ll=14.687817,-17.455592&z=15&t=m&hl=fr&gl=SN&output=embed"
                 className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
