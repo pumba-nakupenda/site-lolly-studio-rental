@@ -75,28 +75,45 @@ export default async function StudioPage() {
             {/* Bloc tagline — 5 cols, golden ratio right */}
             <div className="md:col-span-5 md:row-span-2 md:row-start-1 md:col-start-8 bg-on-surface flex flex-col justify-between gap-5 p-8 md:p-10 min-h-0 overflow-hidden">
               <div>
-                <span className="text-[0.6rem] uppercase tracking-[0.3em] text-primary-fixed font-bold block mb-3">
+                <span className="text-[0.65rem] uppercase tracking-[0.3em] text-primary-fixed font-bold block mb-3">
                   Agence de Conseil en Communication
                 </span>
-                <h1 className="text-xl md:text-[1.35rem] font-black text-white leading-[1.2] tracking-tight">
+                <h1 className="text-2xl md:text-[1.65rem] font-black text-white leading-[1.15] tracking-tight">
                   Des mots qui touchent,{" "}
                   <span className="text-primary-fixed">des images</span> qui
                   marquent.
                 </h1>
-                <p className="mt-5 text-sm md:text-[0.95rem] text-surface-variant leading-relaxed">
+                <p className="mt-5 text-base md:text-[1.05rem] text-surface-variant leading-relaxed">
                   Basés à Dakar, nous accompagnons les marques ambitieuses
                   d&apos;Afrique de l&apos;Ouest sur toute la chaîne de valeur :
                   stratégie 360, branding, production audiovisuelle, community
                   management et formation.
                 </p>
-                <p className="mt-3 text-sm md:text-[0.95rem] text-white/80 leading-relaxed">
-                  12 ans d&apos;expérience, 150+ projets livrés et une obsession
+                <p className="mt-3 text-base md:text-[1.05rem] text-white/85 leading-relaxed">
+                  12 ans d&apos;expérience, 150+ projets livrés, une obsession
                   unique — transformer votre prise de parole en{" "}
                   <span className="text-primary-fixed font-bold">
                     levier de croissance mesurable
                   </span>
                   .
                 </p>
+                <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3">
+                  {[
+                    { k: "Exigence", v: "Zéro compromis sur l'exécution" },
+                    { k: "Stratégie", v: "La data avant la créa" },
+                    { k: "Proximité", v: "Un interlocuteur unique" },
+                    { k: "Impact", v: "Des KPIs, pas du vent" },
+                  ].map((val) => (
+                    <li key={val.k} className="border-l-2 border-primary-fixed pl-3">
+                      <p className="text-[0.7rem] uppercase tracking-widest text-primary-fixed font-black">
+                        {val.k}
+                      </p>
+                      <p className="text-xs md:text-sm text-white/75 leading-snug mt-0.5">
+                        {val.v}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
               </div>
               <Link href="/studio/projets" className="inline-flex items-center group/cta">
                 <span className="text-sm font-black uppercase tracking-widest text-white border-b-2 border-primary-fixed pb-1">
