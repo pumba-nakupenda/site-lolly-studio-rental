@@ -31,7 +31,7 @@ export default async function StudioPage() {
     { data: services },
     { data: team },
   ] = await Promise.all([
-    supabase.from("portfolio").select("*").order("created_at", { ascending: false }).limit(4),
+    supabase.from("portfolio").select("*").order("created_at", { ascending: false }).limit(3),
     supabase.from("partners").select("name, logo").order("created_at"),
     supabase.from("testimonials").select("*"),
     supabase.from("services").select("*").order("order_id"),
@@ -53,13 +53,13 @@ export default async function StudioPage() {
       <main id="main-content" className="min-h-screen">
         {/* ═══ PORTFOLIO — Golden ratio grid ═══ */}
         <section className="px-4 md:px-6 pt-6 pb-3">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 md:grid-rows-3 gap-3 md:h-[calc(100svh-120px)]">
 
             {/* Row 1 — 7/5 : projet dominant + tagline */}
             {firstProject && (
-              <Link href={`/studio/projets/${firstProject.slug}`} className="md:col-span-7 md:row-span-2 group relative overflow-hidden">
+              <Link href={`/studio/projets/${firstProject.slug}`} className="md:col-span-7 md:row-span-2 md:row-start-1 md:col-start-1 group relative overflow-hidden">
                 <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[4/3] md:aspect-[5/8]"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[4/3] md:aspect-auto"
                   src={firstProject.main_image || undefined}
                   alt={firstProject.title}
                 />
@@ -73,18 +73,32 @@ export default async function StudioPage() {
             )}
 
             {/* Bloc tagline — 5 cols, golden ratio right */}
-            <div className="md:col-span-5 bg-on-surface flex flex-col justify-between p-10 md:p-12">
+            <div className="md:col-span-5 md:row-span-2 md:row-start-1 md:col-start-8 bg-on-surface flex flex-col justify-between gap-5 p-8 md:p-10 min-h-0 overflow-hidden">
               <div>
-                <span className="text-[0.6rem] uppercase tracking-[0.3em] text-primary-fixed font-bold block mb-6">
+                <span className="text-[0.6rem] uppercase tracking-[0.3em] text-primary-fixed font-bold block mb-3">
                   Agence de Conseil en Communication
                 </span>
-                <h1 className="text-2xl md:text-[2.2rem] font-black text-white leading-[1.15] tracking-tight">
+                <h1 className="text-xl md:text-[1.35rem] font-black text-white leading-[1.2] tracking-tight">
                   Des mots qui touchent,{" "}
                   <span className="text-primary-fixed">des images</span> qui
                   marquent.
                 </h1>
+                <p className="mt-5 text-sm md:text-[0.95rem] text-surface-variant leading-relaxed">
+                  Basés à Dakar, nous accompagnons les marques ambitieuses
+                  d&apos;Afrique de l&apos;Ouest sur toute la chaîne de valeur :
+                  stratégie 360, branding, production audiovisuelle, community
+                  management et formation.
+                </p>
+                <p className="mt-3 text-sm md:text-[0.95rem] text-white/80 leading-relaxed">
+                  12 ans d&apos;expérience, 150+ projets livrés et une obsession
+                  unique — transformer votre prise de parole en{" "}
+                  <span className="text-primary-fixed font-bold">
+                    levier de croissance mesurable
+                  </span>
+                  .
+                </p>
               </div>
-              <Link href="/studio/projets" className="inline-flex items-center mt-10 group/cta">
+              <Link href="/studio/projets" className="inline-flex items-center group/cta">
                 <span className="text-sm font-black uppercase tracking-widest text-white border-b-2 border-primary-fixed pb-1">
                   Voir tous les projets
                 </span>
@@ -96,9 +110,9 @@ export default async function StudioPage() {
 
             {/* Remaining projects */}
             {remainingProjects[0] && (
-              <Link href={`/studio/projets/${remainingProjects[0].slug}`} className="md:col-span-5 group relative overflow-hidden">
+              <Link href={`/studio/projets/${remainingProjects[0].slug}`} className="md:col-span-5 md:col-start-1 md:row-start-3 group relative overflow-hidden">
                 <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[8/5]"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[8/5] md:aspect-auto"
                   src={remainingProjects[0].main_image || undefined}
                   alt={remainingProjects[0].title}
                 />
@@ -111,11 +125,11 @@ export default async function StudioPage() {
               </Link>
             )}
 
-            {/* Row 2 — 5/7 inversé */}
+            {/* Row 3 — projet secondaire */}
             {remainingProjects[1] && (
-              <Link href={`/studio/projets/${remainingProjects[1].slug}`} className="md:col-span-5 group relative overflow-hidden">
+              <Link href={`/studio/projets/${remainingProjects[1].slug}`} className="md:col-span-7 md:col-start-6 md:row-start-3 group relative overflow-hidden">
                 <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[5/8]"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[5/8] md:aspect-auto"
                   src={remainingProjects[1].main_image || undefined}
                   alt={remainingProjects[1].title}
                 />
@@ -128,21 +142,6 @@ export default async function StudioPage() {
               </Link>
             )}
 
-            {remainingProjects[2] && (
-              <Link href={`/studio/projets/${remainingProjects[2].slug}`} className="md:col-span-7 group relative overflow-hidden">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[8/5]"
-                  src={remainingProjects[2].main_image || undefined}
-                  alt={remainingProjects[2].title}
-                />
-                <div className="absolute inset-0 bg-on-surface/0 group-hover:bg-on-surface/70 transition-all duration-500 flex flex-col justify-end p-8">
-                  <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                    <span className="text-[0.6rem] uppercase tracking-widest text-primary-fixed font-bold mb-1 block">{remainingProjects[2].category}</span>
-                    <h3 className="text-xl font-bold text-white uppercase tracking-tight">{remainingProjects[2].title}</h3>
-                  </div>
-                </div>
-              </Link>
-            )}
           </div>
         </section>
 
