@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Synology Drive sync conflict files
+*_DiskStation_*_Conflict.*
+*_DownloadConflict*
