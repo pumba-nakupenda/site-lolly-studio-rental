@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
@@ -54,7 +55,7 @@ export default async function ProjetsPage() {
             <FilterableGrid
               categories={categories}
               items={items.map((p) => ({ category: p.category }))}
-              className="grid grid-cols-1 md:grid-cols-12 gap-3"
+              className="grid grid-cols-1 md:grid-cols-12 md:auto-rows-[18rem] gap-3"
             >
               {items.map((p, index) => {
                 const layout = {
@@ -65,16 +66,19 @@ export default async function ProjetsPage() {
                   <Link
                     key={p.slug}
                     href={`/studio/projets/${p.slug}`}
-                    className={`${layout.span} group relative overflow-hidden bg-surface-container-lowest`}
+                    className={`${layout.span} ${layout.ratio} md:aspect-auto md:h-full group relative overflow-hidden bg-surface-container-lowest`}
                   >
                     {p.main_image ? (
-                      <img
-                        className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ${layout.ratio}`}
+                      <Image
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
                         src={p.main_image}
                         alt={p.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px"
+                        priority={index < 2}
                       />
                     ) : (
-                      <div className={`w-full bg-surface-container flex items-center justify-center ${layout.ratio}`}>
+                      <div className="w-full h-full bg-surface-container flex items-center justify-center">
                         <span className="text-2xl font-black text-outline-variant/20">{p.title?.charAt(0)}</span>
                       </div>
                     )}

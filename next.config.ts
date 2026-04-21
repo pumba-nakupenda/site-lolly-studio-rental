@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+import os from "node:os";
 
 const nextConfig: NextConfig = {
+  distDir: path.join(os.homedir(), "Library/Caches/site-lolly/.next"),
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    deviceSizes: [640, 768, 1024, 1280, 1536, 1920],
+    imageSizes: [96, 128, 256, 384, 512, 768],
     remotePatterns: [
       { protocol: "https", hostname: "mrycrcktcetlffxdpvvf.supabase.co" },
       { protocol: "https", hostname: "cdn.sanity.io" },

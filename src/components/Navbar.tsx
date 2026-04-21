@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logo from "./Logo";
 
 const mainLinks = [
@@ -43,6 +43,32 @@ export default function Navbar() {
 
   const isStudioActive = pathname.startsWith("/studio");
   const breadcrumbs = getBreadcrumbs(pathname);
+
+  // ESC key closes menus
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        setStudioOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false);
+    setStudioOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll while mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <nav className="w-full top-0 left-0 sticky z-50 bg-surface">
@@ -178,9 +204,19 @@ export default function Navbar() {
         </div>
       )}
 
+      {/* Mobile menu overlay — click to close */}
+      <button
+        aria-hidden={!open}
+        tabIndex={-1}
+        onClick={() => setOpen(false)}
+        className={`md:hidden fixed inset-x-0 bottom-0 top-[88px] bg-on-surface/30 backdrop-blur-sm transition-opacity duration-300 ${
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      />
+
       {/* Mobile menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 bg-surface border-t border-outline-variant/15 ${
+        className={`md:hidden overflow-hidden transition-all duration-300 bg-surface border-t border-outline-variant/15 relative ${
           open ? "max-h-[500px]" : "max-h-0"
         }`}
       >

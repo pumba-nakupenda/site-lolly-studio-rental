@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
 import { createStaticClient } from "@/lib/supabase/static";
 import VideoPlayer from "@/components/VideoPlayer";
+import StickyBackToProjects from "@/components/StickyBackToProjects";
 
 interface ContentBlock {
   type: "text" | "image_grid" | "full_image" | "video" | "quote";
@@ -63,19 +65,36 @@ export default async function ProjectDetailPage({
 
   if (!project) notFound();
 
-  // Fetch all slugs for prev/next navigation
-  const { data: allProjects } = await supabase
+  // Related projects — same category, excluding current, up to 4
+  const { data: categoryMatches } = await supabase
     .from("portfolio")
-    .select("slug, title")
-    .order("created_at", { ascending: false });
+    .select("slug, title, category, main_image")
+    .eq("category", project.category)
+    .neq("slug", slug)
+    .order("grid_order")
+    .limit(4);
 
-  const list = allProjects ?? [];
-  const currentIndex = list.findIndex((p) => p.slug === slug);
-  const prevProject = list[(currentIndex - 1 + list.length) % list.length];
-  const nextProject = list[(currentIndex + 1) % list.length];
+  // Fallback: if fewer than 3 category-matches, top up with latest projects
+  let related = categoryMatches ?? [];
+  if (related.length < 3) {
+    const { data: fallback } = await supabase
+      .from("portfolio")
+      .select("slug, title, category, main_image")
+      .neq("slug", slug)
+      .not("slug", "in", `(${related.map((p) => `"${p.slug}"`).join(",") || "null"})`)
+      .order("grid_order")
+      .limit(4 - related.length);
+    related = [...related, ...(fallback ?? [])];
+  }
 
   const gallery: string[] = project.gallery ?? [];
   const contentBlocks: ContentBlock[] = project.content_blocks ?? [];
+
+  // Pre-filled WhatsApp text referencing this specific project
+  const whatsappText = encodeURIComponent(
+    `Bonjour LOLLY Agency, j'ai vu votre projet "${project.title}" — je souhaiterais discuter d'un projet similaire.`
+  );
+  const whatsappUrl = `https://wa.me/+221772354747?text=${whatsappText}`;
 
   return (
     <>
@@ -114,11 +133,16 @@ export default async function ProjectDetailPage({
         {/* Image principale */}
         {project.main_image && (
           <section className="px-4 md:px-6 pb-3">
-            <img
-              className="w-full object-cover aspect-[16/9]"
-              src={project.main_image}
-              alt={project.title}
-            />
+            <div className="relative w-full aspect-[16/9]">
+              <Image
+                className="object-cover"
+                src={project.main_image}
+                alt={project.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1920px) 96vw, 1920px"
+                priority
+              />
+            </div>
           </section>
         )}
 
@@ -154,11 +178,21 @@ export default async function ProjectDetailPage({
                     }`}>
                       {(block.images ?? []).map((img: string, j: number) => (
                         <div key={j}>
-                          <img
-                            className="w-full object-cover aspect-[4/3]"
-                            src={img}
-                            alt={`${project.title} — ${j + 1}`}
-                          />
+                          <div className="relative w-full aspect-[4/3]">
+                            <Image
+                              className="object-cover"
+                              src={img}
+                              alt={`${project.title} — ${j + 1}`}
+                              fill
+                              sizes={
+                                block.columns === 3
+                                  ? "(max-width: 768px) 100vw, 33vw"
+                                  : block.columns === 1
+                                  ? "(max-width: 768px) 100vw, 1024px"
+                                  : "(max-width: 768px) 100vw, 50vw"
+                              }
+                            />
+                          </div>
                           {block.captions?.[j] && (
                             <p className="text-xs text-secondary mt-2 px-1">
                               {block.captions[j]}
@@ -173,11 +207,17 @@ export default async function ProjectDetailPage({
               case "full_image":
                 return (
                   <section key={i} className="px-4 md:px-6 py-3">
-                    <img
-                      className="w-full object-cover"
-                      src={block.url}
-                      alt={block.caption || project.title}
-                    />
+                    {block.url && (
+                      <div className="relative w-full aspect-[16/9]">
+                        <Image
+                          className="object-cover"
+                          src={block.url}
+                          alt={block.caption || project.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1920px) 96vw, 1920px"
+                        />
+                      </div>
+                    )}
                     {block.caption && (
                       <p className="text-xs text-secondary mt-2 px-2">
                         {block.caption}
@@ -272,7 +312,15 @@ export default async function ProjectDetailPage({
               <section className="px-4 md:px-6 pb-3">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                   {gallery.map((img, j) => (
-                    <img key={j} className={`w-full object-cover aspect-[4/3] ${j % 2 === 0 ? "md:col-span-7" : "md:col-span-5"}`} src={img} alt={`${project.title} — ${j + 1}`} />
+                    <div key={j} className={`relative w-full aspect-[4/3] ${j % 2 === 0 ? "md:col-span-7" : "md:col-span-5"}`}>
+                      <Image
+                        className="object-cover"
+                        src={img}
+                        alt={`${project.title} — ${j + 1}`}
+                        fill
+                        sizes={j % 2 === 0 ? "(max-width: 768px) 100vw, 58vw" : "(max-width: 768px) 100vw, 42vw"}
+                      />
+                    </div>
                   ))}
                 </div>
               </section>
@@ -312,33 +360,66 @@ export default async function ProjectDetailPage({
           </div>
         </section>
 
-        {/* Navigation prev/next */}
-        <section className="border-t border-outline-variant/15">
-          <div className="grid grid-cols-2">
-            <Link
-              href={`/studio/projets/${prevProject.slug}`}
-              className="group p-8 md:p-12 border-r border-outline-variant/15 hover:bg-surface-container-lowest transition-colors"
-            >
-              <span className="text-[0.65rem] uppercase tracking-widest text-secondary block mb-2">
-                ← Précédent
-              </span>
-              <span className="text-lg font-bold uppercase tracking-tight group-hover:text-primary transition-colors">
-                {prevProject.title}
-              </span>
-            </Link>
-            <Link
-              href={`/studio/projets/${nextProject.slug}`}
-              className="group p-8 md:p-12 text-right hover:bg-surface-container-lowest transition-colors"
-            >
-              <span className="text-[0.65rem] uppercase tracking-widest text-secondary block mb-2">
-                Suivant →
-              </span>
-              <span className="text-lg font-bold uppercase tracking-tight group-hover:text-primary transition-colors">
-                {nextProject.title}
-              </span>
-            </Link>
-          </div>
-        </section>
+        {/* Projets similaires — remplace le linéaire prev/next */}
+        {related.length > 0 && (
+          <section className="border-t border-outline-variant/15 px-6 md:px-12 py-16">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex justify-between items-end mb-8">
+                <div>
+                  <span className="text-[0.6rem] uppercase tracking-widest text-primary font-bold mb-2 block">
+                    À découvrir aussi
+                  </span>
+                  <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+                    {categoryMatches && categoryMatches.length > 0
+                      ? `Autres projets ${project.category}`
+                      : "Autres projets"}
+                  </h2>
+                </div>
+                <Link
+                  href="/studio/projets"
+                  className="text-[0.65rem] uppercase tracking-widest text-secondary hover:text-primary transition-colors font-bold"
+                >
+                  Tous les projets →
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {related.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/studio/projets/${p.slug}`}
+                    className="group relative aspect-[4/3] overflow-hidden bg-surface-container-lowest"
+                  >
+                    {p.main_image ? (
+                      <Image
+                        src={p.main_image}
+                        alt={p.title}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-2xl font-black text-outline-variant/20">
+                          {p.title?.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-on-surface/0 group-hover:bg-on-surface/70 transition-all duration-300 flex flex-col justify-end p-4">
+                      <div className="translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                        <span className="text-[0.55rem] uppercase tracking-widest text-primary-fixed font-bold block">
+                          {p.category}
+                        </span>
+                        <h3 className="text-sm font-bold text-white uppercase tracking-tight">
+                          {p.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* CTA */}
         <section className="bg-on-surface text-white px-6 md:px-12 py-24 text-center">
@@ -346,15 +427,18 @@ export default async function ProjectDetailPage({
             <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter mb-6">
               Un projet similaire en tête ?
             </h2>
+            <p className="text-surface-dim text-sm uppercase tracking-widest mb-8">
+              Inspiré par {project.title} ?
+            </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/contact"
+                href={`/contact?message=${encodeURIComponent(`Bonjour, j'ai découvert votre projet "${project.title}" sur votre portfolio et je souhaiterais discuter d'un projet similaire.`)}`}
                 className="bg-primary-fixed text-on-primary-fixed font-black uppercase px-10 py-5 text-sm tracking-widest hover:bg-primary-fixed-dim transition-all"
               >
                 Parlons-en
               </Link>
               <a
-                href="https://wa.me/+221772354747?text=Bonjour%20LOLLY%20Agency%2C%20je%20souhaiterais%20en%20savoir%20plus%20sur%20vos%20services."
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="border border-white text-white font-black uppercase px-10 py-5 text-sm tracking-widest hover:bg-white hover:text-on-surface transition-all"
@@ -365,6 +449,7 @@ export default async function ProjectDetailPage({
           </div>
         </section>
       </main>
+      <StickyBackToProjects />
       <Footer />
     </>
   );

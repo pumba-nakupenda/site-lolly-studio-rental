@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
@@ -19,9 +20,12 @@ const categories = [
   "Tout",
   "Cinéma Digital",
   "Optiques",
+  "Audio",
+  "Drone",
+  "Post-Production",
+  "Streaming",
   "Éclairage",
   "Stabilisation",
-  "Audio",
 ];
 
 export default async function RentalPage() {
@@ -81,12 +85,14 @@ export default async function RentalPage() {
                 {studioList.map((studio) => (
                   <div key={studio.id} className="bg-white/5 border border-white/10 overflow-hidden group hover:border-primary-fixed/50 transition-colors flex flex-col">
                     {/* Image principale */}
-                    <div className="aspect-[16/9] overflow-hidden">
+                    <div className="relative aspect-[16/9] overflow-hidden">
                       {studio.image ? (
-                        <img
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                          src={studio.image || undefined}
+                        <Image
+                          className="object-cover group-hover:scale-105 transition-transform duration-700"
+                          src={studio.image}
                           alt={studio.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
                         />
                       ) : (
                         <div className="w-full h-full bg-white/5 flex items-center justify-center">
@@ -98,8 +104,8 @@ export default async function RentalPage() {
                     {studio.gallery && studio.gallery.length > 0 && (
                       <div className="grid grid-cols-3 gap-0.5">
                         {studio.gallery.slice(0, 3).map((img: string, i: number) => (
-                          <div key={i} className="aspect-[4/3] overflow-hidden">
-                            <img src={img} alt={`${studio.name} — ${i + 1}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+                          <div key={i} className="relative aspect-[4/3] overflow-hidden">
+                            <Image src={img} alt={`${studio.name} — ${i + 1}`} fill sizes="(max-width: 768px) 33vw, 11vw" className="object-cover hover:scale-110 transition-transform duration-500" />
                           </div>
                         ))}
                       </div>
@@ -171,10 +177,12 @@ export default async function RentalPage() {
                   {/* Image — cliquable */}
                   <Link href={p.slug ? `/rental/${p.slug}` : "#"} className="block aspect-square bg-[#f0f0f0] overflow-hidden relative">
                     {p.image ? (
-                      <img
-                        className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+                      <Image
+                        className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
                         src={p.image}
                         alt={p.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
@@ -234,11 +242,15 @@ export default async function RentalPage() {
               <div className="absolute -top-12 -left-12 text-[8rem] md:text-[12rem] font-black text-surface opacity-5 select-none pointer-events-none hidden md:block">
                 TECH
               </div>
-              <img
-                className="w-full h-[300px] md:h-[500px] object-cover grayscale brightness-90"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDs5NVs1P2UtHcHHDTX0zS3USG0VjzndbvJhicHQf9RAgvDj4pX2v6miI-757AiyA_uWLpLjqXRyEqKudeq8B2M8OIeA8pUBRoT5K1eZdCKnU0vgL4WSMQM2I__LckSZz0yhOAwbBfepqLWhxsSIf3ALh7v_n1EeadusnWZLVOKMbp29zrm4FY80McEvnMKjqZ-EObblpqTElK7eFx463ukaoQ_0dGsRiESALFzmL33yGB5ZjerOu0iyLBtAz7BqK6SHhDBQlcnJU"
-                alt="Studio technique"
-              />
+              <div className="relative w-full h-[300px] md:h-[500px]">
+                <Image
+                  className="object-cover grayscale brightness-90"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDs5NVs1P2UtHcHHDTX0zS3USG0VjzndbvJhicHQf9RAgvDj4pX2v6miI-757AiyA_uWLpLjqXRyEqKudeq8B2M8OIeA8pUBRoT5K1eZdCKnU0vgL4WSMQM2I__LckSZz0yhOAwbBfepqLWhxsSIf3ALh7v_n1EeadusnWZLVOKMbp29zrm4FY80McEvnMKjqZ-EObblpqTElK7eFx463ukaoQ_0dGsRiESALFzmL33yGB5ZjerOu0iyLBtAz7BqK6SHhDBQlcnJU"
+                  alt="Studio technique"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                />
+              </div>
             </div>
             <div className="lg:col-span-5">
               <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-8 leading-tight">
@@ -274,6 +286,92 @@ export default async function RentalPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ═══ CONDITIONS DE LOCATION ═══ */}
+        <section className="px-6 md:px-12 py-24 bg-surface">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-12 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+              <div className="md:col-span-7">
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4 block">
+                  Conditions
+                </span>
+                <h2 className="text-3xl md:text-4xl font-black tracking-tighter uppercase">
+                  Comment on loue
+                </h2>
+              </div>
+              <p className="md:col-span-5 text-sm text-secondary leading-relaxed">
+                Tout est sur devis — remises dégressives dès 3 jours, forfaits
+                week-end et semaine. Nos équipes peuvent aussi opérer le
+                matériel pour vous sur demande.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 border-l border-t border-outline-variant/15">
+              {[
+                {
+                  n: "01",
+                  title: "Réservation",
+                  desc: "Minimum 48h à l'avance. Acompte de 30% à la réservation, solde avant remise du matériel.",
+                },
+                {
+                  n: "02",
+                  title: "Pièces requises",
+                  desc: "CNI + justificatif de domicile + contrat de tournage. Entreprises : RCCM + NINEA.",
+                },
+                {
+                  n: "03",
+                  title: "Caution",
+                  desc: "Caution bancaire ou chèque de garantie proportionnel à la valeur du matériel loué.",
+                },
+                {
+                  n: "04",
+                  title: "Assurance",
+                  desc: "Responsabilité civile obligatoire. Une attestation d'assurance tournage est demandée pour le matériel premium.",
+                },
+                {
+                  n: "05",
+                  title: "Retour & État",
+                  desc: "Inventaire contradictoire au départ et au retour. Tout dommage ou accessoire manquant est facturé.",
+                },
+                {
+                  n: "06",
+                  title: "Territoire",
+                  desc: "Dakar et région. Tournages hors-zone et export UEMOA sur étude : per-diem et logistique chiffrés à part.",
+                },
+                {
+                  n: "07",
+                  title: "Accessoires",
+                  desc: "Trépieds, matte box, filtres ND, moniteurs, HF, câblerie, batteries supplémentaires — fournis avec le kit ou à la demande.",
+                },
+                {
+                  n: "08",
+                  title: "Opérateur",
+                  desc: "DOP, cadreurs, preneurs de son et pilotes drone LADOTA disponibles — facturés séparément à la journée.",
+                },
+              ].map((c) => (
+                <div
+                  key={c.n}
+                  className="p-8 border-r border-b border-outline-variant/15 group hover:bg-primary-container/40 transition-colors duration-500"
+                >
+                  <span className="text-3xl font-black text-on-surface/10 group-hover:text-on-primary-container/30 mb-3 block">
+                    {c.n}
+                  </span>
+                  <h4 className="text-sm font-bold uppercase tracking-widest mb-2 group-hover:text-on-primary-container">
+                    {c.title}
+                  </h4>
+                  <p className="text-xs text-on-surface-variant leading-relaxed group-hover:text-on-primary-container">
+                    {c.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-8 text-[0.65rem] uppercase tracking-widest text-secondary text-center">
+              Les conditions complètes sont annexées au devis et au contrat de
+              location.
+            </p>
           </div>
         </section>
 

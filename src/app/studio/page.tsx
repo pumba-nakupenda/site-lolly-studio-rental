@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
@@ -53,16 +54,21 @@ export default async function StudioPage() {
       <main id="main-content" className="min-h-screen">
         {/* ═══ PORTFOLIO — Golden ratio grid ═══ */}
         <section className="px-4 md:px-6 pt-6 pb-3">
-          <div className="grid grid-cols-1 md:grid-cols-12 md:grid-rows-3 gap-3 md:h-[calc(100svh-120px)]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-3 gap-3 lg:h-[calc(100svh-120px)]">
 
             {/* Row 1 — 7/5 : projet dominant + tagline */}
             {firstProject && (
-              <Link href={`/studio/projets/${firstProject.slug}`} className="md:col-span-7 md:row-span-2 md:row-start-1 md:col-start-1 group relative overflow-hidden">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[4/3] md:aspect-auto"
-                  src={firstProject.main_image || undefined}
-                  alt={firstProject.title}
-                />
+              <Link href={`/studio/projets/${firstProject.slug}`} className="lg:col-span-7 lg:row-span-2 lg:row-start-1 lg:col-start-1 group relative overflow-hidden aspect-[4/3] lg:aspect-auto">
+                {firstProject.main_image && (
+                  <Image
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    src={firstProject.main_image}
+                    alt={firstProject.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    priority
+                  />
+                )}
                 <div className="absolute inset-0 bg-on-surface/0 group-hover:bg-on-surface/70 transition-all duration-500 flex flex-col justify-end p-8">
                   <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                     <span className="text-[0.6rem] uppercase tracking-widest text-primary-fixed font-bold mb-1 block">{firstProject.category}</span>
@@ -73,23 +79,23 @@ export default async function StudioPage() {
             )}
 
             {/* Bloc tagline — 5 cols, golden ratio right */}
-            <div className="md:col-span-5 md:row-span-2 md:row-start-1 md:col-start-8 bg-on-surface flex flex-col justify-between gap-5 p-8 md:p-10 min-h-0 overflow-hidden">
+            <div className="lg:col-span-5 lg:row-span-2 lg:row-start-1 lg:col-start-8 bg-on-surface flex flex-col justify-between gap-5 p-6 sm:p-8 lg:p-10 min-h-0 overflow-hidden">
               <div>
                 <span className="text-[0.65rem] uppercase tracking-[0.3em] text-primary-fixed font-bold block mb-3">
                   Agence de Conseil en Communication
                 </span>
-                <h1 className="text-2xl md:text-[1.65rem] font-black text-white leading-[1.15] tracking-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-[1.65rem] xl:text-3xl font-black text-white leading-[1.15] tracking-tight">
                   Des mots qui touchent,{" "}
                   <span className="text-primary-fixed">des images</span> qui
                   marquent.
                 </h1>
-                <p className="mt-5 text-base md:text-[1.05rem] text-surface-variant leading-relaxed">
+                <p className="mt-5 text-sm sm:text-base lg:text-[1.05rem] text-surface-variant leading-relaxed">
                   Basés à Dakar, nous accompagnons les marques ambitieuses
                   d&apos;Afrique de l&apos;Ouest sur toute la chaîne de valeur :
                   stratégie 360, branding, production audiovisuelle, community
                   management et formation.
                 </p>
-                <p className="mt-3 text-base md:text-[1.05rem] text-white/85 leading-relaxed">
+                <p className="mt-3 text-sm sm:text-base lg:text-[1.05rem] text-white/85 leading-relaxed">
                   12 ans d&apos;expérience, 150+ projets livrés, une obsession
                   unique — transformer votre prise de parole en{" "}
                   <span className="text-primary-fixed font-bold">
@@ -108,14 +114,14 @@ export default async function StudioPage() {
                       <p className="text-[0.7rem] uppercase tracking-widest text-primary-fixed font-black">
                         {val.k}
                       </p>
-                      <p className="text-xs md:text-sm text-white/75 leading-snug mt-0.5">
+                      <p className="text-xs lg:text-sm text-white/75 leading-snug mt-0.5">
                         {val.v}
                       </p>
                     </li>
                   ))}
                 </ul>
               </div>
-              <Link href="/studio/projets" className="inline-flex items-center group/cta">
+              <Link href="/studio/projets" className="inline-flex items-center group/cta mt-6">
                 <span className="text-sm font-black uppercase tracking-widest text-white border-b-2 border-primary-fixed pb-1">
                   Voir tous les projets
                 </span>
@@ -127,12 +133,16 @@ export default async function StudioPage() {
 
             {/* Remaining projects */}
             {remainingProjects[0] && (
-              <Link href={`/studio/projets/${remainingProjects[0].slug}`} className="md:col-span-5 md:col-start-1 md:row-start-3 group relative overflow-hidden">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[8/5] md:aspect-auto"
-                  src={remainingProjects[0].main_image || undefined}
-                  alt={remainingProjects[0].title}
-                />
+              <Link href={`/studio/projets/${remainingProjects[0].slug}`} className="lg:col-span-5 lg:col-start-1 lg:row-start-3 group relative overflow-hidden aspect-[8/5] lg:aspect-auto">
+                {remainingProjects[0].main_image && (
+                  <Image
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    src={remainingProjects[0].main_image}
+                    alt={remainingProjects[0].title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                  />
+                )}
                 <div className="absolute inset-0 bg-on-surface/0 group-hover:bg-on-surface/70 transition-all duration-500 flex flex-col justify-end p-6">
                   <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                     <span className="text-[0.6rem] uppercase tracking-widest text-primary-fixed font-bold mb-1 block">{remainingProjects[0].category}</span>
@@ -144,12 +154,16 @@ export default async function StudioPage() {
 
             {/* Row 3 — projet secondaire */}
             {remainingProjects[1] && (
-              <Link href={`/studio/projets/${remainingProjects[1].slug}`} className="md:col-span-7 md:col-start-6 md:row-start-3 group relative overflow-hidden">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-[5/8] md:aspect-auto"
-                  src={remainingProjects[1].main_image || undefined}
-                  alt={remainingProjects[1].title}
-                />
+              <Link href={`/studio/projets/${remainingProjects[1].slug}`} className="lg:col-span-7 lg:col-start-6 lg:row-start-3 group relative overflow-hidden aspect-[5/8] lg:aspect-auto">
+                {remainingProjects[1].main_image && (
+                  <Image
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    src={remainingProjects[1].main_image}
+                    alt={remainingProjects[1].title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                  />
+                )}
                 <div className="absolute inset-0 bg-on-surface/0 group-hover:bg-on-surface/70 transition-all duration-500 flex flex-col justify-end p-6">
                   <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                     <span className="text-[0.6rem] uppercase tracking-widest text-primary-fixed font-bold mb-1 block">{remainingProjects[1].category}</span>
@@ -185,10 +199,13 @@ export default async function StudioPage() {
               {allPartners.map((p: { name: string; logo: string | null }) => (
                 <div key={p.name} className="h-10 flex items-center opacity-50 hover:opacity-100 transition-opacity duration-300">
                   {p.logo ? (
-                    <img
+                    <Image
                       src={p.logo}
                       alt={p.name}
+                      width={120}
+                      height={40}
                       className="h-full w-auto object-contain brightness-0 invert"
+                      unoptimized={p.logo.endsWith(".svg")}
                     />
                   ) : (
                     <span className="text-sm font-black text-white/60 uppercase tracking-tighter">
@@ -224,7 +241,7 @@ export default async function StudioPage() {
                   </p>
                   <div className="flex items-center gap-4">
                     {allTestimonials[0].avatar ? (
-                      <img src={allTestimonials[0].avatar} alt={allTestimonials[0].name} className="h-8 w-auto object-contain brightness-0 invert" />
+                      <Image src={allTestimonials[0].avatar} alt={allTestimonials[0].name} width={120} height={32} className="h-8 w-auto object-contain brightness-0 invert" unoptimized={allTestimonials[0].avatar.endsWith(".svg")} />
                     ) : (
                       <div className="w-11 h-11 bg-primary-fixed flex items-center justify-center">
                         <span className="font-black text-on-primary-fixed">{allTestimonials[0].name?.charAt(0) ?? "?"}</span>
@@ -251,7 +268,7 @@ export default async function StudioPage() {
                   </div>
                   <div className="mt-8 flex items-center gap-4">
                     {allTestimonials[1].avatar ? (
-                      <img src={allTestimonials[1].avatar} alt={allTestimonials[1].name} className="h-7 w-auto object-contain" />
+                      <Image src={allTestimonials[1].avatar} alt={allTestimonials[1].name} width={120} height={28} className="h-7 w-auto object-contain" unoptimized={allTestimonials[1].avatar.endsWith(".svg")} />
                     ) : (
                       <div className="w-10 h-10 bg-surface-container flex items-center justify-center">
                         <span className="font-black text-on-surface text-sm">{allTestimonials[1].name?.charAt(0) ?? "?"}</span>
@@ -287,12 +304,14 @@ export default async function StudioPage() {
                 <div className="md:col-span-7 grid grid-cols-2 gap-6">
                   {teamMembers.map((m: { name: string; role: string; photo: string | null; bio: string | null; linkedin: string | null }) => (
                     <div key={m.name} className="group">
-                      <div className="aspect-[3/4] overflow-hidden mb-4 bg-surface-container">
+                      <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-surface-container">
                         {m.photo ? (
-                          <img
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                          <Image
+                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                             src={m.photo}
                             alt={m.name}
+                            fill
+                            sizes="(max-width: 768px) 50vw, 300px"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">

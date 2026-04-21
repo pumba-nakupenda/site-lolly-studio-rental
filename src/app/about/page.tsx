@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -88,11 +89,15 @@ export default function AboutPage() {
         <section className="bg-surface-container-lowest py-20 md:py-32 px-6 md:px-12">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
             <div className="md:col-span-5">
-              <img
-                className="w-full aspect-[3/4] object-cover grayscale"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzTY6QurhWPMM8U4yzIRuPUzF59WrHEmD-XLF-dM6yOxmI33fQkrAdUXE5A8JpHd4HD1hHLXCB0DbkIGS4YaF0sxGlvncKtfodfWbWhi3mw0w0aVodXhHjXww0wTIGpRwWQG-txpOIDAwuRcUzBYJ7gRR5mglsdGMLtJG44QKXpjvEQAm98dzT1DDeJaNQxoJ6UAP5HICpnKClDhKWD_zvt4JwQGXDHBc2Y9owjgB_tE2UwGbkTpXmpqLJ9jnsbmQXIcpIFa6aB80"
-                alt="Espace LOLLY"
-              />
+              <div className="relative w-full aspect-[3/4]">
+                <Image
+                  className="object-cover grayscale"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzTY6QurhWPMM8U4yzIRuPUzF59WrHEmD-XLF-dM6yOxmI33fQkrAdUXE5A8JpHd4HD1hHLXCB0DbkIGS4YaF0sxGlvncKtfodfWbWhi3mw0w0aVodXhHjXww0wTIGpRwWQG-txpOIDAwuRcUzBYJ7gRR5mglsdGMLtJG44QKXpjvEQAm98dzT1DDeJaNQxoJ6UAP5HICpnKClDhKWD_zvt4JwQGXDHBc2Y9owjgB_tE2UwGbkTpXmpqLJ9jnsbmQXIcpIFa6aB80"
+                  alt="Espace LOLLY"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 42vw"
+                />
+              </div>
             </div>
             <div className="md:col-span-7 md:col-start-6">
               <span className="text-xs uppercase tracking-[0.2em] text-primary mb-6 block">
