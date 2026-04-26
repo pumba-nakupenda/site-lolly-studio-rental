@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
-import path from "node:path";
-import os from "node:os";
 
 const nextConfig: NextConfig = {
-  distDir: path.join(os.homedir(), "Library/Caches/site-lolly/.next"),
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,

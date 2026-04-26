@@ -206,6 +206,7 @@ export default function Navbar() {
 
       {/* Mobile menu overlay — click to close */}
       <button
+        aria-label="Fermer le menu"
         aria-hidden={!open}
         tabIndex={-1}
         onClick={() => setOpen(false)}

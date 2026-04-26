@@ -16,8 +16,6 @@
 # next.js
 /.next/
 /out/
-# Stray absolute-path build cache accidentally materialised at project root
-/Users/
 
 # production
 /build

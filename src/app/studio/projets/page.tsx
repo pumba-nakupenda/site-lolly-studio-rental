@@ -75,7 +75,7 @@ export default async function ProjetsPage() {
                         alt={p.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px"
-                        priority={index < 2}
+                        priority={index === 0}
                       />
                     ) : (
                       <div className="w-full h-full bg-surface-container flex items-center justify-center">

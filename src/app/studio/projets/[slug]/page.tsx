@@ -77,13 +77,16 @@ export default async function ProjectDetailPage({
   // Fallback: if fewer than 3 category-matches, top up with latest projects
   let related = categoryMatches ?? [];
   if (related.length < 3) {
-    const { data: fallback } = await supabase
+    let q = supabase
       .from("portfolio")
       .select("slug, title, category, main_image")
       .neq("slug", slug)
-      .not("slug", "in", `(${related.map((p) => `"${p.slug}"`).join(",") || "null"})`)
       .order("grid_order")
       .limit(4 - related.length);
+    if (related.length > 0) {
+      q = q.not("slug", "in", `(${related.map((p) => `"${p.slug}"`).join(",")})`);
+    }
+    const { data: fallback } = await q;
     related = [...related, ...(fallback ?? [])];
   }
 
@@ -208,15 +211,14 @@ export default async function ProjectDetailPage({
                 return (
                   <section key={i} className="px-4 md:px-6 py-3">
                     {block.url && (
-                      <div className="relative w-full aspect-[16/9]">
-                        <Image
-                          className="object-cover"
-                          src={block.url}
-                          alt={block.caption || project.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1920px) 96vw, 1920px"
-                        />
-                      </div>
+                      <Image
+                        className="w-full h-auto"
+                        src={block.url}
+                        alt={block.caption || project.title}
+                        width={1920}
+                        height={1080}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1920px) 96vw, 1920px"
+                      />
                     )}
                     {block.caption && (
                       <p className="text-xs text-secondary mt-2 px-2">
