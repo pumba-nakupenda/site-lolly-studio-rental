@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { track } from './Track';
-import type { Offer } from '../_lib/offers';
+import { priceFrom, fmtPrice, type Offer } from '../_lib/offers';
 
 export default function OfferCard({ offer }: { offer: Offer }) {
   return (
@@ -23,9 +23,15 @@ export default function OfferCard({ offer }: { offer: Offer }) {
         {offer.cardLead}
       </p>
 
-      <p className="mt-5 text-xs text-secondary tracking-tight">
-        {offer.meta}
-      </p>
+      <div className="mt-5">
+        <p className="text-[0.6rem] uppercase tracking-[0.18em] text-secondary font-bold">
+          À partir de
+        </p>
+        <p className="text-xl font-black text-primary tracking-tight">
+          {fmtPrice(priceFrom(offer))}
+        </p>
+        <p className="mt-1 text-xs text-secondary">{offer.metaShort}</p>
+      </div>
 
       <span className="mt-auto pt-6 text-xs uppercase tracking-[0.18em] font-black text-on-surface group-hover:text-primary transition-colors">
         Découvrir {offer.name} →

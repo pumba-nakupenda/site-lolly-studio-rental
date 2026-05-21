@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { track } from './Track';
-import type { Offer } from '../_lib/offers';
+import { priceFrom, fmtPrice, type Offer } from '../_lib/offers';
 
 export default function FeaturedOfferCard({ offer }: { offer: Offer }) {
   const modules = offer.modules ?? [];
@@ -27,9 +27,17 @@ export default function FeaturedOfferCard({ offer }: { offer: Offer }) {
           {offer.cardLead}
         </p>
 
-        <p className="mt-6 text-xs text-white/60 tracking-tight">
-          {offer.meta}
-        </p>
+        <div className="mt-6 flex items-baseline gap-3">
+          <div>
+            <p className="text-[0.6rem] uppercase tracking-[0.18em] text-white/50 font-bold">
+              À partir de
+            </p>
+            <p className="text-2xl font-black text-primary-fixed tracking-tight">
+              {fmtPrice(priceFrom(offer))}
+            </p>
+          </div>
+          <p className="text-xs text-white/50 tracking-tight">{offer.metaShort}</p>
+        </div>
 
         <Link
           href={`/academy/${offer.slug}`}

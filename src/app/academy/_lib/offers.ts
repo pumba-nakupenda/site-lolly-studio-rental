@@ -236,6 +236,21 @@ export function reserveWhatsappUrl(offer: Offer): string {
   return `https://wa.me/${CONTACT.whatsappDigits}?text=${text}`;
 }
 
+// Prix « à partir de » : early bird s'il existe, sinon tarif plein.
+export function priceFrom(offer: Offer): number {
+  return offer.priceEarly ?? offer.priceFull;
+}
+
+// Message WhatsApp d'inscription suite au diagnostic, formation choisie.
+export function diagnosticWhatsappUrl(offer: Offer): string {
+  const text = encodeURIComponent(
+    `Bonjour LOLLY Academy, j'ai fait le diagnostic et je choisis la formation ${offer.name} (à partir de ${fmtPrice(
+      priceFrom(offer),
+    )}). Mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.`,
+  );
+  return `https://wa.me/${CONTACT.whatsappDigits}?text=${text}`;
+}
+
 export function conseilWhatsappUrl(offer: Offer | null): string {
   const text = encodeURIComponent(
     offer

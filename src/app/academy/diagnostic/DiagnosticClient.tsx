@@ -1,8 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { OFFERS, conseilWhatsappUrl } from '../_lib/offers';
+import {
+  OFFERS,
+  conseilWhatsappUrl,
+  diagnosticWhatsappUrl,
+  priceFrom,
+  fmtPrice,
+} from '../_lib/offers';
 import { track } from '../_components/Track';
 
 const QUESTIONS = [
@@ -83,7 +89,25 @@ export default function DiagnosticClient() {
     () => (done ? computeRecommendation(answers) : null),
     [done, answers],
   );
-  const offer = recommendation ? OFFERS.find((o) => o.slug === recommendation.topSlug) : null;
+  const recommendedOffer = recommendation
+    ? OFFERS.find((o) => o.slug === recommendation.topSlug)
+    : null;
+
+  // Formation choisie par l'utilisateur (par défaut la recommandée).
+  // Il peut basculer vers une autre, notamment moins chère.
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  useEffect(() => {
+    if (recommendation) setSelectedSlug(recommendation.topSlug);
+  }, [recommendation]);
+  const selectedOffer =
+    OFFERS.find((o) => o.slug === selectedSlug) || recommendedOffer;
+
+  // Formations classées par score décroissant pour l'affichage.
+  const rankedOffers = recommendation
+    ? recommendation.sorted
+        .map(([slug]) => OFFERS.find((o) => o.slug === slug))
+        .filter((o): o is (typeof OFFERS)[number] => Boolean(o))
+    : [];
 
   function answer(optIdx: number) {
     const next = [...answers];
@@ -100,6 +124,7 @@ export default function DiagnosticClient() {
   function restart() {
     setStep(0);
     setAnswers(Array(QUESTIONS.length).fill(null));
+    setSelectedSlug(null);
   }
 
   return (
@@ -161,78 +186,117 @@ export default function DiagnosticClient() {
         </section>
       )}
 
-      {done && offer && recommendation && (
+      {done && recommendedOffer && selectedOffer && recommendation && (
         <>
-          <section className="px-6 md:px-12 pt-6 pb-12 md:pb-16 max-w-4xl mx-auto">
+          <section className="px-6 md:px-12 pt-6 pb-10 md:pb-12 max-w-4xl mx-auto">
             <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-3">
               Recommandation
             </p>
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-on-surface leading-[1.05]">
-              {offer.cardTitle}
+              {recommendedOffer.cardTitle}
             </h1>
             <p className="mt-5 text-base md:text-lg text-on-surface-variant max-w-2xl">
-              Au vu de tes réponses, l’offre <strong>{offer.level} — {offer.name}</strong> est celle qui correspond le mieux à ta situation actuelle.
+              Au vu de tes réponses, l’offre <strong>{recommendedOffer.level} — {recommendedOffer.name}</strong> est celle qui te correspond le mieux. Tu peux la garder ou choisir une formation plus accessible ci-dessous.
             </p>
-            <p className="mt-3 text-sm text-secondary">{offer.meta}</p>
+          </section>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Link
-                href={`/academy/${offer.slug}`}
-                onClick={() => track('click_diagnostic_to_offer', { offer: offer.slug })}
-                className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em] hover:bg-on-surface/80 transition-colors"
-              >
-                Voir l’offre {offer.name} →
-              </Link>
+          {/* ── Choix de la formation (sélectionnable) ─────── */}
+          <section className="px-6 md:px-12 pb-10 max-w-4xl mx-auto">
+            <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-5">
+              Choisis ta formation
+            </p>
+            <div className="grid gap-3">
+              {rankedOffers.map((o, i) => {
+                const isSelected = o.slug === selectedOffer.slug;
+                const isRecommended = i === 0;
+                return (
+                  <button
+                    key={o.slug}
+                    onClick={() => {
+                      setSelectedSlug(o.slug);
+                      track('diagnostic_select_offer', { offer: o.slug });
+                    }}
+                    className={`text-left p-5 border-2 transition-all ${
+                      isSelected
+                        ? 'border-on-surface bg-primary-fixed/10'
+                        : 'border-outline-variant/40 bg-surface-container-lowest hover:border-on-surface'
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                      <span className="text-sm md:text-base font-black uppercase tracking-tight text-on-surface">
+                        {o.level} — {o.name}
+                        {isRecommended && (
+                          <span className="ml-2 text-[0.55rem] tracking-[0.18em] bg-on-surface text-primary-fixed px-2 py-0.5 align-middle">
+                            Recommandé
+                          </span>
+                        )}
+                      </span>
+                      <span className="text-sm font-black text-primary tracking-tight whitespace-nowrap">
+                        à partir de {fmtPrice(priceFrom(o))}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-secondary">{o.metaShort}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* ── CTA WhatsApp avec formation choisie ───────── */}
+          <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-12 md:py-16">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter">
+                Ton choix : {selectedOffer.name}
+              </h2>
+              <p className="mt-3 text-base md:text-lg">
+                À partir de <strong>{fmtPrice(priceFrom(selectedOffer))}</strong>. On confirme ton inscription par WhatsApp en moins de 24 h ouvrées.
+              </p>
+              <div className="mt-7 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <a
+                  href={diagnosticWhatsappUrl(selectedOffer)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() =>
+                    track(`click_reserver_paiement_wave_${selectedOffer.slug.replace(/-/g, '_')}`, {
+                      channel: 'whatsapp',
+                      from: 'diagnostic',
+                    })
+                  }
+                  className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em] hover:bg-on-surface/80 transition-colors"
+                >
+                  M’inscrire via WhatsApp →
+                </a>
+                <Link
+                  href={`/academy/${selectedOffer.slug}`}
+                  onClick={() =>
+                    track('click_diagnostic_to_offer', { offer: selectedOffer.slug })
+                  }
+                  className="border-2 border-on-surface text-on-surface font-black uppercase px-8 py-4 text-xs tracking-[0.18em] hover:bg-on-surface hover:text-primary-fixed transition-colors"
+                >
+                  Voir le détail
+                </Link>
+              </div>
               <a
-                href={conseilWhatsappUrl(offer)}
+                href={conseilWhatsappUrl(selectedOffer)}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
                   track('click_conseil_30min', { via: 'whatsapp', from: 'diagnostic' })
                 }
-                className="border-2 border-on-surface text-on-surface font-black uppercase px-8 py-4 text-xs tracking-[0.18em] hover:bg-on-surface hover:text-primary-fixed transition-colors"
+                className="mt-5 inline-block text-xs uppercase tracking-[0.18em] font-bold border-b-2 border-on-primary-fixed pb-1 hover:opacity-70 transition-opacity"
               >
-                Conseil 30 min avant inscription
+                Ou un conseil 30 min avant de décider →
               </a>
             </div>
           </section>
 
-          <section className="bg-surface-container-lowest border-y border-outline-variant/15 px-6 md:px-12 py-12 md:py-16">
-            <div className="max-w-4xl mx-auto">
-              <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-5">
-                Tes autres options
-              </p>
-              <ul className="grid gap-2">
-                {recommendation.sorted.slice(1).map(([slug, score]) => {
-                  const o = OFFERS.find((x) => x.slug === slug);
-                  if (!o) return null;
-                  return (
-                    <li key={slug}>
-                      <Link
-                        href={`/academy/${o.slug}`}
-                        className="flex justify-between items-baseline gap-4 py-3 border-b border-outline-variant/15 hover:border-on-surface transition-colors"
-                      >
-                        <span className="text-sm md:text-base text-on-surface">
-                          <strong className="font-black">
-                            {o.level} — {o.name}
-                          </strong>{' '}
-                          · {o.metaShort}
-                        </span>
-                        <span className="text-[0.65rem] uppercase tracking-[0.18em] text-secondary font-bold whitespace-nowrap">
-                          {score} pts →
-                        </span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-              <button
-                onClick={restart}
-                className="mt-6 text-[0.65rem] uppercase tracking-[0.18em] font-bold text-on-surface hover:text-primary transition-colors"
-              >
-                ↻ Refaire le diagnostic
-              </button>
-            </div>
+          <section className="px-6 md:px-12 py-10 max-w-4xl mx-auto">
+            <button
+              onClick={restart}
+              className="text-[0.65rem] uppercase tracking-[0.18em] font-bold text-on-surface hover:text-primary transition-colors"
+            >
+              ↻ Refaire le diagnostic
+            </button>
           </section>
         </>
       )}
