@@ -121,3 +121,43 @@ textarea:focus {
     transform: translateX(-50%);
   }
 }
+
+/* ── LOLLY Academy ────────────────────────────────────────
+   Page-carte lolly.sn/academy + sous-pages.
+   Couleurs charte stricte : jaune FED700 + noir + paper FAFAF7.
+   Polices : Epilogue (corps + display) + MuseoModerno Black Italic via CDN
+   (déjà chargé par le layout root). */
+:root {
+  --color-lolly-yellow: #FED700;
+  --color-lolly-black: #000000;
+  --color-lolly-paper: #FAFAF7;
+}
+body.academy-light {
+  background: var(--color-lolly-paper);
+  color: var(--color-lolly-black);
+  overflow-x: hidden;
+}
+.lolly-wordmark {
+  font-family: "MuseoModerno", system-ui, sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+.academy-display {
+  font-family: var(--font-epilogue, "Epilogue", system-ui, sans-serif);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.academy-body {
+  font-family: var(--font-epilogue, "Epilogue", system-ui, sans-serif);
+  font-weight: 400;
+  line-height: 1.55;
+}
+.academy-card {
+  transition: transform .25s ease, box-shadow .25s ease, border-color .2s ease;
+}
+.academy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
