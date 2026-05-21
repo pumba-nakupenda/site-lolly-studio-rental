@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import OfferCard from './_components/OfferCard';
 import FeaturedOfferCard from './_components/FeaturedOfferCard';
+import HeroCTAs from './_components/HeroCTAs';
 import { OFFERS, CONTACT, conseilWhatsappUrl } from './_lib/offers';
 import { ConseilCTA } from './_components/ConseilCTA';
 
@@ -28,15 +29,10 @@ export default function AcademyHome() {
           </h1>
 
           <p className="mt-6 text-base md:text-xl text-on-surface-variant max-w-2xl leading-relaxed">
-            4 chemins pour faire bouger ta com. Choisis celui qui te ressemble.
+            4 chemins pour faire bouger ta com. Pas sûr de ton profil&nbsp;? Lance le diagnostic, on t’oriente en 2 minutes.
           </p>
 
-          <Link
-            href="/academy/diagnostic"
-            className="mt-8 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-bold text-on-surface border-b-2 border-on-surface pb-1 hover:text-primary hover:border-primary transition-colors"
-          >
-            Je ne sais pas où je me situe → fais le diagnostic en 2 minutes
-          </Link>
+          <HeroCTAs />
         </div>
       </section>
 
