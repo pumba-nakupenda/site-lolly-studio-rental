@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import Logo from './_components/Logo';
-import AcademyBodyClass from './_components/AcademyBodyClass';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export const metadata = {
   title: 'LOLLY Academy — 4 chemins pour faire bouger ta com',
@@ -17,26 +17,12 @@ export const metadata = {
 
 export default function AcademyLayout({ children }: { children: ReactNode }) {
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'var(--color-lolly-paper, #FAFAF7)',
-        color: '#000',
-      }}
-      className="academy-body"
-    >
-      <AcademyBodyClass />
-      <header
-        style={{
-          background: 'transparent',
-          padding: '24px 24px 0',
-          maxWidth: 1200,
-          margin: '0 auto',
-        }}
-      >
-        <Logo />
-      </header>
-      {children}
-    </div>
+    <>
+      <Navbar />
+      <main id="main-content" className="min-h-screen bg-surface">
+        {children}
+      </main>
+      <Footer />
+    </>
   );
 }

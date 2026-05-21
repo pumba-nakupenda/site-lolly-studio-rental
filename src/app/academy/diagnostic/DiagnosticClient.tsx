@@ -4,11 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { OFFERS, conseilWhatsappUrl } from '../_lib/offers';
 import { track } from '../_components/Track';
-import CTAButton from '../_components/CTAButton';
-import Footer from '../_components/Footer';
 
-// Chaque réponse incrémente le score d'une ou plusieurs offres (par slug).
-// L'offre avec le score le plus élevé est recommandée à la fin.
 const QUESTIONS = [
   {
     q: 'Où tu en es avec ta com aujourd’hui ?',
@@ -72,19 +68,21 @@ function computeRecommendation(answers: (number | null)[]) {
   const sorted = (Object.entries(scores) as [OfferSlug, number][]).sort(
     ([, a], [, b]) => b - a,
   );
-  const top = sorted[0][0];
-  return { topSlug: top, scores, sorted };
+  return { topSlug: sorted[0][0], scores, sorted };
 }
 
 export default function DiagnosticClient() {
-  const [step, setStep] = useState(0); // 0..QUESTIONS.length-1 puis "done"
+  const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(
     Array(QUESTIONS.length).fill(null),
   );
   const done = step >= QUESTIONS.length;
-  const progress = Math.round(((step) / QUESTIONS.length) * 100);
+  const progress = Math.round((step / QUESTIONS.length) * 100);
 
-  const recommendation = useMemo(() => (done ? computeRecommendation(answers) : null), [done, answers]);
+  const recommendation = useMemo(
+    () => (done ? computeRecommendation(answers) : null),
+    [done, answers],
+  );
   const offer = recommendation ? OFFERS.find((o) => o.slug === recommendation.topSlug) : null;
 
   function answer(optIdx: number) {
@@ -105,104 +103,47 @@ export default function DiagnosticClient() {
   }
 
   return (
-    <main>
-      <section
-        style={{
-          padding: '40px 24px 24px',
-          maxWidth: 720,
-          margin: '0 auto',
-        }}
-      >
-        <p
-          className="academy-body"
-          style={{
-            fontSize: 11,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: '#000',
-            background: '#FED700',
-            display: 'inline-block',
-            padding: '6px 14px',
-            fontWeight: 700,
-            marginBottom: 24,
-          }}
-        >
+    <>
+      <section className="px-6 md:px-12 pt-10 md:pt-14 pb-6 max-w-3xl mx-auto">
+        <span className="inline-block bg-primary-fixed text-on-primary-fixed text-[0.65rem] uppercase tracking-[0.22em] font-bold px-3 py-1.5 mb-6">
           Diagnostic 2 minutes
-        </p>
+        </span>
 
         {!done && (
           <>
-            <h1
-              className="academy-display"
-              style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', color: '#000', marginBottom: 16 }}
-            >
+            <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-on-surface mb-4 leading-[1.05]">
               5 questions pour situer ta com
             </h1>
-            <p className="academy-body" style={{ color: '#3A3A3A', fontSize: '1rem' }}>
+            <p className="text-base text-on-surface-variant">
               Sois honnête, c’est anonyme. À la fin tu obtiens une recommandation d’offre.
             </p>
 
-            <div
-              aria-label="Progression"
-              style={{
-                height: 6,
-                background: 'rgba(0,0,0,0.08)',
-                borderRadius: 999,
-                overflow: 'hidden',
-                marginTop: 32,
-              }}
-            >
-              <div
-                style={{
-                  width: `${progress}%`,
-                  height: '100%',
-                  background: '#000',
-                  transition: 'width .3s ease',
-                }}
-              />
+            <div className="mt-10">
+              <div className="h-1.5 bg-outline-variant/30 overflow-hidden">
+                <div
+                  className="h-full bg-on-surface transition-[width] duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-secondary font-bold">
+                Question {step + 1} sur {QUESTIONS.length}
+              </p>
             </div>
-            <p
-              className="academy-body"
-              style={{ marginTop: 8, fontSize: 12, letterSpacing: '0.12em', color: '#6B6B6B', textTransform: 'uppercase' }}
-            >
-              Question {step + 1} sur {QUESTIONS.length}
-            </p>
           </>
         )}
       </section>
 
       {!done && (
-        <section style={{ padding: '0 24px 64px', maxWidth: 720, margin: '0 auto' }}>
-          <h2
-            className="academy-display"
-            style={{ fontSize: 'clamp(1.35rem, 3vw, 1.75rem)', color: '#000', marginBottom: 24 }}
-          >
+        <section className="px-6 md:px-12 pb-16 max-w-3xl mx-auto">
+          <h2 className="text-xl md:text-3xl font-black uppercase tracking-tighter text-on-surface mb-6">
             {QUESTIONS[step].q}
           </h2>
-          <div style={{ display: 'grid', gap: 12 }}>
+          <div className="grid gap-3">
             {QUESTIONS[step].options.map((opt, idx) => (
               <button
                 key={idx}
                 onClick={() => answer(idx)}
-                style={{
-                  textAlign: 'left',
-                  background: '#FFFFFF',
-                  border: '2px solid rgba(0,0,0,0.12)',
-                  padding: '18px 20px',
-                  fontFamily: 'var(--font-lato, "Lato", sans-serif)',
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                  color: '#000',
-                  transition: 'border-color .15s ease, background .15s ease, transform .15s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#000';
-                  e.currentTarget.style.background = '#FFFDF0';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)';
-                  e.currentTarget.style.background = '#FFFFFF';
-                }}
+                className="text-left bg-surface-container-lowest border-2 border-outline-variant/40 hover:border-on-surface hover:bg-primary-fixed/10 transition-all px-5 py-4 text-sm md:text-base text-on-surface"
               >
                 {opt.label}
               </button>
@@ -212,16 +153,7 @@ export default function DiagnosticClient() {
           {step > 0 && (
             <button
               onClick={() => setStep(step - 1)}
-              style={{
-                marginTop: 24,
-                background: 'transparent',
-                border: 'none',
-                color: '#6B6B6B',
-                fontSize: 12,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-              }}
+              className="mt-6 text-[0.65rem] uppercase tracking-[0.18em] text-secondary hover:text-on-surface font-bold transition-colors"
             >
               ← Question précédente
             </button>
@@ -231,74 +163,46 @@ export default function DiagnosticClient() {
 
       {done && offer && recommendation && (
         <>
-          <section
-            style={{
-              padding: '40px 24px 56px',
-              maxWidth: 820,
-              margin: '0 auto',
-            }}
-          >
-            <p
-              className="academy-body"
-              style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6B6B6B', fontWeight: 700 }}
-            >
+          <section className="px-6 md:px-12 pt-6 pb-12 md:pb-16 max-w-4xl mx-auto">
+            <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-3">
               Recommandation
             </p>
-            <h1
-              className="academy-display"
-              style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#000', marginTop: 12 }}
-            >
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-on-surface leading-[1.05]">
               {offer.cardTitle}
             </h1>
-            <p
-              className="academy-body"
-              style={{ marginTop: 16, fontSize: '1.15rem', color: '#3A3A3A', maxWidth: 720 }}
-            >
+            <p className="mt-5 text-base md:text-lg text-on-surface-variant max-w-2xl">
               Au vu de tes réponses, l’offre <strong>{offer.level} — {offer.name}</strong> est celle qui correspond le mieux à ta situation actuelle.
             </p>
-            <p className="academy-body" style={{ marginTop: 12, fontSize: 14, color: '#6B6B6B' }}>
-              {offer.meta}
-            </p>
+            <p className="mt-3 text-sm text-secondary">{offer.meta}</p>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 28 }}>
-              <CTAButton
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Link
                 href={`/academy/${offer.slug}`}
-                variant="primary"
-                size="lg"
-                event="click_diagnostic_to_offer"
-                eventProps={{ offer: offer.slug }}
+                onClick={() => track('click_diagnostic_to_offer', { offer: offer.slug })}
+                className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em] hover:bg-on-surface/80 transition-colors"
               >
                 Voir l’offre {offer.name} →
-              </CTAButton>
-              <CTAButton
+              </Link>
+              <a
                 href={conseilWhatsappUrl(offer)}
-                variant="outline"
-                size="lg"
-                external
-                event="click_conseil_30min"
-                eventProps={{ via: 'whatsapp', from: 'diagnostic' }}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  track('click_conseil_30min', { via: 'whatsapp', from: 'diagnostic' })
+                }
+                className="border-2 border-on-surface text-on-surface font-black uppercase px-8 py-4 text-xs tracking-[0.18em] hover:bg-on-surface hover:text-primary-fixed transition-colors"
               >
                 Conseil 30 min avant inscription
-              </CTAButton>
+              </a>
             </div>
           </section>
 
-          <section
-            style={{
-              background: '#FFFFFF',
-              padding: '48px 24px',
-              borderTop: '1px solid rgba(0,0,0,0.08)',
-              borderBottom: '1px solid rgba(0,0,0,0.08)',
-            }}
-          >
-            <div style={{ maxWidth: 820, margin: '0 auto' }}>
-              <p
-                className="academy-body"
-                style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6B6B6B', fontWeight: 700, marginBottom: 16 }}
-              >
+          <section className="bg-surface-container-lowest border-y border-outline-variant/15 px-6 md:px-12 py-12 md:py-16">
+            <div className="max-w-4xl mx-auto">
+              <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-5">
                 Tes autres options
               </p>
-              <ul style={{ listStyle: 'none', display: 'grid', gap: 12 }}>
+              <ul className="grid gap-2">
                 {recommendation.sorted.slice(1).map(([slug, score]) => {
                   const o = OFFERS.find((x) => x.slug === slug);
                   if (!o) return null;
@@ -306,41 +210,32 @@ export default function DiagnosticClient() {
                     <li key={slug}>
                       <Link
                         href={`/academy/${o.slug}`}
-                        className="academy-body"
-                        style={{ display: 'flex', justifyContent: 'space-between', gap: 16, padding: '14px 0', borderBottom: '1px dashed rgba(0,0,0,0.08)', color: '#000', textDecoration: 'none' }}
+                        className="flex justify-between items-baseline gap-4 py-3 border-b border-outline-variant/15 hover:border-on-surface transition-colors"
                       >
-                        <span style={{ fontSize: 14 }}>
-                          <strong>{o.level} — {o.name}</strong> · {o.metaShort}
+                        <span className="text-sm md:text-base text-on-surface">
+                          <strong className="font-black">
+                            {o.level} — {o.name}
+                          </strong>{' '}
+                          · {o.metaShort}
                         </span>
-                        <span style={{ fontSize: 12, color: '#6B6B6B' }}>{score} pts →</span>
+                        <span className="text-[0.65rem] uppercase tracking-[0.18em] text-secondary font-bold whitespace-nowrap">
+                          {score} pts →
+                        </span>
                       </Link>
                     </li>
                   );
                 })}
               </ul>
-              <div style={{ marginTop: 24 }}>
-                <button
-                  onClick={restart}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: '#000',
-                    fontSize: 12,
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                  }}
-                >
-                  ↻ Refaire le diagnostic
-                </button>
-              </div>
+              <button
+                onClick={restart}
+                className="mt-6 text-[0.65rem] uppercase tracking-[0.18em] font-bold text-on-surface hover:text-primary transition-colors"
+              >
+                ↻ Refaire le diagnostic
+              </button>
             </div>
           </section>
         </>
       )}
-
-      <Footer />
-    </main>
+    </>
   );
 }

@@ -1,8 +1,8 @@
+import Link from 'next/link';
 import OfferCard from './_components/OfferCard';
 import FeaturedOfferCard from './_components/FeaturedOfferCard';
-import CTAButton from './_components/CTAButton';
-import Footer from './_components/Footer';
 import { OFFERS, CONTACT, conseilWhatsappUrl } from './_lib/offers';
+import { ConseilCTA } from './_components/ConseilCTA';
 
 export const metadata = {
   title: 'LOLLY Academy — Quel est ton défi de communication aujourd’hui ?',
@@ -11,233 +11,80 @@ export const metadata = {
 };
 
 export default function AcademyHome() {
+  const featured = OFFERS.find((o) => o.featured) || OFFERS[0];
+  const others = OFFERS.filter((o) => !o.featured);
+
   return (
-    <main>
+    <>
       {/* ── Hero ───────────────────────────────────────── */}
-      <section
-        style={{
-          padding: '64px 24px 56px',
-          maxWidth: 1200,
-          margin: '0 auto',
-        }}
-      >
-        <p
-          className="academy-body"
-          style={{
-            fontSize: 13,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: '#000',
-            background: '#FED700',
-            display: 'inline-block',
-            padding: '6px 14px',
-            fontWeight: 700,
-            marginBottom: 28,
-          }}
-        >
-          Cohorte 1 · lundi 15 juin 2026
-        </p>
+      <section className="px-6 md:px-12 pt-12 pb-12 md:pt-20 md:pb-16">
+        <div className="max-w-7xl mx-auto">
+          <span className="inline-block bg-primary-fixed text-on-primary-fixed text-[0.65rem] uppercase tracking-[0.22em] font-bold px-3 py-1.5 mb-6">
+            <span className="lolly-wordmark">LOLLY</span> Academy · Cohorte 1 · 15 juin 2026
+          </span>
 
-        <h1
-          className="academy-display"
-          style={{
-            fontSize: 'clamp(2.25rem, 6vw, 4rem)',
-            lineHeight: 1.05,
-            color: '#000',
-            maxWidth: 980,
-          }}
-        >
-          Quel est ton défi de communication aujourd’hui&nbsp;?
-        </h1>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-on-surface max-w-5xl leading-[1.05]">
+            Quel est ton défi de communication aujourd’hui&nbsp;?
+          </h1>
 
-        <p
-          className="academy-body"
-          style={{
-            marginTop: 24,
-            fontSize: 'clamp(1.05rem, 2vw, 1.35rem)',
-            color: '#3A3A3A',
-            maxWidth: 720,
-          }}
-        >
-          4 chemins pour faire bouger ta com. Choisis celui qui te ressemble.
-        </p>
+          <p className="mt-6 text-base md:text-xl text-on-surface-variant max-w-2xl leading-relaxed">
+            4 chemins pour faire bouger ta com. Choisis celui qui te ressemble.
+          </p>
 
-        <div style={{ marginTop: 32 }}>
-          <CTAButton
+          <Link
             href="/academy/diagnostic"
-            variant="outline"
-            size="sm"
-            event="click_diagnostic_start"
-            eventProps={{ source: 'hero' }}
+            className="mt-8 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-bold text-on-surface border-b-2 border-on-surface pb-1 hover:text-primary hover:border-primary transition-colors"
           >
             Je ne sais pas où je me situe → fais le diagnostic en 2 minutes
-          </CTAButton>
+          </Link>
         </div>
       </section>
 
-      {/* ── Offre vedette + autres profils ────────────── */}
-      <section
-        id="offres"
-        style={{
-          padding: '0 24px 80px',
-          maxWidth: 1200,
-          margin: '0 auto',
-        }}
-      >
-        {/* Carte FONDATIONS featured (full-width, fond noir, modules visibles) */}
-        {(() => {
-          const featured = OFFERS.find((o) => o.featured) || OFFERS[0];
-          return <FeaturedOfferCard offer={featured} />;
-        })()}
+      {/* ── Offre vedette FONDATIONS + 3 autres ───────── */}
+      <section id="offres" className="px-6 md:px-12 pb-16 md:pb-24">
+        <div className="max-w-7xl mx-auto">
+          <FeaturedOfferCard offer={featured} />
 
-        {/* Les 3 autres profils — grille compacte sous la vedette */}
-        <div style={{ marginTop: 56 }}>
-          <p
-            className="academy-body"
-            style={{
-              fontSize: 12,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: '#6B6B6B',
-              fontWeight: 700,
-              marginBottom: 20,
-            }}
-          >
-            Tu es plus avancé&nbsp;? Trois autres parcours
-          </p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 20,
-            }}
-            className="academy-grid"
-          >
-            {OFFERS.filter((o) => !o.featured).map((offer) => (
-              <OfferCard key={offer.slug} offer={offer} />
-            ))}
+          <div className="mt-12 md:mt-16">
+            <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-6">
+              Tu es plus avancé ? Trois autres parcours
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+              {others.map((offer) => (
+                <OfferCard key={offer.slug} offer={offer} />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── Mini diagnostic ─────────────────────────────── */}
-      <section
-        style={{
-          background: '#FED700',
-          padding: '80px 24px',
-          color: '#000',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 920,
-            margin: '0 auto',
-            display: 'grid',
-            gap: 24,
-          }}
-        >
-          <h2
-            className="academy-display"
-            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)' }}
-          >
-            Tu hésites entre deux profils&nbsp;?
-          </h2>
-          <p
-            className="academy-body"
-            style={{ fontSize: '1.15rem', color: '#000', maxWidth: 680 }}
-          >
-            Réponds à 5 questions en 2 minutes. Tu sauras exactement où tu en es et quelle offre te correspond.
-          </p>
-          <div>
-            <CTAButton
+      <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-16 md:py-24">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+          <div className="md:col-span-8">
+            <p className="text-[0.65rem] uppercase tracking-[0.22em] font-bold mb-4">
+              Diagnostic 2 minutes
+            </p>
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
+              Tu hésites entre deux profils&nbsp;?
+            </h2>
+            <p className="mt-4 text-base md:text-lg">
+              Réponds à 5 questions en 2 minutes. Tu sauras exactement où tu en es et quelle offre te correspond.
+            </p>
+          </div>
+          <div className="md:col-span-4 md:text-right">
+            <Link
               href="/academy/diagnostic"
-              variant="primary"
-              size="lg"
-              event="click_diagnostic_start"
-              eventProps={{ source: 'banner_yellow' }}
+              className="inline-flex items-center gap-2 bg-on-surface text-surface px-8 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-on-surface/80 transition-colors"
             >
               Faire le diagnostic →
-            </CTAButton>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* ── Conseil 30 min ──────────────────────────────── */}
-      <section
-        style={{
-          background: '#0A0A0A',
-          color: '#FFFFFF',
-          padding: '80px 24px',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 920,
-            margin: '0 auto',
-            textAlign: 'center',
-            display: 'grid',
-            gap: 24,
-            justifyItems: 'center',
-          }}
-        >
-          <p
-            className="academy-body"
-            style={{
-              fontSize: 12,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: '#FED700',
-              fontWeight: 700,
-            }}
-          >
-            CTA premium
-          </p>
-          <h2
-            className="academy-display"
-            style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.25rem)', color: '#FFFFFF' }}
-          >
-            Tu préfères en parler de vive voix&nbsp;?
-          </h2>
-          <p
-            className="academy-body"
-            style={{ fontSize: '1.1rem', color: '#CFCFCF', maxWidth: 620 }}
-          >
-            30 minutes en visio avec Amadou Mbaye Gueye, fondateur de <span className="lolly-wordmark" style={{ color: '#FFFFFF' }}>LOLLY</span>.
-            Gratuit si tu t’inscris ensuite à une formation. 15 000 XOF sinon.
-          </p>
-          <div
-            style={{
-              display: 'flex',
-              gap: 12,
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-            }}
-          >
-            <CTAButton
-              href={CONTACT.calendly}
-              variant="yellow-on-black"
-              size="lg"
-              external
-              event="click_conseil_30min"
-              eventProps={{ via: 'calendly' }}
-            >
-              Réserver via Calendly →
-            </CTAButton>
-            <CTAButton
-              href={conseilWhatsappUrl(null)}
-              variant="outline-light"
-              size="lg"
-              external
-              event="click_conseil_30min"
-              eventProps={{ via: 'whatsapp' }}
-            >
-              WhatsApp direct →
-            </CTAButton>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
+      <ConseilCTA whatsappUrl={conseilWhatsappUrl(null)} calendlyUrl={CONTACT.calendly} />
+    </>
   );
 }

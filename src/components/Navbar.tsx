@@ -7,6 +7,7 @@ import Logo from "./Logo";
 
 const mainLinks = [
   { href: "/studio", label: "Studio" },
+  { href: "/academy", label: "Academy" },
   { href: "/rental", label: "Rental" },
   { href: "/about", label: "À Propos" },
   { href: "/contact", label: "Contact" },
@@ -21,9 +22,16 @@ function getBreadcrumbs(pathname: string) {
   const labels: Record<string, string> = {
     studio: "Studio",
     rental: "Rental",
+    academy: "Academy",
     about: "À Propos",
     contact: "Contact",
     projets: "Projets",
+    diagnostic: "Diagnostic",
+    inscription: "Inscription",
+    fondations: "Fondations",
+    "reprise-en-main": "Reprise en main",
+    pilotage: "Pilotage",
+    posture: "Posture",
   };
 
   let path = "";

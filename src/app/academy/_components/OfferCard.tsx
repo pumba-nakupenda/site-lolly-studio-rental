@@ -9,72 +9,25 @@ export default function OfferCard({ offer }: { offer: Offer }) {
     <Link
       href={`/academy/${offer.slug}`}
       onClick={() => track(`click_carte_${offer.slug.replace(/-/g, '_')}`)}
-      className="academy-card"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        background: '#FFFFFF',
-        border: '1px solid rgba(0,0,0,0.08)',
-        padding: '40px 32px',
-        textDecoration: 'none',
-        color: '#000',
-        height: '100%',
-        minHeight: 360,
-      }}
+      className="group flex flex-col bg-surface-container-lowest border border-outline-variant/15 hover:border-on-surface hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)] transition-all p-6 md:p-7 h-full"
     >
-      <span
-        style={{
-          display: 'inline-block',
-          alignSelf: 'flex-start',
-          background: '#000',
-          color: '#FED700',
-          padding: '6px 14px',
-          fontSize: 11,
-          letterSpacing: '0.15em',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-        }}
-        className="academy-body"
-      >
+      <span className="inline-block self-start text-[0.6rem] uppercase tracking-[0.22em] font-bold text-primary-fixed bg-on-surface px-3 py-1.5 mb-5">
         {offer.level} — {offer.name}
       </span>
 
-      <h3
-        className="academy-display"
-        style={{
-          marginTop: 24,
-          fontSize: 'clamp(1.5rem, 2.4vw, 1.95rem)',
-        }}
-      >
+      <h3 className="text-lg md:text-xl font-black uppercase tracking-tight text-on-surface leading-tight">
         {offer.cardTitle}
       </h3>
 
-      <p className="academy-body" style={{ marginTop: 16, color: '#3A3A3A', fontSize: '1rem' }}>
+      <p className="mt-3 text-sm text-on-surface-variant leading-relaxed">
         {offer.cardLead}
       </p>
 
-      <p
-        className="academy-body"
-        style={{
-          marginTop: 24,
-          fontSize: 13,
-          color: '#6B6B6B',
-          letterSpacing: '0.02em',
-        }}
-      >
+      <p className="mt-5 text-xs text-secondary tracking-tight">
         {offer.meta}
       </p>
 
-      <span
-        className="academy-display"
-        style={{
-          marginTop: 'auto',
-          paddingTop: 32,
-          fontSize: 14,
-          letterSpacing: '0.14em',
-          color: '#000',
-        }}
-      >
+      <span className="mt-auto pt-6 text-xs uppercase tracking-[0.18em] font-black text-on-surface group-hover:text-primary transition-colors">
         Découvrir {offer.name} →
       </span>
     </Link>
