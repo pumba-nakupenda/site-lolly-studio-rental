@@ -1,4 +1,5 @@
 import OfferCard from './_components/OfferCard';
+import FeaturedOfferCard from './_components/FeaturedOfferCard';
 import CTAButton from './_components/CTAButton';
 import Footer from './_components/Footer';
 import { OFFERS, CONTACT, conseilWhatsappUrl } from './_lib/offers';
@@ -74,7 +75,7 @@ export default function AcademyHome() {
         </div>
       </section>
 
-      {/* ── 4 Cartes ────────────────────────────────────── */}
+      {/* ── Offre vedette + autres profils ────────────── */}
       <section
         id="offres"
         style={{
@@ -83,17 +84,39 @@ export default function AcademyHome() {
           margin: '0 auto',
         }}
       >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 24,
-          }}
-          className="academy-grid"
-        >
-          {OFFERS.map((offer) => (
-            <OfferCard key={offer.slug} offer={offer} />
-          ))}
+        {/* Carte FONDATIONS featured (full-width, fond noir, modules visibles) */}
+        {(() => {
+          const featured = OFFERS.find((o) => o.featured) || OFFERS[0];
+          return <FeaturedOfferCard offer={featured} />;
+        })()}
+
+        {/* Les 3 autres profils — grille compacte sous la vedette */}
+        <div style={{ marginTop: 56 }}>
+          <p
+            className="academy-body"
+            style={{
+              fontSize: 12,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: '#6B6B6B',
+              fontWeight: 700,
+              marginBottom: 20,
+            }}
+          >
+            Tu es plus avancé&nbsp;? Trois autres parcours
+          </p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: 20,
+            }}
+            className="academy-grid"
+          >
+            {OFFERS.filter((o) => !o.featured).map((offer) => (
+              <OfferCard key={offer.slug} offer={offer} />
+            ))}
+          </div>
         </div>
       </section>
 

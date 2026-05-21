@@ -1,6 +1,14 @@
 // Données centrales des 4 offres LOLLY Academy.
 // Source : BRIEF_PAGE_CARTE_ACADEMY.md + PLAN_LANCEMENT_LOLLY_ACADEMY_2026 v3.
 
+export type Module = {
+  slug: string;
+  title: string;
+  lead: string;
+  takeaways: string[];
+  durationHint: string;
+};
+
 export type Offer = {
   slug: 'fondations' | 'reprise-en-main' | 'pilotage' | 'posture';
   level: 'N0' | 'N1' | 'N2' | 'N3';
@@ -17,6 +25,8 @@ export type Offer = {
   programme: string[];
   format: string[];
   waveText: string;
+  featured?: boolean;
+  modules?: Module[];
 };
 
 export const OFFERS: Offer[] = [
@@ -53,6 +63,57 @@ export const OFFERS: Offer[] = [
     ],
     waveText:
       'Bonjour LOLLY Academy, je souhaite m’inscrire à la formation FONDATIONS (5 jours, early bird 35 000 XOF). Voici mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.',
+    featured: true,
+    modules: [
+      {
+        slug: 'psychologie-vente',
+        title: 'Psychologie de la vente',
+        lead:
+          'Comprendre ce qui déclenche l’achat en ligne. Pourquoi quelqu’un scrolle, s’arrête, clique, achète — ou ne le fait pas.',
+        takeaways: [
+          'Les 5 déclencheurs émotionnels du passage à l’acte',
+          'Faire parler ton produit sans en parler frontalement',
+          'L’objection qu’on doit lever avant qu’elle soit posée',
+        ],
+        durationHint: '2 sessions live · 4h cumulées',
+      },
+      {
+        slug: 'fondations-reseaux',
+        title: 'Fondations des réseaux',
+        lead:
+          'Comment ils fonctionnent vraiment. Algorithme, formats, codes culturels, durée d’attention — la base que personne ne t’a expliquée.',
+        takeaways: [
+          'Choisir LE réseau qui matche ton client (pas tous, un seul)',
+          'Lire un algorithme : ce qu’il récompense, ce qu’il punit',
+          'Calendrier minimal viable : 3 publications par semaine',
+        ],
+        durationHint: '2 sessions live · 4h cumulées',
+      },
+      {
+        slug: 'vendre-sur-les-reseaux',
+        title: 'Vendre sur les réseaux',
+        lead:
+          'Du follower à la commande. Le pipeline qui transforme un like en client : DM, catalogue, confirmation, livraison.',
+        takeaways: [
+          'Le script DM qui ouvre une vente sans paraître insistant',
+          'Quand basculer vers WhatsApp / téléphone / Wave',
+          'La preuve sociale : témoignages, before/after, lives qui rassurent',
+        ],
+        durationHint: '2 sessions live · 4h cumulées',
+      },
+      {
+        slug: 'message-positionnement',
+        title: 'Le message qui parle à ton client',
+        lead:
+          'Avant de publier mieux, il faut clarifier à QUI tu parles et POURQUOI. Le travail de positionnement qui change tout.',
+        takeaways: [
+          'Identifier ton client idéal en une phrase qui claque',
+          'Trouver les 3 angles éditoriaux qui t’appartiennent',
+          'Écrire une bio qui convertit en moins de 5 secondes',
+        ],
+        durationHint: '1 session live · 2h',
+      },
+    ],
   },
   {
     slug: 'reprise-en-main',

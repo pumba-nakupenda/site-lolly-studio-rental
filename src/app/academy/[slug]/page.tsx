@@ -161,6 +161,127 @@ export default async function OfferPage({ params }: { params: Promise<{ slug: st
         </div>
       </section>
 
+      {/* ── Modules au choix (FONDATIONS uniquement) ─────── */}
+      {offer.modules && offer.modules.length > 0 && (
+        <section
+          style={{
+            background: '#000000',
+            color: '#FFFFFF',
+            padding: '64px 24px',
+          }}
+        >
+          <div style={{ maxWidth: 1120, margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: 32,
+                alignItems: 'end',
+                marginBottom: 40,
+              }}
+            >
+              <div>
+                <p
+                  className="academy-body"
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    color: '#FED700',
+                    fontWeight: 700,
+                    marginBottom: 12,
+                  }}
+                >
+                  Tu composes ton parcours
+                </p>
+                <h2
+                  className="academy-display"
+                  style={{ fontSize: 'clamp(1.6rem, 3.2vw, 2.25rem)', color: '#FFFFFF' }}
+                >
+                  Les modules au choix
+                </h2>
+              </div>
+              <p className="academy-body" style={{ color: '#C7C7C7', fontSize: '1rem', maxWidth: 460 }}>
+                Tu prends tout le pack ou tu choisis 2-3 modules selon ton angle. On adapte le format à ce que tu réserves.
+              </p>
+            </div>
+
+            <ul
+              style={{
+                listStyle: 'none',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: 20,
+              }}
+            >
+              {offer.modules.map((m, i) => (
+                <li
+                  key={m.slug}
+                  style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    padding: '28px',
+                    display: 'grid',
+                    gap: 16,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                    <span
+                      className="academy-display"
+                      style={{
+                        color: '#000',
+                        background: '#FED700',
+                        padding: '4px 10px',
+                        fontSize: 13,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <h3
+                      className="academy-display"
+                      style={{ fontSize: '1.15rem', color: '#FFFFFF' }}
+                    >
+                      {m.title}
+                    </h3>
+                  </div>
+                  <p className="academy-body" style={{ color: '#D4D4D4', fontSize: '0.95rem' }}>
+                    {m.lead}
+                  </p>
+                  <ul style={{ listStyle: 'none', display: 'grid', gap: 8 }}>
+                    {m.takeaways.map((t, j) => (
+                      <li
+                        key={j}
+                        className="academy-body"
+                        style={{
+                          color: '#FFFFFF',
+                          fontSize: '0.9rem',
+                          paddingLeft: 14,
+                          borderLeft: '2px solid #FED700',
+                        }}
+                      >
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                  <p
+                    className="academy-body"
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: '#9A9A9A',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {m.durationHint}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       {/* ── Programme + Format en 7/5 ───────────────────── */}
       <section
         style={{
