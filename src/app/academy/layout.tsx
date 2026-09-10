@@ -3,15 +3,17 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'LOLLY Academy — 4 chemins pour faire bouger ta com',
+  title: { default: 'LOLLY Academy — Formations en communication digitale', template: '%s | LOLLY Academy' },
   description:
-    'LOLLY Academy : 4 offres de formation pour vendre, reprendre la main, piloter et transmettre. Cohorte 1 le 15 juin 2026.',
+    'Formation intensive de 5 jours, accompagnement de 3 à 5 mois et ateliers pratiques à Dakar.',
+  alternates: { canonical: '/academy' },
   openGraph: {
-    title: 'LOLLY Academy — Quel est ton défi de communication aujourd’hui ?',
+    title: 'LOLLY Academy — Apprendre, appliquer, avancer',
     description:
-      '4 chemins pour faire bouger ta com. FONDATIONS, REPRISE EN MAIN, PILOTAGE, POSTURE. Cohorte 1 le 15 juin 2026.',
+      'Formation intensive, accompagnement et ateliers pratiques en communication digitale à Dakar.',
     type: 'website',
-    locale: 'fr_FR',
+    locale: 'fr_SN',
+    url: 'https://lolly.sn/academy',
   },
 };
 

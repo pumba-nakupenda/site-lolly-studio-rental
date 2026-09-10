@@ -18,11 +18,11 @@ export default function HeroCTAs() {
           href="#offres"
           className="inline-flex items-center justify-center gap-2 border-2 border-on-surface text-on-surface font-black uppercase px-8 py-4 text-sm tracking-[0.16em] hover:bg-on-surface hover:text-primary-fixed transition-colors"
         >
-          Voir les formations
+          Comparer les offres
         </a>
       </div>
       <p className="mt-3 text-xs text-secondary tracking-tight">
-        Gratuit · anonyme · 5 questions
+        Gratuit · sans engagement · 4 questions
       </p>
     </>
   );

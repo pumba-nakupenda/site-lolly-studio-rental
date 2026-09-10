@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { track } from './Track';
-import { priceFrom, fmtPrice, type Offer } from '../_lib/offers';
+import { offerPriceLabel, type Offer } from '../_lib/offers';
 
 export default function OfferCard({ offer }: { offer: Offer }) {
   return (
@@ -12,7 +12,7 @@ export default function OfferCard({ offer }: { offer: Offer }) {
       className="group flex flex-col bg-surface-container-lowest border border-outline-variant/15 hover:border-on-surface hover:shadow-[0_16px_40px_rgba(0,0,0,0.12)] transition-all p-6 md:p-7 h-full"
     >
       <span className="inline-block self-start text-[0.6rem] uppercase tracking-[0.22em] font-bold text-primary-fixed bg-on-surface px-3 py-1.5 mb-5">
-        {offer.level} — {offer.name}
+        {offer.eyebrow} — {offer.name}
       </span>
 
       <h3 className="text-lg md:text-xl font-black uppercase tracking-tight text-on-surface leading-tight">
@@ -25,16 +25,16 @@ export default function OfferCard({ offer }: { offer: Offer }) {
 
       <div className="mt-5">
         <p className="text-[0.6rem] uppercase tracking-[0.18em] text-secondary font-bold">
-          À partir de
+          Tarif
         </p>
         <p className="text-xl font-black text-primary tracking-tight">
-          {fmtPrice(priceFrom(offer))}
+          {offerPriceLabel(offer)}
         </p>
-        <p className="mt-1 text-xs text-secondary">{offer.metaShort}</p>
+        <p className="mt-1 text-xs text-secondary">{offer.durationLine}</p>
       </div>
 
       <span className="mt-auto pt-6 text-xs uppercase tracking-[0.18em] font-black text-on-surface group-hover:text-primary transition-colors">
-        Découvrir {offer.name} →
+        Voir le détail →
       </span>
     </Link>
   );

@@ -25,7 +25,6 @@ export function track(event: string, props: Props = {}): void {
       window.gtag('event', event, props);
     }
     if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
       console.info('[track]', event, props);
     }
   } catch {

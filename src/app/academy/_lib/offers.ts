@@ -1,24 +1,14 @@
-// Données centrales des 4 offres LOLLY Academy.
-// Source : BRIEF_PAGE_CARTE_ACADEMY.md + PLAN_LANCEMENT_LOLLY_ACADEMY_2026 v3.
-
-export type Module = {
-  slug: string;
-  title: string;
-  lead: string;
-  takeaways: string[];
-  durationHint: string;
-};
+export type Workshop = { title: string; description: string };
 
 export type Offer = {
-  slug: 'fondations' | 'reprise-en-main' | 'pilotage' | 'posture';
-  level: 'N0' | 'N1' | 'N2' | 'N3';
+  slug: 'formation-intensive' | 'accompagnement' | 'ateliers';
+  eyebrow: string;
   name: string;
   cardTitle: string;
   cardLead: string;
-  meta: string;
-  metaShort: string;
-  priceFull: number;
-  priceEarly: number | null;
+  price: number;
+  pricePrefix?: string;
+  priceSuffix?: string;
   durationLine: string;
   promiseHeadline: string;
   problemBody: string[];
@@ -26,240 +16,97 @@ export type Offer = {
   format: string[];
   waveText: string;
   featured?: boolean;
-  modules?: Module[];
+  workshops?: Workshop[];
 };
+
+export const WORKSHOPS: Workshop[] = [
+  { title: 'Stratégie digitale & positionnement', description: 'Clarifier sa cible, sa promesse et les canaux qui méritent vraiment du temps.' },
+  { title: 'Créer du contenu au smartphone', description: 'Préparer, tourner et monter des contenus propres avec les moyens disponibles.' },
+  { title: 'Instagram & TikTok', description: 'Choisir les bons formats et construire une présence régulière sans publier au hasard.' },
+  { title: 'WhatsApp Business & vente', description: 'Transformer les conversations en demandes, relances et commandes mieux suivies.' },
+  { title: 'Copywriting & storytelling', description: 'Écrire des messages plus clairs, crédibles et capables de faire passer à l’action.' },
+  { title: 'Community management', description: 'Organiser un calendrier éditorial, animer une communauté et répondre avec méthode.' },
+  { title: 'Publicité Meta', description: 'Préparer une campagne simple et lire les résultats pour éviter de dépenser à l’aveugle.' },
+  { title: 'IA pratique pour la communication', description: 'Accélérer la préparation des contenus sans perdre sa voix, son jugement ni son identité.' },
+];
 
 export const OFFERS: Offer[] = [
   {
-    slug: 'fondations',
-    level: 'N0',
-    name: 'FONDATIONS',
-    cardTitle: 'Tu vends sur les réseaux mais rien ne décolle.',
-    cardLead:
-      'Stories quotidiennes, promos lancées, DM envoyés — et toujours pas de ventes. Les réseaux, ce n’est pas comme le marché. Tu n’as pas appris comment ça marche vraiment.',
-    meta: '5 jours intensifs · cohorte en ligne live · 50 000 XOF (early bird 35 000 XOF)',
-    metaShort: '5 jours · 50 000 XOF',
-    priceFull: 50000,
-    priceEarly: 35000,
-    durationLine: '5 jours intensifs · sessions live en visio',
-    promiseHeadline:
-      'À la fin de la semaine, tu sais exactement comment transformer un follower en client.',
+    slug: 'formation-intensive', eyebrow: '5 jours', name: 'Formation intensive', featured: true,
+    cardTitle: 'Cinq jours pour rendre ta communication plus claire et plus utile à la vente.',
+    cardLead: 'Un parcours concentré pour poser les bases, produire avec méthode et repartir avec un plan d’action applicable dès la semaine suivante.',
+    price: 75000,
+    durationLine: '5 jours de formation · exercices appliqués · plan d’action final',
+    promiseHeadline: 'Tu repars avec un message clair, des contenus prêts à produire et une méthode de vente que tu peux répéter.',
     problemBody: [
-      'Tu publies tous les jours et tu sens que rien ne bouge. Pas un DM sérieux, pas une vente. Tu commences à te demander si ce n’est pas toi le problème.',
-      'Le marché, tu sais le tenir. Tu sens les gens, tu négocies, tu conclus. Mais sur les réseaux les codes sont inversés : ce n’est pas la voix qui vend, c’est la régularité, l’angle, la preuve. Personne ne te l’a appris.',
+      'Tu communiques, mais les actions restent dispersées : un post aujourd’hui, une promotion demain, puis plus rien quand l’activité devient chargée.',
+      'Pendant cinq jours, on remet chaque élément dans le bon ordre : la cible, le message, le contenu, la conversion et le suivi. Chaque notion est appliquée à ton activité.',
     ],
     programme: [
-      'Comprendre la logique d’un feed et d’un algorithme',
-      'Construire un message clair qui parle à un seul client idéal',
-      'Le format qui te ressemble : reel, story, photo, audio',
-      'Le pipeline DM → catalogue → commande',
-      'Les preuves sociales : témoignages, before/after, lives',
+      'Jour 1 — Positionnement, cible et promesse commerciale',
+      'Jour 2 — Ligne éditoriale et contenus qui attirent l’attention',
+      'Jour 3 — Production au smartphone et organisation du calendrier',
+      'Jour 4 — WhatsApp Business, prise de contact et relance',
+      'Jour 5 — Plan de communication et feuille de route sur 30 jours',
     ],
-    format: [
-      '5 sessions live (2h chacune) du lundi au vendredi, 18h00-20h00 Dakar',
-      'Replays disponibles 30 jours',
-      'Communauté WhatsApp dédiée à la cohorte',
-      'Exercice quotidien à publier — feedback du formateur',
-    ],
-    waveText:
-      'Bonjour LOLLY Academy, je souhaite m’inscrire à la formation FONDATIONS (5 jours, early bird 35 000 XOF). Voici mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.',
-    featured: true,
-    modules: [
-      {
-        slug: 'psychologie-vente',
-        title: 'Psychologie de la vente',
-        lead:
-          'Comprendre ce qui déclenche l’achat en ligne. Pourquoi quelqu’un scrolle, s’arrête, clique, achète — ou ne le fait pas.',
-        takeaways: [
-          'Les 5 déclencheurs émotionnels du passage à l’acte',
-          'Faire parler ton produit sans en parler frontalement',
-          'L’objection qu’on doit lever avant qu’elle soit posée',
-        ],
-        durationHint: '2 sessions live · 4h cumulées',
-      },
-      {
-        slug: 'fondations-reseaux',
-        title: 'Fondations des réseaux',
-        lead:
-          'Comment ils fonctionnent vraiment. Algorithme, formats, codes culturels, durée d’attention — la base que personne ne t’a expliquée.',
-        takeaways: [
-          'Choisir LE réseau qui matche ton client (pas tous, un seul)',
-          'Lire un algorithme : ce qu’il récompense, ce qu’il punit',
-          'Calendrier minimal viable : 3 publications par semaine',
-        ],
-        durationHint: '2 sessions live · 4h cumulées',
-      },
-      {
-        slug: 'vendre-sur-les-reseaux',
-        title: 'Vendre sur les réseaux',
-        lead:
-          'Du follower à la commande. Le pipeline qui transforme un like en client : DM, catalogue, confirmation, livraison.',
-        takeaways: [
-          'Le script DM qui ouvre une vente sans paraître insistant',
-          'Quand basculer vers WhatsApp / téléphone / Wave',
-          'La preuve sociale : témoignages, before/after, lives qui rassurent',
-        ],
-        durationHint: '2 sessions live · 4h cumulées',
-      },
-      {
-        slug: 'message-positionnement',
-        title: 'Le message qui parle à ton client',
-        lead:
-          'Avant de publier mieux, il faut clarifier à QUI tu parles et POURQUOI. Le travail de positionnement qui change tout.',
-        takeaways: [
-          'Identifier ton client idéal en une phrase qui claque',
-          'Trouver les 3 angles éditoriaux qui t’appartiennent',
-          'Écrire une bio qui convertit en moins de 5 secondes',
-        ],
-        durationHint: '1 session live · 2h',
-      },
-    ],
+    format: ['Apports courts suivis d’exercices sur ton activité', 'Corrections et retours concrets pendant la formation', 'Supports de travail réutilisables après les cinq jours', 'Attestation de participation en fin de parcours'],
+    waveText: 'Bonjour LOLLY Academy, je souhaite m’inscrire à la formation intensive de 5 jours à 75 000 XOF. Voici mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.',
   },
   {
-    slug: 'reprise-en-main',
-    level: 'N1',
-    name: 'REPRISE EN MAIN',
-    cardTitle: 'Tu avais commencé, tu as abandonné par stress.',
-    cardLead:
-      'Tu publiais, tu prospectais, tu y croyais. Puis ça s’est arrêté. Pas parce que tu es paresseux. Parce que c’était devenu trop, et que tu ne savais pas conclure tes ventes.',
-    meta: '4 semaines · cohorte en ligne live · 100 000 XOF (early bird 75 000 XOF)',
-    metaShort: '4 semaines · 100 000 XOF',
-    priceFull: 100000,
-    priceEarly: 75000,
-    durationLine: '4 semaines · 2 sessions live par semaine + suivi',
-    promiseHeadline:
-      'Tu remets ta com en route avec un rythme tenable et un système de vente qui n’a plus besoin de toi 24/7.',
+    slug: 'accompagnement', eyebrow: '3 à 5 mois', name: 'Accompagnement',
+    cardTitle: 'Installer une communication qui tient dans le temps, avec un regard à tes côtés.',
+    cardLead: 'Pour les entrepreneurs et équipes qui veulent être suivis dans l’exécution, corriger rapidement et progresser sur des objectifs réels.',
+    price: 85000, pricePrefix: 'À partir de',
+    durationLine: '3 à 5 mois · rythme défini après diagnostic · suivi de l’exécution',
+    promiseHeadline: 'Tu ne repars pas seulement avec des idées : tu avances avec un cadre, des priorités et des corrections régulières.',
     problemBody: [
-      'Tu te souviens du moment où tu y croyais. Tu publiais, tu prospectais, tu répondais. Et puis le mur. Tu n’avais plus la tête à ça, plus le souffle. Ça s’est éteint sans bruit.',
-      'Le problème n’était pas ta motivation. Le problème était que personne ne t’avait montré comment installer un système qui tient sans toi. On va le faire ensemble — calmement, en 4 semaines.',
+      'Tu sais globalement ce qu’il faudrait faire, mais l’urgence quotidienne reprend le dessus. Les actions s’arrêtent, les contenus s’accumulent et les résultats sont difficiles à lire.',
+      'L’accompagnement transforme la stratégie en habitudes de travail. Nous fixons les objectifs, construisons les outils utiles et suivons leur mise en œuvre avec toi.',
     ],
-    programme: [
-      'Diagnostic : pourquoi tu as lâché, ce qu’il faut récupérer',
-      'Calendrier éditorial minimum viable (3 publications / semaine)',
-      'Scripts DM pour faire repartir le pipeline froid',
-      'Conclusion de vente : le moment où ça bascule',
-      'Routine hebdomadaire — 4 h par semaine maximum',
-    ],
-    format: [
-      '8 sessions live sur 4 semaines (mardi + jeudi, 19h-20h30)',
-      'Replays + ressources PDF',
-      'WhatsApp dédié + 1 appel de suivi en fin de cycle',
-      'Audit complet de ta page à l’entrée',
-    ],
-    waveText:
-      'Bonjour LOLLY Academy, je souhaite m’inscrire à la formation REPRISE EN MAIN (4 semaines, early bird 75 000 XOF). Voici mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.',
+    programme: ['Diagnostic de la communication et choix de trois priorités', 'Positionnement, messages et parcours de conversion', 'Organisation éditoriale et production des contenus', 'Suivi des prospects, relances et fidélisation', 'Lecture des résultats et ajustements réguliers'],
+    format: ['Accompagnement personnalisé sur 3 à 5 mois', 'Objectifs et rythme adaptés après un premier diagnostic', 'Points de suivi, corrections et ressources de travail', 'Tarif final défini selon le périmètre et le niveau de suivi'],
+    waveText: 'Bonjour LOLLY Academy, je souhaite échanger sur l’accompagnement de 3 à 5 mois à partir de 85 000 XOF. Voici mes coordonnées : Nom — WhatsApp — Email — Activité. Merci.',
   },
   {
-    slug: 'pilotage',
-    level: 'N2',
-    name: 'PILOTAGE',
-    cardTitle: 'Ta communication tourne, mais tu t’épuises à tout porter.',
-    cardLead:
-      'Tu publies, tu réponds, tu relances, tu produis. Et personne ne peut le faire à ta place. Tu veux automatiser, contrôler avec les bons outils, reprendre la main.',
-    meta: '12 semaines · parcours + suivi mensuel · 150 000 XOF (early bird 120 000 XOF)',
-    metaShort: '12 semaines · 150 000 XOF',
-    priceFull: 150000,
-    priceEarly: 120000,
-    durationLine: '12 semaines · 1 atelier hebdo + 3 coaching individuels',
-    promiseHeadline:
-      'Tu sors avec une équipe (ou un freelance), des outils qui tournent seuls, et ton temps récupéré.',
+    slug: 'ateliers', eyebrow: 'Format court', name: 'Ateliers LOLLY',
+    cardTitle: 'Travailler une compétence précise et repartir avec quelque chose de prêt.',
+    cardLead: 'Des sessions pratiques en petit groupe autour d’un sujet concret de communication digitale. Tu apprends, tu produis, tu corriges.',
+    price: 25000, priceSuffix: 'personne',
+    durationLine: '25 000 XOF par personne · thèmes et dates annoncés selon le calendrier',
+    promiseHeadline: 'Un atelier, un sujet, un résultat directement utilisable dans ton activité.',
     problemBody: [
-      'Tu produis tout, tu valides tout, tu réponds à tout. Ta com fonctionne précisément parce que tu portes tout — et c’est exactement ce qui t’empêche de scaler.',
-      'En 12 semaines on installe les outils, les procédures, les indicateurs et la posture qui te permettent de déléguer sans perdre le contrôle. Tu redeviens directeur, pas exécutant.',
+      'Tu n’as pas forcément besoin d’un programme complet. Tu veux débloquer un point précis : mieux filmer, mieux écrire, organiser tes publications ou mieux vendre sur WhatsApp.',
+      'Les Ateliers LOLLY vont droit au travail utile. Le groupe avance sur un même objectif et chacun repart avec une production ou un outil adapté à son activité.',
     ],
-    programme: [
-      'Cartographie de ta com : ce que toi seul peux faire vs ce qui peut sortir',
-      'Outils : Notion, Airtable, Buffer/Metricool, ManyChat, IA assistante',
-      'Scripts SOP — chaque tâche documentée, transférable',
-      'Recrutement : community manager, monteur, prospecteur',
-      'Indicateurs hebdo : ce que tu regardes pour piloter',
-    ],
-    format: [
-      '12 ateliers live (mercredi 18h-20h)',
-      '3 coachings individuels 1:1 (45 min)',
-      'Bibliothèque de templates LOLLY (Notion, Airtable, scripts DM)',
-      'Communauté WhatsApp Pilotage + revue mensuelle',
-    ],
-    waveText:
-      'Bonjour LOLLY Academy, je souhaite m’inscrire à la formation PILOTAGE (12 semaines, early bird 120 000 XOF). Voici mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.',
-  },
-  {
-    slug: 'posture',
-    level: 'N3',
-    name: 'POSTURE',
-    cardTitle: 'Tu portes ton entreprise sur tes épaules.',
-    cardLead:
-      'Tu veux que tes équipes parlent de ta marque avec la même posture que toi. Que ta com tourne aussi quand tu n’es pas là. Ça ne s’improvise pas — ça se transmet.',
-    meta: '6 à 8 semaines · coaching dirigeant + atelier équipe · à partir de 300 000 XOF',
-    metaShort: '6-8 semaines · dès 300 000 XOF',
-    priceFull: 300000,
-    priceEarly: null,
-    durationLine: '6 à 8 semaines · coaching dirigeant 1:1 + atelier équipe',
-    promiseHeadline:
-      'Tes équipes portent ta voix avec la même conviction que toi. Ta com tourne même quand tu n’es pas dans la pièce.',
-    problemBody: [
-      'Ton entreprise marche parce que tu es là. Tu fais les appels stratégiques, tu trouves les bons mots, tu rassures les clients. Quand tu pars en voyage, tout ralentit.',
-      'POSTURE est un programme sur mesure : coaching dirigeant 1:1 pour clarifier ta voix, puis atelier équipe pour la transmettre. À la sortie, ta marque a une signature partageable, pas juste une intuition logée dans ta tête.',
-    ],
-    programme: [
-      'Audit dirigeant : ta voix, tes convictions, ce qui fait ta différence',
-      'Manifeste de marque + charte de prise de parole interne',
-      'Atelier équipe (2 jours) : transmettre la posture LOLLY',
-      'Scripts de gestion de crise + porte-parole secondaire',
-      'Plan de mesure et de suivi sur 90 jours après le programme',
-    ],
-    format: [
-      '6 à 8 séances 1:1 dirigeant (selon profil)',
-      '1 atelier équipe (2 jours, présentiel Dakar ou hybride)',
-      'Livrables documentés : manifeste, charte interne, scripts',
-      'Suivi trimestriel après livraison',
-    ],
-    waveText:
-      'Bonjour LOLLY Academy, je souhaite échanger sur le programme POSTURE (sur mesure, à partir de 300 000 XOF). Voici mes coordonnées : Nom — Prénom — WhatsApp — Email — Entreprise. Merci.',
+    programme: ['Comprendre les principes essentiels du sujet', 'Observer des exemples adaptés au marché local', 'Appliquer la méthode à son activité pendant l’atelier', 'Recevoir une correction et une prochaine action claire'],
+    format: ['Atelier pratique en groupe', '25 000 XOF par participant et par atelier', 'Thèmes proposés selon le calendrier LOLLY Academy', 'Possibilité d’organiser un atelier dédié pour une équipe'],
+    waveText: 'Bonjour LOLLY Academy, je souhaite connaître les prochaines dates des Ateliers LOLLY à 25 000 XOF par personne. Le thème qui m’intéresse est : … Mes coordonnées : Nom — WhatsApp — Email. Merci.',
+    workshops: WORKSHOPS,
   },
 ];
 
-export function getOffer(slug: string): Offer | undefined {
-  return OFFERS.find((o) => o.slug === slug);
-}
-
-export const CONTACT = {
-  whatsapp: '+221772354747',
-  whatsappDigits: '221772354747',
-  email: 'oudama@lolly.sn',
-  calendly: 'https://calendly.com/lolly-sn/conseil-30min',
-  city: 'Dakar, Sénégal',
+export const LEGACY_OFFER_REDIRECTS: Record<string, Offer['slug']> = {
+  fondations: 'formation-intensive', 'reprise-en-main': 'accompagnement', pilotage: 'accompagnement', posture: 'accompagnement',
 };
 
-export function reserveWhatsappUrl(offer: Offer): string {
-  const text = encodeURIComponent(offer.waveText);
-  return `https://wa.me/${CONTACT.whatsappDigits}?text=${text}`;
+export function getOffer(slug: string): Offer | undefined { return OFFERS.find((offer) => offer.slug === slug); }
+
+export const CONTACT = { whatsapp: '+221 77 235 47 47', whatsappDigits: '221772354747', email: 'oudama@lolly.sn', calendly: 'https://calendly.com/lolly-sn/conseil-30min', city: 'Dakar, Sénégal' };
+
+export function fmtPrice(n: number): string { return `${new Intl.NumberFormat('fr-FR').format(n)} XOF`; }
+
+export function offerPriceLabel(offer: Offer): string {
+  return `${offer.pricePrefix ? `${offer.pricePrefix} ` : ''}${fmtPrice(offer.price)}${offer.priceSuffix ? ` / ${offer.priceSuffix}` : ''}`;
 }
 
-// Prix « à partir de » : early bird s'il existe, sinon tarif plein.
-export function priceFrom(offer: Offer): number {
-  return offer.priceEarly ?? offer.priceFull;
-}
+export function reserveWhatsappUrl(offer: Offer): string { return `https://wa.me/${CONTACT.whatsappDigits}?text=${encodeURIComponent(offer.waveText)}`; }
 
-// Message WhatsApp d'inscription suite au diagnostic, formation choisie.
 export function diagnosticWhatsappUrl(offer: Offer): string {
-  const text = encodeURIComponent(
-    `Bonjour LOLLY Academy, j'ai fait le diagnostic et je choisis la formation ${offer.name} (à partir de ${fmtPrice(
-      priceFrom(offer),
-    )}). Mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.`,
-  );
-  return `https://wa.me/${CONTACT.whatsappDigits}?text=${text}`;
+  const text = `Bonjour LOLLY Academy, j’ai fait le diagnostic et je souhaite avancer avec l’offre ${offer.name} (${offerPriceLabel(offer)}). Mes coordonnées : Nom — Prénom — WhatsApp — Email. Merci.`;
+  return `https://wa.me/${CONTACT.whatsappDigits}?text=${encodeURIComponent(text)}`;
 }
 
 export function conseilWhatsappUrl(offer: Offer | null): string {
-  const text = encodeURIComponent(
-    offer
-      ? `Bonjour LOLLY Academy, je voudrais réserver un conseil 30 min avant de m’inscrire à ${offer.name}. Mes coordonnées : Nom — WhatsApp — Email.`
-      : 'Bonjour LOLLY Academy, je voudrais réserver un conseil 30 min pour choisir l’offre qui me correspond. Mes coordonnées : Nom — WhatsApp — Email.',
-  );
-  return `https://wa.me/${CONTACT.whatsappDigits}?text=${text}`;
-}
-
-export function fmtPrice(n: number): string {
-  return new Intl.NumberFormat('fr-FR').format(n) + ' XOF';
+  const text = offer ? `Bonjour LOLLY Academy, je voudrais échanger avant de choisir l’offre ${offer.name}. Mes coordonnées : Nom — WhatsApp — Email.` : 'Bonjour LOLLY Academy, je voudrais être conseillé pour choisir la formule adaptée à mon besoin. Mes coordonnées : Nom — WhatsApp — Email.';
+  return `https://wa.me/${CONTACT.whatsappDigits}?text=${encodeURIComponent(text)}`;
 }
