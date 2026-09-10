@@ -2,7 +2,7 @@ import InscriptionForm from './InscriptionForm';
 
 export const metadata = {
   title: 'Inscription',
-  description: 'Demande d’inscription aux formations, accompagnements et ateliers LOLLY Academy.',
+  description: 'Inscription aux Masterclass de LOLLY, formations, accompagnements et ateliers LOLLY Academy.',
 };
 
 export default async function InscriptionPage({

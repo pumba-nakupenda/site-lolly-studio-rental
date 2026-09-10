@@ -28,7 +28,7 @@ export default function AcademyHome() {
               Apprendre.<br /><span className="text-primary-fixed">Appliquer.</span><br />Progresser.
             </h1>
             <p className="mt-7 text-base md:text-xl text-white/70 max-w-2xl leading-relaxed">
-              Tu ne viens pas écouter des recettes. Tu viens travailler sur ton activité, produire pendant la session et repartir avec une méthode que tu peux continuer à utiliser.
+              Avant de te proposer une formation, nous cherchons à comprendre ton activité. Commence par le diagnostic ou échange directement avec l’équipe LOLLY.
             </p>
             <HeroCTAs inverse />
           </div>
@@ -39,6 +39,45 @@ export default function AcademyHome() {
                 <li key={offer.slug} className="grid grid-cols-[auto_1fr] gap-4 items-start">
                   <span className="text-xs font-black text-primary-fixed">0{index + 1}</span>
                   <div><p className="font-black uppercase tracking-tight">{offer.name}</p><p className="mt-1 text-sm text-white/55">{offer.eyebrow} · {offerPriceLabel(offer)}</p></div>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        </div>
+      </section>
+
+      {/* ── Conseil d'abord ────────────────────────────── */}
+      <ConseilCTA whatsappUrl={conseilWhatsappUrl(null)} calendlyUrl={CONTACT.calendly} />
+
+      {/* ── Masterclass hebdomadaires ──────────────────── */}
+      <section className="px-6 md:px-12 py-16 md:py-24 border-b border-outline-variant/20">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div className="lg:col-span-7">
+            <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-4">
+              Tous les samedis · Gratuit
+            </p>
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-[0.95]">
+              Les Masterclass de <span className="lolly-wordmark">LOLLY</span>
+            </h2>
+            <p className="mt-6 text-base md:text-lg text-on-surface-variant leading-relaxed max-w-2xl">
+              Un rendez-vous gratuit chaque samedi pour comprendre un sujet utile, poser tes questions et repartir avec une action concrète pour ton business.
+            </p>
+            <Link href="/academy/inscription?offre=masterclass" className="mt-8 inline-flex bg-on-surface text-primary-fixed px-8 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-on-surface/85 transition-colors">
+              Réserver ma place gratuite →
+            </Link>
+            <p className="mt-3 text-xs text-secondary">Inscription enregistrée directement sur le site · aucun paiement</p>
+          </div>
+          <aside className="lg:col-span-5 bg-primary-fixed text-on-primary-fixed p-7 md:p-10" aria-label="Fonctionnement des Masterclass de LOLLY">
+            <p className="text-[0.65rem] uppercase tracking-[0.22em] font-bold mb-6">Le rendez-vous du samedi</p>
+            <ol className="grid gap-5">
+              {[
+                ['01', 'Un thème concret', 'Contenu, visibilité, présentation ou vente.'],
+                ['02', 'Une méthode claire', 'Des explications accessibles et des exemples utiles.'],
+                ['03', 'Une prochaine action', 'Tu sais quoi tester dès la semaine suivante.'],
+              ].map(([number, title, text]) => (
+                <li key={number} className="grid grid-cols-[auto_1fr] gap-4 border-t border-on-primary-fixed/25 pt-4">
+                  <span className="text-xs font-black">{number}</span>
+                  <div><h3 className="font-black uppercase tracking-tight">{title}</h3><p className="mt-1 text-sm leading-relaxed">{text}</p></div>
                 </li>
               ))}
             </ol>
@@ -87,10 +126,10 @@ export default function AcademyHome() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 mb-10">
             <div className="lg:col-span-7">
-              <p className="text-[0.65rem] uppercase tracking-[0.22em] text-primary-fixed font-bold mb-4">Ateliers LOLLY · 25 000 XOF / personne</p>
-              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">Choisis le sujet qui te bloque aujourd’hui.</h2>
+              <p className="text-[0.65rem] uppercase tracking-[0.22em] text-primary-fixed font-bold mb-4">Chaque mois · 25 000 XOF / personne</p>
+              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">Les ateliers de formation LOLLY.</h2>
             </div>
-            <p className="lg:col-span-5 text-sm md:text-base text-white/70 leading-relaxed lg:pt-8">Chaque atelier part d’un cas concret. Pas de cours générique : tu viens avec ton activité et tu repars avec un contenu, un outil ou une méthode déjà travaillé.</p>
+            <p className="lg:col-span-5 text-sm md:text-base text-white/70 leading-relaxed lg:pt-8">Chaque mois, nous travaillons une compétence précise. Tu viens avec ton activité et tu repars avec un contenu, une présentation, un outil ou une méthode déjà travaillé.</p>
           </div>
           <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/15 border border-white/15">
             {WORKSHOPS.map((workshop, index) => (
@@ -101,37 +140,25 @@ export default function AcademyHome() {
               </li>
             ))}
           </ol>
-          <Link href="/academy/ateliers" className="mt-8 inline-flex bg-primary-fixed text-on-primary-fixed px-7 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-primary-fixed-dim transition-colors">Voir les Ateliers LOLLY →</Link>
-        </div>
-      </section>
-
-      {/* ── Mini diagnostic ─────────────────────────────── */}
-      <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-16 md:py-24">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
-          <div className="md:col-span-8">
-            <p className="text-[0.65rem] uppercase tracking-[0.22em] font-bold mb-4">
-              Diagnostic 2 minutes
-            </p>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
-              Quelle formule correspond à ton besoin&nbsp;?
-            </h2>
-            <p className="mt-4 text-base md:text-lg">
-              Réponds à 4 questions. Nous te recommandons une formule selon ton objectif, ton rythme et le niveau de suivi souhaité.
-            </p>
-          </div>
-          <div className="md:col-span-4 md:text-right">
-            <Link
-              href="/academy/diagnostic"
-              className="inline-flex items-center gap-2 bg-on-surface text-surface px-8 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-on-surface/80 transition-colors"
-            >
-              Faire le diagnostic →
-            </Link>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <Link href="/academy/inscription?offre=ateliers" className="inline-flex justify-center bg-primary-fixed text-on-primary-fixed px-7 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-primary-fixed-dim transition-colors">Choisir mon atelier →</Link>
+            <Link href="/academy/ateliers" className="inline-flex justify-center border-2 border-white text-white px-7 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-white hover:text-on-surface transition-colors">Voir tous les thèmes</Link>
           </div>
         </div>
       </section>
 
-      {/* ── Conseil 30 min ──────────────────────────────── */}
-      <ConseilCTA whatsappUrl={conseilWhatsappUrl(null)} calendlyUrl={CONTACT.calendly} />
+      {/* ── CTA final, identique au parcours d’entrée ──── */}
+      <section className="px-6 md:px-12 py-14 md:py-20">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-4">Tu hésites encore ?</p>
+          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">Commence par comprendre ton besoin.</h2>
+          <p className="mt-4 text-on-surface-variant max-w-2xl mx-auto">Quatre réponses suffisent pour recevoir une recommandation et avancer sans choisir une offre au hasard.</p>
+          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+            <Link href="/academy/diagnostic" className="bg-on-surface text-primary-fixed px-8 py-4 font-black uppercase text-xs tracking-[0.18em]">Faire mon diagnostic gratuit →</Link>
+            <a href="#conseil" className="border-2 border-on-surface text-on-surface px-8 py-4 font-black uppercase text-xs tracking-[0.18em]">Parler à un conseiller</a>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

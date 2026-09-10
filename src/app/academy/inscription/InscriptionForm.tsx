@@ -2,14 +2,24 @@
 
 import Link from 'next/link';
 import { useState, type FormEvent, type ReactNode } from 'react';
-import { OFFERS, getOffer, reserveWhatsappUrl } from '../_lib/offers';
+import { CONTACT, EVENT_TOPICS, OFFERS, getOffer, reserveWhatsappUrl, type Offer } from '../_lib/offers';
 import { track } from '../_components/Track';
 
-type FormState = { offer: string; nom: string; prenom: string; email: string; whatsapp: string; entreprise: string; message: string; website: string };
+type RegistrationSlug = Offer['slug'] | 'masterclass';
+type FormState = { offer: RegistrationSlug; topic: string; nom: string; prenom: string; email: string; whatsapp: string; entreprise: string; message: string; website: string };
+
+const REGISTRATION_OPTIONS: { slug: RegistrationSlug; name: string; durationLine: string }[] = [
+  { slug: 'masterclass', name: 'Les Masterclass de LOLLY', durationLine: 'Tous les samedis · gratuit' },
+  ...OFFERS.map(({ slug, name, durationLine }) => ({ slug, name, durationLine })),
+];
+
+function getRegistrationOption(slug: string) {
+  return REGISTRATION_OPTIONS.find((option) => option.slug === slug);
+}
 
 export default function InscriptionForm({ initialOffer }: { initialOffer: string }) {
-  const validInitialOffer = getOffer(initialOffer)?.slug ?? OFFERS[0].slug;
-  const [form, setForm] = useState<FormState>({ offer: validInitialOffer, nom: '', prenom: '', email: '', whatsapp: '', entreprise: '', message: '', website: '' });
+  const validInitialOffer = getRegistrationOption(initialOffer)?.slug ?? OFFERS[0].slug;
+  const [form, setForm] = useState<FormState>({ offer: validInitialOffer, topic: '', nom: '', prenom: '', email: '', whatsapp: '', entreprise: '', message: '', website: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [error, setError] = useState('');
 
@@ -21,8 +31,8 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
     event.preventDefault();
     setStatus('sending');
     setError('');
-    const offer = getOffer(form.offer) ?? OFFERS[0];
-    track('inscription_form_submit', { offer: offer.slug });
+    const registration = getRegistrationOption(form.offer) ?? REGISTRATION_OPTIONS[0];
+    track('inscription_form_submit', { offer: registration.slug });
 
     try {
       const response = await fetch('/api/contact', {
@@ -32,10 +42,10 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
           name: `${form.prenom.trim()} ${form.nom.trim()}`.trim(),
           email: form.email,
           phone: form.whatsapp,
-          service_interest: `LOLLY Academy — ${offer.name}`,
+          service_interest: `LOLLY Academy — ${registration.name}`,
           message: form.message,
           request_type: 'academy_registration',
-          request_data: { offer: offer.slug, offer_name: offer.name, company: form.entreprise },
+          request_data: { offer: registration.slug, offer_name: registration.name, company: form.entreprise, topic: form.topic },
           website: form.website,
         }),
       });
@@ -48,7 +58,12 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
     }
   }
 
-  const selectedOffer = getOffer(form.offer) ?? OFFERS[0];
+  const selectedOffer = getOffer(form.offer);
+  const selectedRegistration = getRegistrationOption(form.offer) ?? REGISTRATION_OPTIONS[0];
+  const successWhatsappUrl = selectedOffer
+    ? reserveWhatsappUrl(selectedOffer)
+    : `https://wa.me/${CONTACT.whatsappDigits}?text=${encodeURIComponent('Bonjour LOLLY Academy, je viens de m’inscrire aux Masterclass de LOLLY sur le site. Je souhaite connaître le thème et l’horaire du prochain samedi. Merci.')}`;
+  const showTopic = form.offer === 'masterclass' || form.offer === 'ateliers';
 
   return (
     <section className="px-6 md:px-12 py-12 md:py-20 max-w-3xl mx-auto">
@@ -59,7 +74,8 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
       {status !== 'success' ? (
         <form onSubmit={handleSubmit} className="grid gap-4 mt-10">
           <div className="absolute -left-[9999px]" aria-hidden="true"><label>Site web<input tabIndex={-1} autoComplete="off" value={form.website} onChange={(event) => update('website', event.target.value)} /></label></div>
-          <Field label="Offre"><select value={form.offer} onChange={(event) => update('offer', event.target.value)} className={inputClass}>{OFFERS.map((offer) => <option key={offer.slug} value={offer.slug}>{offer.name} — {offer.durationLine}</option>)}</select></Field>
+          <Field label="Rendez-vous ou offre"><select value={form.offer} onChange={(event) => update('offer', event.target.value)} className={inputClass}>{REGISTRATION_OPTIONS.map((option) => <option key={option.slug} value={option.slug}>{option.name} — {option.durationLine}</option>)}</select></Field>
+          {showTopic ? <Field label="Sujet qui t’intéresse"><select value={form.topic} onChange={(event) => update('topic', event.target.value)} className={inputClass}><option value="">Je souhaite découvrir le prochain thème</option>{EVENT_TOPICS.map((topic) => <option key={topic} value={topic}>{topic}</option>)}</select></Field> : null}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Prénom"><input className={inputClass} required maxLength={80} autoComplete="given-name" value={form.prenom} onChange={(event) => update('prenom', event.target.value)} /></Field>
             <Field label="Nom"><input className={inputClass} required maxLength={80} autoComplete="family-name" value={form.nom} onChange={(event) => update('nom', event.target.value)} /></Field>
@@ -68,15 +84,15 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
           <Field label="WhatsApp"><input type="tel" className={inputClass} required maxLength={40} autoComplete="tel" placeholder="+221 ..." value={form.whatsapp} onChange={(event) => update('whatsapp', event.target.value)} /></Field>
           <Field label="Entreprise (optionnel)"><input className={inputClass} maxLength={120} autoComplete="organization" value={form.entreprise} onChange={(event) => update('entreprise', event.target.value)} /></Field>
           <Field label="Ton objectif ou ton besoin (optionnel)"><textarea className={`${inputClass} min-h-[120px] resize-y`} maxLength={1200} value={form.message} onChange={(event) => update('message', event.target.value)} /></Field>
-          <p className="text-xs text-secondary">Les informations sont utilisées uniquement pour répondre à ta demande d’inscription.</p>
+          <p className="text-xs text-secondary">Les informations sont utilisées uniquement pour enregistrer ta demande et te communiquer les prochaines informations pratiques.</p>
           {status === 'error' && <p role="alert" className="border-l-4 border-error pl-3 text-sm text-error">{error}</p>}
           <div><button type="submit" disabled={status === 'sending'} className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em] disabled:opacity-60">{status === 'sending' ? 'Envoi en cours…' : 'Envoyer ma demande →'}</button></div>
         </form>
       ) : (
         <div role="status" className="mt-10 border-t-4 border-primary-fixed bg-white p-7 md:p-10">
           <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter">Demande bien reçue.</h2>
-          <p className="mt-4 text-on-surface-variant">L’équipe LOLLY va vérifier ta demande et te recontacter. Pour préciser un point immédiatement, tu peux continuer sur WhatsApp.</p>
-          <div className="mt-7 flex flex-col sm:flex-row gap-3"><a href={reserveWhatsappUrl(selectedOffer)} target="_blank" rel="noopener noreferrer" className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em]">Continuer sur WhatsApp →</a><Link href="/academy" className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em]">Retour aux offres</Link></div>
+          <p className="mt-4 text-on-surface-variant">Ton inscription à « {selectedRegistration.name} » est enregistrée. L’équipe LOLLY te recontactera avec les prochaines informations pratiques.</p>
+          <div className="mt-7 flex flex-col sm:flex-row gap-3"><a href={successWhatsappUrl} target="_blank" rel="noopener noreferrer" className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em]">Continuer sur WhatsApp →</a><Link href="/academy" className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em]">Retour à Academy</Link></div>
         </div>
       )}
     </section>

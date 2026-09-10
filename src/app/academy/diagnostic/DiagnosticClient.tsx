@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { OFFERS, conseilWhatsappUrl, diagnosticWhatsappUrl, offerPriceLabel, type Offer } from '../_lib/offers';
+import { OFFERS, diagnosticWhatsappUrl, offerPriceLabel, type Offer } from '../_lib/offers';
 import { track } from '../_components/Track';
 
 type OfferSlug = Offer['slug'];
@@ -112,10 +112,10 @@ export default function DiagnosticClient() {
           <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter">Ton choix : {selectedOffer.name}</h2>
           <p className="mt-3 text-base md:text-lg">{offerPriceLabel(selectedOffer)}. L’équipe confirme les prochaines disponibilités avant l’inscription définitive.</p>
           <div className="mt-7 flex flex-col sm:flex-row gap-3">
-            <a href={diagnosticWhatsappUrl(selectedOffer)} target="_blank" rel="noopener noreferrer" className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em]">Continuer sur WhatsApp →</a>
+            <Link href={`/academy/inscription?offre=${selectedOffer.slug}`} className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em]">Envoyer ma demande d’inscription →</Link>
             <Link href={`/academy/${selectedOffer.slug}`} className="border-2 border-on-surface font-black uppercase px-8 py-4 text-xs tracking-[0.18em]">Voir le détail</Link>
           </div>
-          <a href={conseilWhatsappUrl(selectedOffer)} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-xs uppercase tracking-[0.18em] font-bold border-b-2 border-on-primary-fixed pb-1">Demander conseil avant de décider →</a>
+          <a href={diagnosticWhatsappUrl(selectedOffer)} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-xs uppercase tracking-[0.18em] font-bold border-b-2 border-on-primary-fixed pb-1">Parler de cette recommandation sur WhatsApp →</a>
         </div>
       </section>
       <section className="px-6 md:px-12 py-10 max-w-4xl mx-auto"><button type="button" onClick={restart} className="text-[0.65rem] uppercase tracking-[0.18em] font-bold">↻ Refaire le diagnostic</button></section>

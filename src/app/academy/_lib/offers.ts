@@ -30,6 +30,15 @@ export const WORKSHOPS: Workshop[] = [
   { title: 'IA pratique pour la communication', description: 'Accélérer la préparation des contenus sans perdre sa voix, son jugement ni son identité.' },
 ];
 
+export const EVENT_TOPICS = [
+  'Créer du contenu pour les réseaux sociaux',
+  'Présenter son business avec clarté',
+  'Filmer et monter avec son smartphone',
+  'Transformer WhatsApp en outil de vente',
+  'Organiser un mois de communication',
+  'Écrire des contenus qui donnent envie d’agir',
+] as const;
+
 export const OFFERS: Offer[] = [
   {
     slug: 'formation-intensive', eyebrow: '5 jours', name: 'Formation intensive', featured: true,

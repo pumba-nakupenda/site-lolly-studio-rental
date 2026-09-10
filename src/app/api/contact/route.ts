@@ -28,7 +28,7 @@ function escapeHtml(value: unknown) {
 
 function requestDetailsHtml(requestType: string, details: Record<string, unknown>) {
   if (requestType === 'academy_registration') {
-    return `<p><strong>Offre :</strong> ${escapeHtml(details.offer_name)}</p><p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>`;
+    return `<p><strong>Rendez-vous ou offre :</strong> ${escapeHtml(details.offer_name)}</p><p><strong>Sujet souhaité :</strong> ${escapeHtml(details.topic) || 'Prochain thème'}</p><p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>`;
   }
   if (requestType === 'studio_booking') {
     return `<p><strong>Studio :</strong> ${escapeHtml(details.studio)}</p><p><strong>Date :</strong> ${escapeHtml(details.date)} — ${escapeHtml(details.duration)}</p>${details.needs ? `<p><strong>Besoins :</strong> ${escapeHtml(details.needs)}</p>` : ''}`;
