@@ -4,6 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 60;
 
+const academyOffers = [
+  { label: "Formation intensive", detail: "5 jours", price: "75 000 XOF" },
+  { label: "Accompagnement", detail: "3 à 5 mois", price: "Dès 85 000 XOF" },
+  { label: "Ateliers LOLLY", detail: "Par sujet", price: "25 000 XOF / pers." },
+];
+
 export default async function Home() {
   const supabase = await createClient();
   const { data } = await supabase.from("homepage_blocks").select("*").order("id");
@@ -24,13 +30,13 @@ export default async function Home() {
               </span>
               <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.95]">
                 L&apos;agence qui marque.{" "}
-                <span className="text-primary-fixed">L&apos;équipement qui tourne.</span>
+                <span className="text-primary-fixed">Les compétences qui restent.</span>
               </h1>
             </div>
             <p className="md:max-w-sm text-sm md:text-base text-surface-variant leading-relaxed">
-              Conseil en communication d&apos;élite & location de matériel
-              audiovisuel premium pour les créateurs d&apos;Afrique de
-              l&apos;Ouest. Une maison, deux expertises.
+              Conseil, production, formation et location de matériel audiovisuel
+              pour les entrepreneurs, les équipes et les créateurs d&apos;Afrique de
+              l&apos;Ouest. Une maison, trois expertises.
             </p>
           </div>
         </section>
@@ -124,6 +130,40 @@ export default async function Home() {
               </div>
             </Link>
           )}
+        </section>
+
+        {/* Academy — troisième pilier commercial */}
+        <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-16 md:py-24">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+              <div className="lg:col-span-8">
+                <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase block mb-5">
+                  Service 03 · LOLLY Academy
+                </span>
+                <h2 className="text-4xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.92] max-w-4xl">
+                  Ta communication doit produire des résultats, pas seulement du contenu.
+                </h2>
+              </div>
+              <div className="lg:col-span-4">
+                <p className="text-base md:text-lg leading-relaxed mb-7">
+                  Des formations pratiques pour clarifier ton message, mieux produire et transformer tes actions digitales en activité durable.
+                </p>
+                <Link href="/academy" className="inline-flex items-center bg-on-surface text-primary-fixed px-8 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-on-surface/85 transition-colors">
+                  Découvrir Academy →
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 border-y-2 border-on-primary-fixed/25">
+              {academyOffers.map((offer, index) => (
+                <Link key={offer.label} href="/academy#offres" className="group py-6 md:px-7 first:pl-0 border-b md:border-b-0 md:border-r last:border-0 border-on-primary-fixed/25">
+                  <span className="text-[0.6rem] font-black tracking-[0.2em] uppercase opacity-60">0{index + 1} · {offer.detail}</span>
+                  <h3 className="mt-2 text-xl md:text-2xl font-black uppercase tracking-tight group-hover:translate-x-1 transition-transform">{offer.label}</h3>
+                  <p className="mt-2 text-sm font-bold">{offer.price}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* Chiffres clés */}
