@@ -375,6 +375,17 @@ export default async function RentalPage() {
           </div>
         </section>
 
+        <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-14 md:py-16">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            <div className="max-w-2xl">
+              <p className="text-xs font-black uppercase tracking-widest mb-4">Votre salle, votre progression</p>
+              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter">Un espace pour former. Une Academy pour pratiquer.</h2>
+              <p className="mt-4 leading-relaxed">Vous organisez une formation ? Découvrez aussi les Masterclass gratuites du samedi et les ateliers mensuels de LOLLY Academy.</p>
+            </div>
+            <Link href="/academy" className="shrink-0 bg-on-surface text-primary-fixed px-7 py-4 text-xs font-black uppercase tracking-widest hover:bg-on-surface/85 transition-colors">Découvrir Academy →</Link>
+          </div>
+        </section>
+
         {/* ═══ CTA ═══ */}
         <section className="bg-on-surface text-white px-6 md:px-12 py-24 text-center">
           <div className="max-w-3xl mx-auto">

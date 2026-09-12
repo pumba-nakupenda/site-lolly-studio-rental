@@ -11,6 +11,12 @@ const SUBJECT_MAP: Record<string, string> = {
 };
 
 const ALLOWED_TYPES = new Set(Object.keys(SUBJECT_MAP));
+const ACADEMY_OFFER_NAMES: Record<string, string> = {
+  masterclass: 'Les Masterclass de LOLLY',
+  'formation-intensive': 'Formation intensive',
+  accompagnement: 'Accompagnement',
+  ateliers: 'Ateliers LOLLY',
+};
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function clean(value: unknown, maxLength: number) {
@@ -28,7 +34,7 @@ function escapeHtml(value: unknown) {
 
 function requestDetailsHtml(requestType: string, details: Record<string, unknown>) {
   if (requestType === 'academy_registration') {
-    return `<p><strong>Rendez-vous ou offre :</strong> ${escapeHtml(details.offer_name)}</p><p><strong>Sujet souhaité :</strong> ${escapeHtml(details.topic) || 'Prochain thème'}</p><p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>`;
+    return `<p><strong>Rendez-vous ou offre :</strong> ${escapeHtml(details.offer_name)}</p><p><strong>Sujet souhaité :</strong> ${escapeHtml(details.topic) || 'Prochain thème'}</p><p><strong>Samedi souhaité :</strong> ${escapeHtml(details.session_preference) || 'Prochaine date à communiquer'}</p><p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>`;
   }
   if (requestType === 'studio_booking') {
     return `<p><strong>Studio :</strong> ${escapeHtml(details.studio)}</p><p><strong>Date :</strong> ${escapeHtml(details.date)} — ${escapeHtml(details.duration)}</p>${details.needs ? `<p><strong>Besoins :</strong> ${escapeHtml(details.needs)}</p>` : ''}`;
@@ -54,13 +60,37 @@ export async function POST(request: Request) {
     const name = clean(body.name, 160);
     const email = clean(body.email, 160).toLowerCase();
     const phone = clean(body.phone, 40);
-    const serviceInterest = clean(body.service_interest, 180);
+    let serviceInterest = clean(body.service_interest, 180);
     const message = clean(body.message, 2000);
     const requestType = ALLOWED_TYPES.has(body.request_type) ? body.request_type : 'general';
-    const requestData = body.request_data && typeof body.request_data === 'object' && !Array.isArray(body.request_data) ? body.request_data : {};
+    let requestData: Record<string, unknown> = body.request_data && typeof body.request_data === 'object' && !Array.isArray(body.request_data) ? body.request_data : {};
 
     if (!name || !EMAIL_PATTERN.test(email)) {
       return Response.json({ error: 'Indique un nom et une adresse e-mail valides.' }, { status: 400 });
+    }
+
+    if (requestType === 'academy_registration') {
+      const offer = clean(requestData.offer, 40);
+      if (!ACADEMY_OFFER_NAMES[offer]) {
+        return Response.json({ error: 'Choisis une offre Academy valide.' }, { status: 400 });
+      }
+      const sessionPreference = offer === 'masterclass' ? clean(requestData.session_preference, 10) : '';
+      if (sessionPreference) {
+        const sessionDate = new Date(`${sessionPreference}T00:00:00Z`);
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(sessionPreference) || Number.isNaN(sessionDate.getTime()) || sessionDate.toISOString().slice(0, 10) !== sessionPreference || sessionDate.getUTCDay() !== 6 || sessionDate < today) {
+          return Response.json({ error: 'Choisis un samedi à venir.' }, { status: 400 });
+        }
+      }
+      requestData = {
+        offer,
+        offer_name: ACADEMY_OFFER_NAMES[offer],
+        company: clean(requestData.company, 120),
+        topic: clean(requestData.topic, 160),
+        session_preference: sessionPreference,
+      };
+      serviceInterest = `LOLLY Academy — ${ACADEMY_OFFER_NAMES[offer]}`;
     }
 
     const supabase = await createClient();
@@ -70,7 +100,9 @@ export async function POST(request: Request) {
       phone,
       service_interest: serviceInterest,
       message,
-      request_type: requestType,
+      // La contrainte actuelle de contact_requests n'accepte pas encore academy_registration.
+      // Le type métier Academy reste dans request_data et service_interest jusqu'à migration validée.
+      request_type: requestType === 'academy_registration' ? 'general' : requestType,
       request_data: requestData,
     });
 

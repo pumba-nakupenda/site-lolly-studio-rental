@@ -5,8 +5,8 @@ interface LogoProps {
 }
 
 export default function Logo({ className = "", color = "black", height = 28 }: LogoProps) {
-  const textColor = color === "white" ? "#ffffff" : "#2d2f2f";
-  const dotColor = "#fed000";
+  const textColor = color === "white" ? "#ffffff" : "#000000";
+  const dotColor = "#fed700";
 
   return (
     <svg
@@ -17,11 +17,10 @@ export default function Logo({ className = "", color = "black", height = 28 }: L
       aria-label="LOLLY"
       role="img"
     >
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@1,900&display=swap');`}</style>
       <text
         x="0"
         y="37"
-        fontFamily="'MuseoModerno', sans-serif"
+        fontFamily="var(--font-museo), sans-serif"
         fontWeight="900"
         fontStyle="italic"
         fontSize="42"

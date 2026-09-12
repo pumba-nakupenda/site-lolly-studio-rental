@@ -423,6 +423,17 @@ export default async function StudioPage() {
         </section>
         </ScrollReveal>
 
+        <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-14 md:py-16">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            <div className="max-w-2xl">
+              <p className="text-xs font-black uppercase tracking-widest mb-4">Continuer avec LOLLY Academy</p>
+              <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter">Faire grandir vos compétences, pas seulement vos contenus.</h2>
+              <p className="mt-4 leading-relaxed">Après la stratégie et la production, formez votre équipe pour communiquer avec plus d’autonomie. Le diagnostic gratuit aide à trouver le bon point de départ.</p>
+            </div>
+            <Link href="/academy/diagnostic" className="shrink-0 bg-on-surface text-primary-fixed px-7 py-4 text-xs font-black uppercase tracking-widest hover:bg-on-surface/85 transition-colors">Faire le diagnostic gratuit →</Link>
+          </div>
+        </section>
+
         {/* ═══ CTA ═══ */}
         <section className="bg-on-surface text-white px-6 md:px-12 py-24 text-center">
           <div className="max-w-3xl mx-auto">
@@ -430,15 +441,15 @@ export default async function StudioPage() {
               Votre projet mérite mieux qu&apos;une agence classique.
             </h2>
             <p className="text-lg text-surface-dim mb-10">
-              Une heure de consultation stratégique offerte aux marques
-              ambitieuses.
+              Parlons de votre activité et de ce que votre communication doit
+              changer concrètement.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/contact"
                 className="bg-primary-fixed text-on-primary-fixed font-black uppercase px-12 py-5 text-sm tracking-widest hover:bg-primary-fixed-dim transition-all"
               >
-                Réserver mon créneau
+                Parler de mon projet
               </Link>
               <a
                 href="https://wa.me/+221772354747?text=Bonjour%20LOLLY%20Agency%2C%20je%20souhaiterais%20en%20savoir%20plus%20sur%20vos%20services."

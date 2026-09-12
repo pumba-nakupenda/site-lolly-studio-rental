@@ -63,9 +63,9 @@ export default function AcademyHome() {
               Un rendez-vous gratuit chaque samedi pour comprendre un sujet utile, poser tes questions et repartir avec une action concrète pour ton business.
             </p>
             <Link href="/academy/inscription?offre=masterclass" className="mt-8 inline-flex bg-on-surface text-primary-fixed px-8 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-on-surface/85 transition-colors">
-              Réserver ma place gratuite →
+              Demander ma place gratuite →
             </Link>
-            <p className="mt-3 text-xs text-secondary">Inscription enregistrée directement sur le site · aucun paiement</p>
+            <p className="mt-3 text-xs text-secondary">Demande enregistrée sur le site · place confirmée après retour de l’équipe · aucun paiement</p>
           </div>
           <aside className="lg:col-span-5 bg-primary-fixed text-on-primary-fixed p-7 md:p-10" aria-label="Fonctionnement des Masterclass de LOLLY">
             <p className="text-[0.65rem] uppercase tracking-[0.22em] font-bold mb-6">Le rendez-vous du samedi</p>

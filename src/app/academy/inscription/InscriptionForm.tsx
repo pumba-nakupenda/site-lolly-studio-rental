@@ -6,7 +6,7 @@ import { CONTACT, EVENT_TOPICS, OFFERS, getOffer, reserveWhatsappUrl, type Offer
 import { track } from '../_components/Track';
 
 type RegistrationSlug = Offer['slug'] | 'masterclass';
-type FormState = { offer: RegistrationSlug; topic: string; nom: string; prenom: string; email: string; whatsapp: string; entreprise: string; message: string; website: string };
+type FormState = { offer: RegistrationSlug; topic: string; sessionPreference: string; nom: string; prenom: string; email: string; whatsapp: string; entreprise: string; message: string; website: string };
 
 const REGISTRATION_OPTIONS: { slug: RegistrationSlug; name: string; durationLine: string }[] = [
   { slug: 'masterclass', name: 'Les Masterclass de LOLLY', durationLine: 'Tous les samedis · gratuit' },
@@ -19,7 +19,7 @@ function getRegistrationOption(slug: string) {
 
 export default function InscriptionForm({ initialOffer }: { initialOffer: string }) {
   const validInitialOffer = getRegistrationOption(initialOffer)?.slug ?? OFFERS[0].slug;
-  const [form, setForm] = useState<FormState>({ offer: validInitialOffer, topic: '', nom: '', prenom: '', email: '', whatsapp: '', entreprise: '', message: '', website: '' });
+  const [form, setForm] = useState<FormState>({ offer: validInitialOffer, topic: '', sessionPreference: '', nom: '', prenom: '', email: '', whatsapp: '', entreprise: '', message: '', website: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [error, setError] = useState('');
 
@@ -29,6 +29,16 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    if (form.offer === 'masterclass' && form.sessionPreference) {
+      const requestedDate = new Date(`${form.sessionPreference}T00:00:00Z`);
+      const today = new Date();
+      today.setUTCHours(0, 0, 0, 0);
+      if (requestedDate.getUTCDay() !== 6 || requestedDate < today) {
+        setError('Choisis un samedi à venir, ou laisse le champ vide pour recevoir la prochaine date.');
+        setStatus('error');
+        return;
+      }
+    }
     setStatus('sending');
     setError('');
     const registration = getRegistrationOption(form.offer) ?? REGISTRATION_OPTIONS[0];
@@ -45,7 +55,7 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
           service_interest: `LOLLY Academy — ${registration.name}`,
           message: form.message,
           request_type: 'academy_registration',
-          request_data: { offer: registration.slug, offer_name: registration.name, company: form.entreprise, topic: form.topic },
+          request_data: { offer: registration.slug, offer_name: registration.name, company: form.entreprise, topic: form.topic, session_preference: form.offer === 'masterclass' ? form.sessionPreference : '' },
           website: form.website,
         }),
       });
@@ -69,13 +79,14 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
     <section className="px-6 md:px-12 py-12 md:py-20 max-w-3xl mx-auto">
       <span className="inline-block bg-primary-fixed text-on-primary-fixed text-[0.65rem] uppercase tracking-[0.22em] font-bold px-3 py-1.5 mb-6">Demande d’inscription</span>
       <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter leading-[1.05]">Dis-nous où tu veux avancer.</h1>
-      <p className="mt-5 text-base md:text-lg text-on-surface-variant max-w-2xl">Cette demande ne déclenche aucun paiement. L’équipe vérifie la formule, les disponibilités et revient vers toi.</p>
+      <p className="mt-5 text-base md:text-lg text-on-surface-variant max-w-2xl">Cette demande ne déclenche aucun paiement. Pour les Masterclass et ateliers, la date, l’horaire et la place seront confirmés par l’équipe LOLLY.</p>
 
       {status !== 'success' ? (
         <form onSubmit={handleSubmit} className="grid gap-4 mt-10">
           <div className="absolute -left-[9999px]" aria-hidden="true"><label>Site web<input tabIndex={-1} autoComplete="off" value={form.website} onChange={(event) => update('website', event.target.value)} /></label></div>
           <Field label="Rendez-vous ou offre"><select value={form.offer} onChange={(event) => update('offer', event.target.value)} className={inputClass}>{REGISTRATION_OPTIONS.map((option) => <option key={option.slug} value={option.slug}>{option.name} — {option.durationLine}</option>)}</select></Field>
           {showTopic ? <Field label="Sujet qui t’intéresse"><select value={form.topic} onChange={(event) => update('topic', event.target.value)} className={inputClass}><option value="">Je souhaite découvrir le prochain thème</option>{EVENT_TOPICS.map((topic) => <option key={topic} value={topic}>{topic}</option>)}</select></Field> : null}
+          {form.offer === 'masterclass' ? <Field label="Samedi souhaité (facultatif, sous réserve de confirmation)"><input type="date" className={inputClass} value={form.sessionPreference} onChange={(event) => update('sessionPreference', event.target.value)} /><span className="text-xs text-secondary">Laisse vide si tu préfères connaître la prochaine date disponible.</span></Field> : null}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Prénom"><input className={inputClass} required maxLength={80} autoComplete="given-name" value={form.prenom} onChange={(event) => update('prenom', event.target.value)} /></Field>
             <Field label="Nom"><input className={inputClass} required maxLength={80} autoComplete="family-name" value={form.nom} onChange={(event) => update('nom', event.target.value)} /></Field>
@@ -91,7 +102,7 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
       ) : (
         <div role="status" className="mt-10 border-t-4 border-primary-fixed bg-white p-7 md:p-10">
           <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter">Demande bien reçue.</h2>
-          <p className="mt-4 text-on-surface-variant">Ton inscription à « {selectedRegistration.name} » est enregistrée. L’équipe LOLLY te recontactera avec les prochaines informations pratiques.</p>
+          <p className="mt-4 text-on-surface-variant">Ta demande pour « {selectedRegistration.name} » est enregistrée. L’équipe LOLLY te recontactera pour confirmer la date, l’horaire et la disponibilité de la place.</p>
           <div className="mt-7 flex flex-col sm:flex-row gap-3"><a href={successWhatsappUrl} target="_blank" rel="noopener noreferrer" className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em]">Continuer sur WhatsApp →</a><Link href="/academy" className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em]">Retour à Academy</Link></div>
         </div>
       )}

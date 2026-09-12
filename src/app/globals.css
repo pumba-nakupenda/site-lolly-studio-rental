@@ -53,15 +53,19 @@
   --color-inverse-on-surface: #9c9d9d;
   --color-tertiary-container: #ffffff;
 
-  --font-headline: "Epilogue", sans-serif;
-  --font-body: "Epilogue", sans-serif;
-  --font-label: "Epilogue", sans-serif;
+  --font-headline: var(--font-montserrat), sans-serif;
+  --font-body: var(--font-lato), sans-serif;
+  --font-label: var(--font-montserrat), sans-serif;
 }
 
 body {
   font-family: var(--font-body);
   background: var(--color-surface);
   color: var(--color-on-surface);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline);
 }
 
 ::selection {
@@ -77,7 +81,7 @@ body {
   border-bottom: 1px solid var(--color-outline);
 }
 .editorial-underline:focus-within {
-  border-bottom: 2px solid #ffd100;
+  border-bottom: 2px solid #fed700;
 }
 
 .asymmetric-grid {
@@ -109,7 +113,7 @@ body {
 input:focus,
 textarea:focus {
   outline: none !important;
-  border-bottom: 2px solid #ffd100 !important;
+  border-bottom: 2px solid #fed700 !important;
   box-shadow: none !important;
 }
 
@@ -123,12 +127,9 @@ textarea:focus {
 }
 
 /* ── LOLLY Academy ────────────────────────────────────────
-   Pages /academy : design system du site (Epilogue + classes
-   Tailwind primary-fixed/on-surface/surface). Seule cette classe
-   reste : elle force le mot LOLLY en MuseoModerno Black Italic
-   (CDN chargé par le layout root). */
+   Le mot LOLLY dans les titres garde la graisse et l'italique du logo. */
 .lolly-wordmark {
-  font-family: "MuseoModerno", system-ui, sans-serif;
+  font-family: var(--font-museo), sans-serif;
   font-style: italic;
   font-weight: 900;
   letter-spacing: -0.03em;

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 60;
@@ -14,8 +15,22 @@ export default async function Home() {
   const supabase = await createClient();
   const { data } = await supabase.from("homepage_blocks").select("*").order("id");
 
-  const studio = data?.find((b) => b.id === "studio");
-  const rental = data?.find((b) => b.id === "rental");
+  const studio = data?.find((b) => b.id === "studio") ?? {
+    label: "Conseil & création",
+    title: "Studio.",
+    description: "Une stratégie claire et des contenus produits pour parler à vos clients.",
+    cta_text: "Découvrir Studio",
+    link: "/studio",
+    image: null,
+  };
+  const rental = data?.find((b) => b.id === "rental") ?? {
+    label: "Espaces & matériel",
+    title: "Rental.",
+    description: "Les espaces et les équipements utiles à vos projets audiovisuels.",
+    cta_text: "Découvrir Rental",
+    link: "/rental",
+    image: null,
+  };
 
   return (
     <>
@@ -33,21 +48,31 @@ export default async function Home() {
                 <span className="text-primary-fixed">Les compétences qui restent.</span>
               </h1>
             </div>
-            <p className="md:max-w-sm text-sm md:text-base text-surface-variant leading-relaxed">
-              Conseil, production, formation et location de matériel audiovisuel
-              pour les entrepreneurs, les équipes et les créateurs d&apos;Afrique de
-              l&apos;Ouest. Une maison, trois expertises.
-            </p>
+            <div className="md:max-w-sm">
+              <p className="text-sm md:text-base text-surface-variant leading-relaxed">
+                Conseil, production, formation et location de matériel audiovisuel
+                pour les entrepreneurs, les équipes et les créateurs d&apos;Afrique de
+                l&apos;Ouest. Une maison, trois expertises.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link href="/academy/diagnostic" className="bg-primary-fixed text-on-primary-fixed px-5 py-3 text-xs font-black uppercase tracking-wider hover:bg-primary-fixed-dim transition-colors">
+                  Faire mon diagnostic gratuit →
+                </Link>
+                <Link href="/contact" className="border border-white/60 px-5 py-3 text-xs font-black uppercase tracking-wider hover:bg-white hover:text-on-surface transition-colors">
+                  Parler de mon projet
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Split hero — STUDIO / RENTAL avec expansion au survol */}
-        <section className="flex flex-col md:flex-row min-h-[calc(100vh-260px)] w-full">
+        {/* Trois portes d'entrée de même rang */}
+        <section aria-label="Choisir votre parcours LOLLY" className="grid grid-cols-1 md:grid-cols-3 w-full">
           {/* Studio Block */}
           {studio && (
             <Link
               href={studio.link}
-              className="relative flex-1 md:hover:flex-[1.6] transition-[flex-grow] duration-700 ease-[cubic-bezier(0.2,0.9,0.3,1)] group overflow-hidden bg-surface-container-lowest border-b md:border-b-0 md:border-r border-outline/10"
+              className="relative min-h-[390px] md:min-h-[520px] flex flex-col group overflow-hidden bg-surface-container-lowest border-b md:border-b-0 md:border-r border-outline/10"
             >
               {studio.image && (
                 <div
@@ -56,7 +81,7 @@ export default async function Home() {
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/70 to-transparent" />
-              <div className="relative h-full flex flex-col justify-between p-10 md:p-16 z-10">
+              <div className="relative flex-1 flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 z-10">
                 <div className="flex items-start justify-between">
                   <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase text-on-surface-variant">
                     {studio.label}
@@ -68,7 +93,7 @@ export default async function Home() {
                   </span>
                 </div>
                 <div>
-                  <h2 className="text-6xl md:text-[7.5rem] font-black tracking-tighter text-on-surface mb-5 leading-[0.9]">
+                  <h2 className="text-5xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tighter text-on-surface mb-5 leading-[0.9]">
                     {studio.title}
                   </h2>
                   <p className="text-base md:text-lg max-w-md text-secondary mb-8 leading-relaxed min-h-[5.5rem]">
@@ -91,7 +116,7 @@ export default async function Home() {
           {rental && (
             <Link
               href={rental.link}
-              className="relative flex-1 md:hover:flex-[1.6] transition-[flex-grow] duration-700 ease-[cubic-bezier(0.2,0.9,0.3,1)] group overflow-hidden bg-on-surface"
+              className="relative min-h-[390px] md:min-h-[520px] flex flex-col group overflow-hidden bg-on-surface border-b md:border-b-0 md:border-r border-white/15"
             >
               {rental.image && (
                 <div
@@ -100,7 +125,7 @@ export default async function Home() {
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-on-surface via-on-surface/70 to-transparent" />
-              <div className="relative h-full flex flex-col justify-between p-10 md:p-16 z-10">
+              <div className="relative flex-1 flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 z-10">
                 <div className="flex items-start justify-between">
                   <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase text-surface-variant">
                     {rental.label}
@@ -112,7 +137,7 @@ export default async function Home() {
                   </span>
                 </div>
                 <div>
-                  <h2 className="text-6xl md:text-[7.5rem] font-black tracking-tighter text-white mb-5 leading-[0.9]">
+                  <h2 className="text-5xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tighter text-white mb-5 leading-[0.9]">
                     {rental.title}
                   </h2>
                   <p className="text-base md:text-lg max-w-md text-surface-dim mb-8 leading-relaxed min-h-[5.5rem]">
@@ -130,6 +155,21 @@ export default async function Home() {
               </div>
             </Link>
           )}
+          <Link href="/academy" className="group min-h-[390px] md:min-h-[520px] bg-primary-fixed text-on-primary-fixed flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 hover:bg-primary-fixed-dim transition-colors">
+            <div className="flex items-start justify-between">
+              <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase">Se former · Academy</span>
+              <span className="w-8 h-8 border border-on-primary-fixed/30 flex items-center justify-center group-hover:bg-on-surface group-hover:text-primary-fixed transition-colors" aria-hidden="true">↗</span>
+            </div>
+            <div>
+              <h2 className="text-5xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tighter mb-5 leading-[0.9]">Academy.</h2>
+              <p className="text-base md:text-lg max-w-md mb-8 leading-relaxed">
+                Tu veux mieux présenter ton activité, créer du contenu utile ou former ton équipe ? On commence par comprendre ton besoin.
+              </p>
+              <span className="inline-flex items-center text-xs md:text-sm font-black uppercase tracking-widest border-b-2 border-on-primary-fixed pb-1 group-hover:translate-x-1 transition-transform">
+                Découvrir mon parcours →
+              </span>
+            </div>
+          </Link>
         </section>
 
         {/* Academy — troisième pilier commercial */}
@@ -166,14 +206,14 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Chiffres clés */}
+        {/* Repères de parcours */}
         <section className="bg-primary-fixed text-on-primary-fixed py-10 px-6 md:px-12">
           <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
             {[
-              { k: "12 ans", v: "d'expérience" },
-              { k: "150+", v: "projets livrés" },
-              { k: "40+", v: "clients actifs" },
-              { k: "Dakar", v: "· Afrique de l'Ouest" },
+              { k: "01", v: "Comprendre votre besoin" },
+              { k: "02", v: "Choisir la bonne réponse" },
+              { k: "03", v: "Produire ou apprendre" },
+              { k: "04", v: "Suivre les résultats" },
             ].map((s) => (
               <div key={s.k} className="border-l-2 border-on-primary-fixed/30 pl-4">
                 <p className="text-2xl md:text-3xl font-black tracking-tight leading-none">
@@ -187,6 +227,7 @@ export default async function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }
