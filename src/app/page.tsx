@@ -42,12 +42,8 @@ export default async function Home() {
     cta_text: rentalBlock.cta_text?.replace(/rental/gi, "Production") ?? "Découvrir Production",
     link: rentalBlock.link.replace(/^\/rental(?=\/|$)/, "/production"),
   };
-  const studioLabel = /^service\s*0?1\b/i.test(studio.label)
-    ? studio.label
-    : `Service 01 · ${studio.label}`;
-  const productionLabel = /^service\s*0?2\b/i.test(production.label)
-    ? production.label
-    : `Service 02 · ${production.label}`;
+  const studioLabel = `Service 02 · ${(studio.label ?? "Conseil & création").replace(/^service\s*\d+\s*[·:—-]?\s*/i, "")}`;
+  const productionLabel = `Service 03 · ${(production.label ?? "Espaces & matériel").replace(/^service\s*\d+\s*[·:—-]?\s*/i, "")}`;
 
   return (
     <>
@@ -67,7 +63,7 @@ export default async function Home() {
             </div>
             <div className="md:max-w-sm">
               <p className="text-sm md:text-base text-surface-variant leading-relaxed">
-                Conseil et création, studios et matériel, formation pratique :
+                Formation pratique, conseil et création, studios et matériel :
                 trois façons d&apos;avancer avec LOLLY, selon ton besoin.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
@@ -84,6 +80,21 @@ export default async function Home() {
 
         {/* Trois portes d'entrée de même rang */}
         <section id="services" aria-label="Choisir votre parcours LOLLY" className="grid grid-cols-1 md:grid-cols-3 w-full scroll-mt-24">
+          <Link href="/academy" className="group min-h-[390px] md:min-h-[520px] bg-primary-fixed text-on-primary-fixed flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 hover:bg-primary-fixed-dim transition-colors">
+            <div className="flex items-start justify-between">
+              <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase">Service 01 · Se former</span>
+              <span className="w-8 h-8 border border-on-primary-fixed/30 flex items-center justify-center group-hover:bg-on-surface group-hover:text-primary-fixed transition-colors" aria-hidden="true">↗</span>
+            </div>
+            <div>
+              <h2 className="text-5xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tighter mb-5 leading-[0.9]">Academy.</h2>
+              <p className="text-base md:text-lg max-w-md mb-8 leading-relaxed">
+                Tu veux mieux présenter ton activité, créer du contenu utile ou former ton équipe ? On commence par comprendre ton besoin.
+              </p>
+              <span className="inline-flex items-center text-xs md:text-sm font-black uppercase tracking-widest border-b-2 border-on-primary-fixed pb-1 group-hover:translate-x-1 transition-transform">
+                Découvrir Academy →
+              </span>
+            </div>
+          </Link>
           {/* Studio Block */}
           {studio && (
             <Link
@@ -171,21 +182,6 @@ export default async function Home() {
               </div>
             </Link>
           )}
-          <Link href="/academy" className="group min-h-[390px] md:min-h-[520px] bg-primary-fixed text-on-primary-fixed flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 hover:bg-primary-fixed-dim transition-colors">
-            <div className="flex items-start justify-between">
-              <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase">Service 03 · Se former</span>
-              <span className="w-8 h-8 border border-on-primary-fixed/30 flex items-center justify-center group-hover:bg-on-surface group-hover:text-primary-fixed transition-colors" aria-hidden="true">↗</span>
-            </div>
-            <div>
-              <h2 className="text-5xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tighter mb-5 leading-[0.9]">Academy.</h2>
-              <p className="text-base md:text-lg max-w-md mb-8 leading-relaxed">
-                Tu veux mieux présenter ton activité, créer du contenu utile ou former ton équipe ? On commence par comprendre ton besoin.
-              </p>
-              <span className="inline-flex items-center text-xs md:text-sm font-black uppercase tracking-widest border-b-2 border-on-primary-fixed pb-1 group-hover:translate-x-1 transition-transform">
-                Découvrir Academy →
-              </span>
-            </div>
-          </Link>
         </section>
 
         {/* Repères de parcours */}

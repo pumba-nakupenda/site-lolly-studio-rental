@@ -7,7 +7,7 @@ const phone = "221772354747";
 export default function FloatingWhatsApp() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/admin") || pathname === "/bio") return null;
 
   const message = pathname.startsWith("/academy")
     ? "Bonjour LOLLY, j'aimerais échanger sur mon projet de formation."

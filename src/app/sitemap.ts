@@ -23,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/academy/diagnostic` },
     { url: `${BASE}/about` },
     { url: `${BASE}/contact` },
+    { url: `${BASE}/bio` },
   ];
 
   const portfolioPages: MetadataRoute.Sitemap = (portfolio ?? [])
