@@ -30,14 +30,12 @@ function LinkCard({
   title,
   description,
   featured = false,
-  external = false,
 }: {
   href: string;
   number: string;
   title: string;
   description: string;
   featured?: boolean;
-  external?: boolean;
 }) {
   const className = `group flex min-h-24 items-center gap-4 border px-5 py-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FED700] ${
     featured
@@ -51,15 +49,11 @@ function LinkCard({
         <span className="block font-headline text-base font-black uppercase leading-snug tracking-tight sm:text-lg">{title}</span>
         <span className={`mt-1 block text-sm leading-snug ${featured ? "text-black/75" : "text-white/65"}`}>{description}</span>
       </span>
-      <span aria-hidden="true" className="self-start font-headline text-xl transition-transform group-hover:translate-x-1">{external ? "↗" : "→"}</span>
+      <span aria-hidden="true" className="self-start font-headline text-xl transition-transform group-hover:translate-x-1">→</span>
     </>
   );
 
-  return external ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
-      {content}
-    </a>
-  ) : (
+  return (
     <Link href={href} className={className}>
       {content}
     </Link>
@@ -85,9 +79,18 @@ export default function BioPage() {
 
         <nav aria-label="Les liens essentiels de LOLLY" className="mt-6 grid gap-3">
           <LinkCard href="/academy/diagnostic" number="01" title="Faire mon diagnostic gratuit" description="Clarifions ton activité et tes canaux en 4 minutes." featured />
-          <LinkCard href={whatsappUrl} number="02" title="Parler de mon projet" description="Un échange direct avec l’équipe LOLLY sur WhatsApp." external />
-          <LinkCard href="/academy/inscription?offre=masterclass" number="03" title="Les Masterclass de LOLLY" description="Un rendez-vous gratuit chaque samedi. Inscription sur le site." />
-          <LinkCard href="/studio/projets" number="04" title="Voir nos réalisations" description="Des projets de communication et de création menés avec nos clients." />
+          <div className="grid grid-cols-2 gap-3" aria-label="Contacter LOLLY">
+            <a href="tel:+221772354747" className="flex min-h-24 flex-col justify-center border border-[#FED700] px-4 py-3 text-white transition-colors hover:bg-[#FED700] hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FED700]">
+              <span className="font-headline text-sm font-black uppercase sm:text-base">Appeler LOLLY</span>
+              <span className="mt-1 text-sm">+221 77 235 47 47</span>
+            </a>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-24 flex-col justify-center border border-[#25D366] bg-[#25D366] px-4 py-3 text-black transition-colors hover:bg-[#20bd5b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FED700]">
+              <span className="font-headline text-sm font-black uppercase sm:text-base">WhatsApp</span>
+              <span className="mt-1 text-sm">Écrire à l’équipe ↗</span>
+            </a>
+          </div>
+          <LinkCard href="/academy/inscription?offre=masterclass" number="02" title="Les Masterclass de LOLLY" description="Un rendez-vous gratuit chaque samedi. Inscription sur le site." />
+          <LinkCard href="/studio/projets" number="03" title="Voir nos réalisations" description="Des projets de communication et de création menés avec nos clients." />
         </nav>
 
         <section aria-labelledby="services-title" className="mt-9 border-t border-white/20 pt-6">
