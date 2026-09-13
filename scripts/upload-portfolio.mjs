@@ -1,5 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync } from "fs";
+
+const uploadEmail = process.env.LOLLY_UPLOAD_EMAIL;
+const uploadPassword = process.env.LOLLY_UPLOAD_PASSWORD;
+if (!uploadEmail || !uploadPassword) {
+  console.error("Set LOLLY_UPLOAD_EMAIL and LOLLY_UPLOAD_PASSWORD before running this script.");
+  process.exit(1);
+}
 import { basename } from "path";
 
 const supabase = createClient(
@@ -9,8 +16,8 @@ const supabase = createClient(
 
 // Sign in first
 const { error: authError } = await supabase.auth.signInWithPassword({
-  email: "oudama@lolly.sn",
-  password: "781227",
+  email: uploadEmail,
+  password: uploadPassword
 });
 if (authError) { console.error("Auth failed:", authError.message); process.exit(1); }
 console.log("Authenticated ✓");

@@ -67,28 +67,38 @@ export function CartPanel() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleSubmit() {
-    if (!name || !email || items.length === 0) return;
+    if (!name.trim() || !email.trim() || items.length === 0) return;
     setSubmitting(true);
+    setError("");
 
-    await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        phone,
-        service_interest: "Location Équipement",
-        message: `Demande de devis pour ${items.length} équipement(s):\n${items.map((i) => `- ${i.brand} ${i.name} (${i.price_label})`).join("\n")}\n\nDates souhaitées: ${dates}\nNotes: ${notes}`,
-        request_type: "equipment_quote",
-        request_data: { items: items.map((i) => ({ name: i.name, brand: i.brand, price: i.price_label })), dates, notes },
-      }),
-    });
-
-    setSubmitted(true);
-    setSubmitting(false);
-    clearCart();
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone,
+          service_interest: "Production",
+          message: `Demande de devis pour ${items.length} équipement(s):\n${items.map((i) => `- ${i.brand} ${i.name} (${i.price_label})`).join("\n")}\n\nDates souhaitées: ${dates}\nNotes: ${notes}`,
+          request_type: "equipment_quote",
+          request_data: { items: items.map((i) => ({ name: i.name, brand: i.brand, price: i.price_label })), dates, notes },
+        }),
+      });
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || "Impossible d'envoyer la demande.");
+      }
+      setSubmitted(true);
+      clearCart();
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Impossible d'envoyer la demande.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (!isOpen) return null;
@@ -114,7 +124,7 @@ export function CartPanel() {
           <div className="p-8 text-center space-y-4">
             <span className="material-symbols-outlined text-primary-fixed text-5xl">check_circle</span>
             <h3 className="text-xl font-bold">Demande envoyée !</h3>
-            <p className="text-sm text-secondary">Nous vous recontacterons sous 24h avec votre devis personnalisé.</p>
+            <p className="text-sm text-secondary">Nous vous recontacterons pour préciser votre besoin et préparer le devis.</p>
             <button onClick={() => { setSubmitted(false); setIsOpen(false); }} className="bg-on-surface text-surface px-6 py-3 font-bold uppercase text-xs tracking-widest">
               Fermer
             </button>
@@ -133,7 +143,7 @@ export function CartPanel() {
                       <p className="text-sm font-bold">{item.name}</p>
                       <p className="text-xs text-primary font-bold mt-1">{item.price_label}</p>
                     </div>
-                    <button onClick={() => removeItem(item.id)} className="text-secondary hover:text-error">
+                    <button onClick={() => removeItem(item.id)} aria-label={`Retirer ${item.name} de ma sélection`} className="text-secondary hover:text-error">
                       <span className="material-symbols-outlined text-sm">delete</span>
                     </button>
                   </div>
@@ -157,6 +167,7 @@ export function CartPanel() {
                   <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Notes complémentaires..." rows={2} className="w-full border border-outline-variant/30 py-2 px-3 text-sm bg-transparent resize-none" />
                 </div>
 
+                {error && <p role="alert" className="border-l-4 border-error pl-3 text-sm text-error">{error}</p>}
                 <button
                   onClick={handleSubmit}
                   disabled={submitting || !name || !email}
@@ -192,7 +203,8 @@ export function CartBadge() {
   return (
     <button
       onClick={() => setIsOpen(true)}
-      className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 bg-primary-fixed text-on-primary-fixed w-14 h-14 flex items-center justify-center shadow-lg hover:bg-primary-fixed-dim transition-all"
+      className="fixed bottom-24 right-4 md:right-6 z-50 bg-primary-fixed text-on-primary-fixed w-14 h-14 flex items-center justify-center shadow-lg hover:bg-primary-fixed-dim transition-all"
+      aria-label={`Ouvrir ma sélection de matériel (${items.length} article${items.length > 1 ? "s" : ""})`}
     >
       <span className="material-symbols-outlined text-xl">shopping_bag</span>
       <span className="absolute -top-1 -right-1 bg-on-surface text-surface text-[0.6rem] font-black w-5 h-5 flex items-center justify-center">

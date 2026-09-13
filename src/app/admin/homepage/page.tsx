@@ -20,13 +20,20 @@ export default function AdminHomepagePage() {
   const [saving, setSaving] = useState(false);
   const supabase = createClient();
 
-  useEffect(() => { load(); }, []);
-
-  async function load() {
-    const { data } = await supabase.from("homepage_blocks").select("*").order("id");
-    setBlocks(data ?? []);
-    setLoading(false);
-  }
+  useEffect(() => {
+    const client = createClient();
+    async function load() {
+      const { data } = await client.from("homepage_blocks").select("*").order("id");
+      setBlocks((data ?? []).map((block) => block.id === "rental" ? {
+        ...block,
+        title: block.title.replace(/rental/gi, "Production"),
+        cta_text: block.cta_text?.replace(/rental/gi, "Production") ?? "Découvrir Production",
+        link: block.link.replace(/^\/rental(?=\/|$)/, "/production"),
+      } : block));
+      setLoading(false);
+    }
+    void load();
+  }, []);
 
   function update(id: string, field: string, value: string) {
     setBlocks((prev) =>
