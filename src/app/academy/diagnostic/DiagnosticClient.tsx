@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { OFFERS, offerPriceLabel, type Offer } from '../_lib/offers';
+import { DIAGNOSTIC_STORAGE_KEY } from '../_lib/diagnostic';
 import { track } from '../_components/Track';
 
 type OfferSlug = Offer['slug'];
@@ -63,6 +64,10 @@ function diagnosticSummary(data: Diagnostic, channels: string) {
     `Canaux à explorer : ${data.futureChannels.join(', ') || 'à définir'}${data.otherChannel ? ` ; autre : ${data.otherChannel}` : ''}`,
     `Canaux à discuter : ${channels}`, `Besoin d’aide : ${data.support}`, `Rythme : ${data.rhythm}`,
   ].join('\n').slice(0, 1150);
+}
+
+function saveDiagnostic(summary: string) {
+  try { sessionStorage.setItem(DIAGNOSTIC_STORAGE_KEY, summary); } catch { /* Le formulaire signalera si la synthèse n'est pas disponible. */ }
 }
 
 function SelectField({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (value: string) => void }) {
@@ -133,13 +138,13 @@ export default function DiagnosticClient() {
         <div className="bg-white p-6"><p className="text-xs uppercase tracking-wider font-bold text-secondary">Canaux à examiner</p><p className="mt-3 font-black">{channelLine}</p><p className="mt-2 text-sm text-on-surface-variant">Il ne s’agit pas d’être partout : on choisira les canaux adaptés à tes clients et à tes moyens.</p></div>
         <div className="bg-white p-6"><p className="text-xs uppercase tracking-wider font-bold text-secondary">Prochaine action</p><p className="mt-3 text-sm">{nextAction(data.obstacle)}</p></div>
       </div>
-      <div className="mt-8 flex flex-col sm:flex-row gap-3"><Link href={{ pathname: '/academy/inscription', query: { offre: 'conseil', diagnostic: summary } }} className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em] text-center">Parler de mon diagnostic →</Link><button type="button" onClick={restart} className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em]">Recommencer</button></div>
+      <div className="mt-8 flex flex-col sm:flex-row gap-3"><Link href={{ pathname: '/academy/inscription', query: { offre: 'conseil', diagnostic: '1' } }} onClick={() => saveDiagnostic(summary)} className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em] text-center">Parler de mon diagnostic →</Link><button type="button" onClick={restart} className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em]">Recommencer</button></div>
       <p className="mt-3 text-xs text-secondary">La demande de conseil se fait sur le site, sans paiement. Ta synthèse sera ajoutée au message.</p>
     </section>
     <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-12 md:py-16"><div className="max-w-4xl mx-auto">
       <p className="text-xs font-black uppercase tracking-wider">Si tu souhaites te former</p><h2 className="mt-3 text-2xl md:text-4xl font-black uppercase tracking-tighter">{recommendedSlug ? `Le format à discuter : ${OFFERS.find((offer) => offer.slug === recommendedSlug)?.name}` : 'Le format reste à définir ensemble.'}</h2><p className="mt-3 text-sm md:text-base">Ce choix dépend de ton besoin de suivi et de ton rythme, pas de ton secteur. Il reste à confirmer ensemble.</p>
       <div className="mt-7 grid gap-3">{OFFERS.map((offer) => <button key={offer.slug} type="button" onClick={() => setChosenSlug(offer.slug)} aria-pressed={selectedOffer?.slug === offer.slug} className={`text-left p-5 border-2 ${selectedOffer?.slug === offer.slug ? 'border-on-surface bg-white/40' : 'border-on-surface/30 bg-white/10'}`}><span className="font-black uppercase">{offer.name}</span><span className="block mt-1 text-sm">{offer.eyebrow} · {offerPriceLabel(offer)}</span></button>)}</div>
-      {selectedOffer && <div className="mt-7 flex flex-col sm:flex-row gap-3"><Link href={{ pathname: '/academy/inscription', query: { offre: selectedOffer.slug, diagnostic: summary } }} className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em] text-center">Demander ce format →</Link><Link href={`/academy/${selectedOffer.slug}`} className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em] text-center">Voir le détail</Link></div>}
+      {selectedOffer && <div className="mt-7 flex flex-col sm:flex-row gap-3"><Link href={{ pathname: '/academy/inscription', query: { offre: selectedOffer.slug, diagnostic: '1' } }} onClick={() => saveDiagnostic(summary)} className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em] text-center">Demander ce format →</Link><Link href={`/academy/${selectedOffer.slug}`} className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em] text-center">Voir le détail</Link></div>}
     </div></section>
   </>;
 }

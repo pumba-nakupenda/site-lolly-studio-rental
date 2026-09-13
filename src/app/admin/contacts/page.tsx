@@ -165,6 +165,7 @@ export default function AdminContactsPage() {
                     <div><p className="text-[0.6rem] uppercase tracking-widest text-secondary font-bold">Thème souhaité</p><p className="text-sm">{detailValue(selected.request_data?.topic)}</p></div>
                     <div><p className="text-[0.6rem] uppercase tracking-widest text-secondary font-bold">Samedi souhaité</p><p className="text-sm">{detailValue(selected.request_data?.session_preference)}</p></div>
                     <div><p className="text-[0.6rem] uppercase tracking-widest text-secondary font-bold">Entreprise</p><p className="text-sm">{detailValue(selected.request_data?.company)}</p></div>
+                    {typeof selected.request_data?.diagnostic === "string" && selected.request_data.diagnostic && <div><p className="text-[0.6rem] uppercase tracking-widest text-secondary font-bold">Diagnostic</p><p className="mt-1 whitespace-pre-wrap break-words text-sm">{selected.request_data.diagnostic}</p></div>}
                   </div>
                 )}
                 <div>

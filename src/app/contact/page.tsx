@@ -27,8 +27,10 @@ function ContactPageInner() {
   const [phone, setPhone] = useState("");
   const [serviceInterest, setServiceInterest] = useState("Je ne sais pas encore");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [notificationSent, setNotificationSent] = useState(false);
   const [error, setError] = useState("");
 
   // Préremplir le service choisi avant d'arriver sur la page Contact.
@@ -54,14 +56,13 @@ function ContactPageInner() {
           phone,
           service_interest: serviceInterest,
           message,
+          website,
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Erreur lors de l\u2019envoi.");
-      }
-
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erreur lors de l\u2019envoi.");
+      setNotificationSent(data.notificationSent === true);
       setSubmitted(true);
     } catch (err) {
       setError(
@@ -108,20 +109,23 @@ function ContactPageInner() {
                     check_circle
                   </span>
                   <h3 className="text-2xl font-bold uppercase tracking-tighter">
-                    Message envoy&eacute; !
+                    Demande enregistr&eacute;e !
                   </h3>
                   <p className="text-on-surface-variant max-w-md mx-auto">
                     Merci pour votre message. Notre &eacute;quipe vous
                     recontactera dans les plus brefs d&eacute;lais.
                   </p>
+                  {notificationSent ? <p className="text-sm text-on-surface-variant">Une notification a été envoyée à l’équipe LOLLY.</p> : <p role="alert" className="text-sm font-bold">La demande est enregistrée, mais la notification par e-mail n’a pas été confirmée. En cas d’urgence, contactez-nous sur WhatsApp.</p>}
                   <button
                     onClick={() => {
                       setSubmitted(false);
+                      setNotificationSent(false);
                       setName("");
                       setEmail("");
                       setPhone("");
                       setServiceInterest("Je ne sais pas encore");
                       setMessage("");
+                      setWebsite("");
                     }}
                     className="mt-6 px-8 py-3 bg-primary-container text-on-primary-fixed font-bold uppercase text-xs tracking-widest hover:bg-primary-fixed-dim transition-all"
                   >
@@ -130,6 +134,7 @@ function ContactPageInner() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-8 md:space-y-12">
+                  <div className="absolute -left-[9999px]" aria-hidden="true"><label>Site web<input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></label></div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                     <div className="flex flex-col gap-2">
                       <label htmlFor="contact-name" className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">

@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { CONTACT, EVENT_TOPICS, OFFERS, getOffer, reserveWhatsappUrl, type Offer } from '../_lib/offers';
+import { DIAGNOSTIC_STORAGE_KEY } from '../_lib/diagnostic';
 import { track } from '../_components/Track';
 
 type RegistrationSlug = Offer['slug'] | 'masterclass' | 'conseil';
@@ -23,6 +24,20 @@ export default function InscriptionForm({ initialOffer, initialDiagnostic = '' }
   const [form, setForm] = useState<FormState>({ offer: validInitialOffer, topic: '', sessionPreference: '', nom: '', prenom: '', email: '', whatsapp: '', entreprise: '', message: '', website: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [error, setError] = useState('');
+  const [notificationSent, setNotificationSent] = useState(false);
+  const [diagnostic, setDiagnostic] = useState(initialDiagnostic === '1' ? '' : initialDiagnostic);
+  const [diagnosticMissing, setDiagnosticMissing] = useState(false);
+
+  useEffect(() => {
+    if (initialDiagnostic !== '1') return;
+    try {
+      const stored = sessionStorage.getItem(DIAGNOSTIC_STORAGE_KEY);
+      if (stored) setDiagnostic(stored.slice(0, 1200));
+      else setDiagnosticMissing(true);
+    } catch {
+      setDiagnosticMissing(true);
+    }
+  }, [initialDiagnostic]);
 
   function update(key: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -54,14 +69,18 @@ export default function InscriptionForm({ initialOffer, initialDiagnostic = '' }
           email: form.email,
           phone: form.whatsapp,
           service_interest: `LOLLY Academy — ${registration.name}`,
-          message: initialDiagnostic ? `${initialDiagnostic}${form.message.trim() ? `\n\nPrécisions :\n${form.message.trim()}` : ''}` : form.message,
+          message: form.message,
           request_type: 'academy_registration',
-          request_data: { offer: registration.slug, offer_name: registration.name, company: form.entreprise, topic: form.topic, session_preference: form.offer === 'masterclass' ? form.sessionPreference : '' },
+          request_data: { offer: registration.slug, offer_name: registration.name, company: form.entreprise, topic: form.topic, session_preference: form.offer === 'masterclass' ? form.sessionPreference : '', diagnostic },
           website: form.website,
         }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Impossible d’envoyer la demande.');
+      setNotificationSent(result.notificationSent === true);
+      if (initialDiagnostic === '1') {
+        try { sessionStorage.removeItem(DIAGNOSTIC_STORAGE_KEY); } catch { /* Le nettoyage sera réessayé par le navigateur. */ }
+      }
       setStatus('success');
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Impossible d’envoyer la demande.');
@@ -95,16 +114,18 @@ export default function InscriptionForm({ initialOffer, initialDiagnostic = '' }
           <Field label="Email"><input type="email" className={inputClass} required maxLength={160} autoComplete="email" value={form.email} onChange={(event) => update('email', event.target.value)} /></Field>
           <Field label="WhatsApp"><input type="tel" className={inputClass} required maxLength={40} autoComplete="tel" placeholder="+221 ..." value={form.whatsapp} onChange={(event) => update('whatsapp', event.target.value)} /></Field>
           <Field label="Entreprise (optionnel)"><input className={inputClass} maxLength={120} autoComplete="organization" value={form.entreprise} onChange={(event) => update('entreprise', event.target.value)} /></Field>
-          {initialDiagnostic && <div className="border-l-4 border-primary-fixed bg-white p-5"><p className="text-xs font-black uppercase tracking-wider">Synthèse jointe à ta demande</p><pre className="mt-3 whitespace-pre-wrap break-words font-sans text-sm text-on-surface-variant">{initialDiagnostic}</pre></div>}
-          <Field label={form.offer === 'conseil' ? 'Une précision sur ton diagnostic (optionnel)' : 'Ton objectif ou ton besoin (optionnel)'}><textarea className={`${inputClass} min-h-[120px] resize-y`} maxLength={initialDiagnostic ? 600 : 1200} value={form.message} onChange={(event) => update('message', event.target.value)} /></Field>
+          {diagnostic && <div className="border-l-4 border-primary-fixed bg-white p-5"><p className="text-xs font-black uppercase tracking-wider">Synthèse jointe à ta demande</p><pre className="mt-3 whitespace-pre-wrap break-words font-sans text-sm text-on-surface-variant">{diagnostic}</pre></div>}
+          {diagnosticMissing && <p role="alert" className="border-l-4 border-error pl-3 text-sm text-error">La synthèse n’a pas été retrouvée dans ce navigateur. <Link href="/academy/diagnostic" className="underline">Reprends le diagnostic</Link> pour l’envoyer avec ta demande.</p>}
+          <Field label={form.offer === 'conseil' ? 'Une précision sur ton diagnostic (optionnel)' : 'Ton objectif ou ton besoin (optionnel)'}><textarea className={`${inputClass} min-h-[120px] resize-y`} maxLength={diagnostic ? 600 : 1200} value={form.message} onChange={(event) => update('message', event.target.value)} /></Field>
           <p className="text-xs text-secondary">Les informations sont utilisées uniquement pour enregistrer ta demande et te communiquer les prochaines informations pratiques.</p>
           {status === 'error' && <p role="alert" className="border-l-4 border-error pl-3 text-sm text-error">{error}</p>}
-          <div><button type="submit" disabled={status === 'sending'} className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em] disabled:opacity-60">{status === 'sending' ? 'Envoi en cours…' : 'Envoyer ma demande →'}</button></div>
+          <div><button type="submit" disabled={status === 'sending' || (initialDiagnostic === '1' && form.offer === 'conseil' && !diagnostic)} className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em] disabled:opacity-60">{status === 'sending' ? 'Envoi en cours…' : 'Envoyer ma demande →'}</button></div>
         </form>
       ) : (
         <div role="status" className="mt-10 border-t-4 border-primary-fixed bg-white p-7 md:p-10">
           <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter">Demande bien reçue.</h2>
-          <p className="mt-4 text-on-surface-variant">{form.offer === 'conseil' ? 'Ton diagnostic est transmis à l’équipe LOLLY. Nous te recontacterons pour en parler avant de proposer une solution.' : `Ta demande pour « ${selectedRegistration.name} » est enregistrée. L’équipe LOLLY te recontactera pour confirmer la date, l’horaire et la disponibilité de la place.`}</p>
+          <p className="mt-4 text-on-surface-variant">{form.offer === 'conseil' ? 'Ton diagnostic est enregistré. Nous te recontacterons pour en parler avant de proposer une solution.' : `Ta demande pour « ${selectedRegistration.name} » est enregistrée. L’équipe LOLLY te recontactera pour confirmer la date, l’horaire et la disponibilité de la place.`}</p>
+          {notificationSent ? <p className="mt-3 text-sm text-on-surface-variant">Une notification a été envoyée à l’équipe LOLLY.</p> : <p role="alert" className="mt-3 text-sm font-bold">La demande est bien enregistrée, mais la notification par e-mail n’a pas été confirmée. Pour un besoin urgent, contacte-nous sur WhatsApp.</p>}
           <div className="mt-7 flex flex-col sm:flex-row gap-3"><a href={successWhatsappUrl} target="_blank" rel="noopener noreferrer" className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em]">Continuer sur WhatsApp →</a><Link href="/academy" className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em]">Retour à Academy</Link></div>
         </div>
       )}

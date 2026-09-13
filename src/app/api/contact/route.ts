@@ -19,6 +19,8 @@ const ACADEMY_OFFER_NAMES: Record<string, string> = {
   ateliers: 'Ateliers LOLLY',
 };
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const NOTIFICATION_TO = 'kane@lolly.sn';
+const NOTIFICATION_FROM = process.env.RESEND_FROM_EMAIL || 'LOLLY <notifications@lolly.sn>';
 
 function clean(value: unknown, maxLength: number) {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
@@ -36,7 +38,8 @@ function escapeHtml(value: unknown) {
 function requestDetailsHtml(requestType: string, details: Record<string, unknown>) {
   if (requestType === 'academy_registration') {
     const eventDetails = details.offer === 'masterclass' || details.offer === 'ateliers' ? `<p><strong>Sujet souhaité :</strong> ${escapeHtml(details.topic) || 'Prochain thème'}</p>${details.offer === 'masterclass' ? `<p><strong>Samedi souhaité :</strong> ${escapeHtml(details.session_preference) || 'Prochaine date à communiquer'}</p>` : ''}` : '';
-    return `<p><strong>Rendez-vous ou offre :</strong> ${escapeHtml(details.offer_name)}</p>${eventDetails}<p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>`;
+    const diagnostic = escapeHtml(details.diagnostic);
+    return `<p><strong>Rendez-vous ou offre :</strong> ${escapeHtml(details.offer_name)}</p>${eventDetails}<p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>${diagnostic ? `<h3>Diagnostic communiqué</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;padding:16px;border-left:4px solid #FED700;background:#f7f7f7">${diagnostic}</pre>` : ''}`;
   }
   if (requestType === 'studio_booking') {
     return `<p><strong>Studio :</strong> ${escapeHtml(details.studio)}</p><p><strong>Date :</strong> ${escapeHtml(details.date)} — ${escapeHtml(details.duration)}</p>${details.needs ? `<p><strong>Besoins :</strong> ${escapeHtml(details.needs)}</p>` : ''}`;
@@ -57,6 +60,9 @@ function requestDetailsHtml(requestType: string, details: Record<string, unknown
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return Response.json({ error: 'Demande invalide.' }, { status: 400 });
+    }
     if (clean(body.website, 200)) return Response.json({ success: true });
 
     const name = clean(body.name, 160);
@@ -91,12 +97,15 @@ export async function POST(request: Request) {
         company: clean(requestData.company, 120),
         topic: clean(requestData.topic, 160),
         session_preference: sessionPreference,
+        diagnostic: clean(requestData.diagnostic, 1200),
       };
       serviceInterest = `LOLLY Academy — ${ACADEMY_OFFER_NAMES[offer]}`;
     }
 
+    const requestId = crypto.randomUUID();
     const supabase = await createClient();
     const { error: dbError } = await supabase.from('contact_requests').insert({
+      id: requestId,
       name,
       email,
       phone,
@@ -113,26 +122,40 @@ export async function POST(request: Request) {
       return Response.json({ error: 'Impossible d’enregistrer la demande pour le moment.' }, { status: 500 });
     }
 
-    if (process.env.RESEND_API_KEY) {
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      const details = requestData as Record<string, unknown>;
-      const detailsHtml = requestDetailsHtml(requestType, details);
+    if (!process.env.RESEND_API_KEY) {
+      console.error('Contact notification unavailable: RESEND_API_KEY missing', requestId);
+      return Response.json({ success: true, notificationSent: false }, { status: 202 });
+    }
 
-      await resend.emails.send({
-        from: 'LOLLY Site <onboarding@resend.dev>',
-        to: ['contact@lolly.sn'],
-        subject: `${SUBJECT_MAP[requestType]} : ${name} — ${serviceInterest}`,
-        html: `<div style="font-family:sans-serif;max-width:600px">
-          <h2 style="color:#6f5900;margin:0 0 16px">${SUBJECT_MAP[requestType]}</h2>
+    try {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const detailsHtml = requestDetailsHtml(requestType, requestData);
+      const subject = requestType === 'academy_registration' && requestData.diagnostic
+        ? 'Diagnostic LOLLY Academy'
+        : SUBJECT_MAP[requestType];
+      const { data: notification, error: mailError } = await resend.emails.send({
+        from: NOTIFICATION_FROM,
+        to: [NOTIFICATION_TO],
+        replyTo: email,
+        subject: `${subject} : ${name} — ${serviceInterest}`,
+        html: `<div style="font-family:Arial,sans-serif;max-width:640px;color:#000000">
+          <h2 style="background:#FED700;color:#000000;padding:16px;margin:0 0 20px">${subject}</h2>
           <p><strong>${escapeHtml(name)}</strong> (${escapeHtml(email)}${phone ? `, ${escapeHtml(phone)}` : ''})</p>
           <p><strong>Service :</strong> ${escapeHtml(serviceInterest)}</p>
           ${detailsHtml}
-          ${message ? `<p style="margin-top:16px;padding:12px;background:#f5f5f5">${escapeHtml(message)}</p>` : ''}
+          ${message ? `<h3>Message</h3><p style="white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;background:#f5f5f5">${escapeHtml(message)}</p>` : ''}
         </div>`,
-      });
-    }
+      }, { idempotencyKey: `contact-${requestId}` });
 
-    return Response.json({ success: true });
+      if (mailError || !notification?.id) {
+        console.error('Contact notification rejected', requestId, mailError?.name);
+        return Response.json({ success: true, notificationSent: false }, { status: 202 });
+      }
+      return Response.json({ success: true, notificationSent: true });
+    } catch (notificationError) {
+      console.error('Contact notification failed', requestId, notificationError instanceof Error ? notificationError.name : 'unknown');
+      return Response.json({ success: true, notificationSent: false }, { status: 202 });
+    }
   } catch (error) {
     console.error('Contact route error:', error);
     return Response.json({ error: 'Une erreur est survenue.' }, { status: 500 });
