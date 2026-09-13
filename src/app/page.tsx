@@ -31,6 +31,12 @@ export default async function Home() {
     cta_text: rentalBlock.cta_text?.replace(/rental/gi, "Production") ?? "Découvrir Production",
     link: rentalBlock.link.replace(/^\/rental(?=\/|$)/, "/production"),
   };
+  const studioLabel = /^service\s*0?1\b/i.test(studio.label)
+    ? studio.label
+    : `Service 01 · ${studio.label}`;
+  const productionLabel = /^service\s*0?2\b/i.test(production.label)
+    ? production.label
+    : `Service 02 · ${production.label}`;
 
   return (
     <>
@@ -83,7 +89,7 @@ export default async function Home() {
               <div className="relative flex-1 flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 z-10">
                 <div className="flex items-start justify-between">
                   <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase text-on-surface-variant">
-                    Service 01 · {studio.label}
+                    {studioLabel}
                   </span>
                   <span className="w-8 h-8 border border-on-surface/20 flex items-center justify-center group-hover:bg-primary-fixed group-hover:border-primary-fixed transition-all">
                     <span className="material-symbols-outlined text-sm text-on-surface">
@@ -127,7 +133,7 @@ export default async function Home() {
               <div className="relative flex-1 flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 z-10">
                 <div className="flex items-start justify-between">
                   <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase text-surface-variant">
-                    Service 02 · {production.label}
+                    {productionLabel}
                   </span>
                   <span className="w-8 h-8 border border-white/20 flex items-center justify-center group-hover:bg-primary-fixed group-hover:border-primary-fixed transition-all">
                     <span className="material-symbols-outlined text-sm text-white group-hover:text-on-surface">
