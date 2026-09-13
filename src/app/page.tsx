@@ -1,9 +1,20 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Agence de Conseil en Communication | LOLLY Agence",
+    description: "Conseil, production et formation à Dakar : trouvons le bon point de départ pour ton activité.",
+    url: "https://lolly.sn",
+    type: "website",
+  },
+};
 
 export default async function Home() {
   const supabase = await createClient();

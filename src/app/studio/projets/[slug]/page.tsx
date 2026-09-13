@@ -46,6 +46,13 @@ export async function generateMetadata({
   return {
     title: `${project.title} | LOLLY Studio`,
     description: project.description,
+    alternates: { canonical: `/studio/projets/${slug}` },
+    openGraph: {
+      title: `${project.title} | LOLLY Studio`,
+      description: project.description,
+      url: `https://lolly.sn/studio/projets/${slug}`,
+      type: "website",
+    },
   };
 }
 

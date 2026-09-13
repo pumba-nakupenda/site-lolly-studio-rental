@@ -23,6 +23,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${data.brand} ${data.name} | LOLLY Production`,
     description: data.description || `Location ${data.brand} ${data.name} à Dakar.`,
+    alternates: { canonical: `/production/${slug}` },
+    openGraph: {
+      title: `${data.brand} ${data.name} | LOLLY Production`,
+      description: data.description || `Location ${data.brand} ${data.name} à Dakar.`,
+      url: `https://lolly.sn/production/${slug}`,
+      type: "website",
+    },
   };
 }
 

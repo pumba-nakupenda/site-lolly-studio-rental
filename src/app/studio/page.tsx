@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   title: "Studio | LOLLY Agence — Conseil en Communication",
   description:
     "Agence de Conseil en Communication d'élite au Sénégal. Stratégie 360, Branding, Formation, Production Vidéo et Community Management.",
+  alternates: { canonical: "/studio" },
+  openGraph: {
+    title: "LOLLY Studio — Conseil et création à Dakar",
+    description: "Stratégie de communication, identité de marque et contenus audiovisuels pour votre activité.",
+    url: "https://lolly.sn/studio",
+    type: "website",
+  },
 };
 
 export const revalidate = 60;

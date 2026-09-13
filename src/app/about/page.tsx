@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: "À Propos | LOLLY Agence",
   description:
     "Découvrez comment LOLLY relie conseil, production, formation et location pour accompagner les entreprises et les créateurs à Dakar.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "À propos de LOLLY Agence",
+    description: "Conseil, production et formation : découvrez notre approche à Dakar.",
+    url: "https://lolly.sn/about",
+    type: "website",
+  },
 };
 
 const values = [

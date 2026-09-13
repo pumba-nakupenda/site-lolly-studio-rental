@@ -15,6 +15,13 @@ export const metadata: Metadata = {
   title: "Production | LOLLY — Studios et matériel audiovisuel",
   description:
     "Location d'équipement cinéma premium et studio shooting à Dakar. ARRI, RED, Cooke, Aputure, DJI. Plateaux photo et vidéo équipés.",
+  alternates: { canonical: "/production" },
+  openGraph: {
+    title: "LOLLY Production — Studios et matériel audiovisuel",
+    description: "Studios, équipements photo, vidéo et cinéma pour vos productions à Dakar.",
+    url: "https://lolly.sn/production",
+    type: "website",
+  },
 };
 
 const categories = [

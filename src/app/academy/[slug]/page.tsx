@@ -16,6 +16,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: offer.name,
     description: offer.cardLead,
     alternates: { canonical: `/academy/${offer.slug}` },
+    openGraph: {
+      title: `${offer.name} | LOLLY Academy`,
+      description: offer.cardLead,
+      url: `https://lolly.sn/academy/${offer.slug}`,
+      type: 'website',
+    },
   };
 }
 

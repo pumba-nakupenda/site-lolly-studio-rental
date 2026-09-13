@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -6,23 +6,23 @@ import "./globals.css";
 
 const montserrat = localFont({
   src: [
-    { path: "./fonts/Montserrat-Regular.ttf", weight: "400", style: "normal" },
-    { path: "./fonts/Montserrat-Bold.ttf", weight: "700", style: "normal" },
-    { path: "./fonts/Montserrat-Black.ttf", weight: "900", style: "normal" },
+    { path: "./fonts/Montserrat-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Montserrat-Bold.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/Montserrat-Black.woff2", weight: "900", style: "normal" },
   ],
   variable: "--font-montserrat",
   display: "swap",
 });
 const lato = localFont({
   src: [
-    { path: "./fonts/Lato-Regular.ttf", weight: "400", style: "normal" },
-    { path: "./fonts/Lato-Bold.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/Lato-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Lato-Bold.woff2", weight: "700", style: "normal" },
   ],
   variable: "--font-lato",
   display: "swap",
 });
 const museo = localFont({
-  src: "./fonts/MuseoModerno-BlackItalic.ttf",
+  src: "./fonts/MuseoModerno-BlackItalic.woff2",
   weight: "900",
   style: "italic",
   variable: "--font-museo",
@@ -31,6 +31,7 @@ const museo = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lolly.sn"),
+  robots: process.env.VERCEL_ENV === "preview" ? { index: false, follow: false } : undefined,
   title: "Agence de Conseil en Communication | LOLLY Agence",
   description:
     "LOLLY relie conseil, production, formation et location audiovisuelle pour faire avancer les entreprises et les créateurs à Dakar.",
@@ -40,7 +41,6 @@ export const metadata: Metadata = {
     title: "Agence de Conseil en Communication | LOLLY Agence",
     description:
       "Conseil, production, formation et location audiovisuelle à Dakar : trouvez le bon point de départ avec LOLLY.",
-    url: "https://lolly.sn",
     type: "website",
   },
   twitter: {
@@ -49,9 +49,10 @@ export const metadata: Metadata = {
     description:
       "Conseil, production, formation et location audiovisuelle à Dakar.",
   },
-  other: {
-    "theme-color": "#FED700",
-  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FED700",
 };
 
 export default function RootLayout({

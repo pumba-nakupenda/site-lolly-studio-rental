@@ -9,6 +9,13 @@ export const metadata = {
   title: 'LOLLY Academy — Formations en communication digitale à Dakar',
   description:
     'Formation intensive de 5 jours, accompagnement de 3 à 5 mois et ateliers pratiques en communication digitale à Dakar.',
+  alternates: { canonical: '/academy' },
+  openGraph: {
+    title: 'LOLLY Academy — Formations en communication digitale à Dakar',
+    description: 'Formation intensive, accompagnement et ateliers pratiques en communication digitale à Dakar.',
+    url: 'https://lolly.sn/academy',
+    type: 'website',
+  },
 };
 
 export default function AcademyHome() {

@@ -12,6 +12,13 @@ export const metadata: Metadata = {
   title: "Portfolio | LOLLY Agence — Nos Réalisations",
   description:
     "Découvrez l'impact de LOLLY Agency à travers nos projets en branding, stratégie digitale et production audiovisuelle au Sénégal.",
+  alternates: { canonical: "/studio/projets" },
+  openGraph: {
+    title: "Réalisations | LOLLY Studio",
+    description: "Parcourez nos projets de communication, branding et production audiovisuelle au Sénégal.",
+    url: "https://lolly.sn/studio/projets",
+    type: "website",
+  },
 };
 
 const fallbackSpan: Record<number, { span: string; ratio: string }> = {
