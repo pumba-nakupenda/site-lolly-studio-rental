@@ -22,7 +22,7 @@ export default function HeroCTAs({ inverse = false }: { inverse?: boolean }) {
         </a>
       </div>
       <p className={`mt-3 text-xs tracking-tight ${inverse ? 'text-white/50' : 'text-secondary'}`}>
-        2 minutes · gratuit · sans engagement
+        Environ 4 minutes · gratuit · sans engagement
       </p>
     </>
   );

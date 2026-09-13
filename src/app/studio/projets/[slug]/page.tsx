@@ -434,7 +434,7 @@ export default async function ProjectDetailPage({
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href={`/contact?message=${encodeURIComponent(`Bonjour, j'ai découvert votre projet "${project.title}" sur votre portfolio et je souhaiterais discuter d'un projet similaire.`)}`}
+                href={`/contact?service=Studio&message=${encodeURIComponent(`Bonjour, j'ai découvert votre projet "${project.title}" sur votre portfolio et je souhaiterais discuter d'un projet similaire.`)}`}
                 className="bg-primary-fixed text-on-primary-fixed font-black uppercase px-10 py-5 text-sm tracking-widest hover:bg-primary-fixed-dim transition-all"
               >
                 Parlons-en

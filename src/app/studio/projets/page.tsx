@@ -113,7 +113,7 @@ export default async function ProjetsPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/contact"
+                href="/contact?service=Studio"
                 className="bg-primary-fixed text-on-primary-fixed font-black uppercase px-12 py-5 text-sm tracking-widest hover:bg-primary-fixed-dim transition-all"
               >
                 Parlons de votre projet

@@ -21,16 +21,16 @@ export default function Footer() {
               Studio
             </Link>
             <Link
-              href="/academy"
-              className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
-            >
-              Academy
-            </Link>
-            <Link
               href="/production"
               className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
             >
               Production
+            </Link>
+            <Link
+              href="/academy"
+              className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
+            >
+              Academy
             </Link>
             <Link
               href="/about"

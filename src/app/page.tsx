@@ -5,12 +5,6 @@ import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 60;
 
-const academyOffers = [
-  { label: "Formation intensive", detail: "5 jours", price: "75 000 XOF" },
-  { label: "Accompagnement", detail: "3 à 5 mois", price: "Dès 85 000 XOF" },
-  { label: "Ateliers LOLLY", detail: "Par sujet", price: "25 000 XOF / pers." },
-];
-
 export default async function Home() {
   const supabase = await createClient();
   const { data } = await supabase.from("homepage_blocks").select("*").order("id");
@@ -56,24 +50,23 @@ export default async function Home() {
             </div>
             <div className="md:max-w-sm">
               <p className="text-sm md:text-base text-surface-variant leading-relaxed">
-                Conseil, production, formation et location de matériel audiovisuel
-                pour les entrepreneurs, les équipes et les créateurs d&apos;Afrique de
-                l&apos;Ouest. Une maison, trois expertises.
+                Conseil et création, studios et matériel, formation pratique :
+                trois façons d&apos;avancer avec LOLLY, selon ton besoin.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/academy/diagnostic" className="bg-primary-fixed text-on-primary-fixed px-5 py-3 text-xs font-black uppercase tracking-wider hover:bg-primary-fixed-dim transition-colors">
-                  Faire mon diagnostic gratuit →
+                <Link href="/contact" className="bg-primary-fixed text-on-primary-fixed px-5 py-3 text-xs font-black uppercase tracking-wider hover:bg-primary-fixed-dim transition-colors">
+                  Parler de mon projet →
                 </Link>
-                <Link href="/contact" className="border border-white/60 px-5 py-3 text-xs font-black uppercase tracking-wider hover:bg-white hover:text-on-surface transition-colors">
-                  Parler de mon projet
-                </Link>
+                <a href="#services" className="border border-white/60 px-5 py-3 text-xs font-black uppercase tracking-wider hover:bg-white hover:text-on-surface transition-colors">
+                  Choisir mon service
+                </a>
               </div>
             </div>
           </div>
         </section>
 
         {/* Trois portes d'entrée de même rang */}
-        <section aria-label="Choisir votre parcours LOLLY" className="grid grid-cols-1 md:grid-cols-3 w-full">
+        <section id="services" aria-label="Choisir votre parcours LOLLY" className="grid grid-cols-1 md:grid-cols-3 w-full scroll-mt-24">
           {/* Studio Block */}
           {studio && (
             <Link
@@ -90,7 +83,7 @@ export default async function Home() {
               <div className="relative flex-1 flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 z-10">
                 <div className="flex items-start justify-between">
                   <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase text-on-surface-variant">
-                    {studio.label}
+                    Service 01 · {studio.label}
                   </span>
                   <span className="w-8 h-8 border border-on-surface/20 flex items-center justify-center group-hover:bg-primary-fixed group-hover:border-primary-fixed transition-all">
                     <span className="material-symbols-outlined text-sm text-on-surface">
@@ -134,7 +127,7 @@ export default async function Home() {
               <div className="relative flex-1 flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 z-10">
                 <div className="flex items-start justify-between">
                   <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase text-surface-variant">
-                    {production.label}
+                    Service 02 · {production.label}
                   </span>
                   <span className="w-8 h-8 border border-white/20 flex items-center justify-center group-hover:bg-primary-fixed group-hover:border-primary-fixed transition-all">
                     <span className="material-symbols-outlined text-sm text-white group-hover:text-on-surface">
@@ -163,7 +156,7 @@ export default async function Home() {
           )}
           <Link href="/academy" className="group min-h-[390px] md:min-h-[520px] bg-primary-fixed text-on-primary-fixed flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 hover:bg-primary-fixed-dim transition-colors">
             <div className="flex items-start justify-between">
-              <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase">Se former · Academy</span>
+              <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase">Service 03 · Se former</span>
               <span className="w-8 h-8 border border-on-primary-fixed/30 flex items-center justify-center group-hover:bg-on-surface group-hover:text-primary-fixed transition-colors" aria-hidden="true">↗</span>
             </div>
             <div>
@@ -172,48 +165,14 @@ export default async function Home() {
                 Tu veux mieux présenter ton activité, créer du contenu utile ou former ton équipe ? On commence par comprendre ton besoin.
               </p>
               <span className="inline-flex items-center text-xs md:text-sm font-black uppercase tracking-widest border-b-2 border-on-primary-fixed pb-1 group-hover:translate-x-1 transition-transform">
-                Découvrir mon parcours →
+                Découvrir Academy →
               </span>
             </div>
           </Link>
         </section>
 
-        {/* Academy — troisième pilier commercial */}
-        <section className="bg-primary-fixed text-on-primary-fixed px-6 md:px-12 py-16 md:py-24">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
-              <div className="lg:col-span-8">
-                <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase block mb-5">
-                  Service 03 · LOLLY Academy
-                </span>
-                <h2 className="text-4xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.92] max-w-4xl">
-                  Ta communication doit produire des résultats, pas seulement du contenu.
-                </h2>
-              </div>
-              <div className="lg:col-span-4">
-                <p className="text-base md:text-lg leading-relaxed mb-7">
-                  Des formations pratiques pour clarifier ton message, mieux produire et transformer tes actions digitales en activité durable.
-                </p>
-                <Link href="/academy" className="inline-flex items-center bg-on-surface text-primary-fixed px-8 py-4 font-black uppercase text-xs tracking-[0.18em] hover:bg-on-surface/85 transition-colors">
-                  Découvrir Academy →
-                </Link>
-              </div>
-            </div>
-
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 border-y-2 border-on-primary-fixed/25">
-              {academyOffers.map((offer, index) => (
-                <Link key={offer.label} href="/academy#offres" className="group py-6 md:px-7 first:pl-0 border-b md:border-b-0 md:border-r last:border-0 border-on-primary-fixed/25">
-                  <span className="text-[0.6rem] font-black tracking-[0.2em] uppercase opacity-60">0{index + 1} · {offer.detail}</span>
-                  <h3 className="mt-2 text-xl md:text-2xl font-black uppercase tracking-tight group-hover:translate-x-1 transition-transform">{offer.label}</h3>
-                  <p className="mt-2 text-sm font-bold">{offer.price}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Repères de parcours */}
-        <section className="bg-primary-fixed text-on-primary-fixed py-10 px-6 md:px-12">
+        <section className="bg-surface-container-lowest text-on-surface py-10 px-6 md:px-12">
           <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
             {[
               { k: "01", v: "Comprendre votre besoin" },
@@ -221,7 +180,7 @@ export default async function Home() {
               { k: "03", v: "Produire ou apprendre" },
               { k: "04", v: "Suivre les résultats" },
             ].map((s) => (
-              <div key={s.k} className="border-l-2 border-on-primary-fixed/30 pl-4">
+              <div key={s.k} className="border-l-2 border-primary-fixed pl-4">
                 <p className="text-2xl md:text-3xl font-black tracking-tight leading-none">
                   {s.k}
                 </p>

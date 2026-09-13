@@ -372,7 +372,7 @@ export default async function StudioPage() {
                 </div>
                 <div className="md:col-span-5 bg-primary-fixed flex items-center justify-center p-10">
                   <Link
-                    href="/contact"
+                    href="/contact?service=Studio"
                     className="bg-on-surface text-white px-8 py-4 font-bold uppercase text-xs tracking-widest hover:bg-on-surface/80 transition-all"
                   >
                     Nous consulter
@@ -446,7 +446,7 @@ export default async function StudioPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/contact"
+                href="/contact?service=Studio"
                 className="bg-primary-fixed text-on-primary-fixed font-black uppercase px-12 py-5 text-sm tracking-widest hover:bg-primary-fixed-dim transition-all"
               >
                 Parler de mon projet

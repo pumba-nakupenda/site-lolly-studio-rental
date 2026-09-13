@@ -6,13 +6,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const SERVICES = [
-  "Consulting Strat\u00e9gique",
-  "Formation Digitale Pro",
-  "Production Vid\u00e9o / Photo",
-  "Design & Branding",
-  "Community Management",
-  "Cr\u00e9ation de Contenu",
-  "Autre demande",
+  "Studio",
+  "Production",
+  "Academy",
+  "Je ne sais pas encore",
 ];
 
 export default function ContactPage() {
@@ -28,13 +25,13 @@ function ContactPageInner() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [serviceInterest, setServiceInterest] = useState(SERVICES[0]);
+  const [serviceInterest, setServiceInterest] = useState("Je ne sais pas encore");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  // Pre-fill from URL params (?service=Production+Vidéo&message=...)
+  // Préremplir le service choisi avant d'arriver sur la page Contact.
   useEffect(() => {
     const service = searchParams.get("service");
     const msg = searchParams.get("message");
@@ -90,9 +87,8 @@ function ContactPageInner() {
               <span className="text-primary-fixed">PROJET</span>.
             </h1>
             <p className="text-base md:text-xl text-secondary mt-5 md:mt-6 max-w-2xl leading-relaxed">
-              Que vous soyez au d&eacute;but de votre r&eacute;flexion ou
-              pr&ecirc;t &agrave; lancer votre campagne, nous sommes l&agrave;
-              pour vous accompagner vers l&apos;excellence.
+              Dites-nous ce que vous cherchez à faire. Nous clarifions votre besoin
+              avant de vous proposer une solution Studio, Production ou Academy.
             </p>
           </div>
         </section>
@@ -103,7 +99,7 @@ function ContactPageInner() {
             {/* Inquiry Form */}
             <div className="lg:col-span-7 bg-surface-container-lowest p-6 md:p-12 shadow-[0px_24px_48px_-12px_rgba(12,15,15,0.04)]">
               <h2 className="text-xl md:text-2xl font-bold mb-8 md:mb-12 uppercase tracking-tighter">
-                Envoyer un message
+                Décrivez-nous votre besoin
               </h2>
 
               {submitted ? (
@@ -124,7 +120,7 @@ function ContactPageInner() {
                       setName("");
                       setEmail("");
                       setPhone("");
-                      setServiceInterest(SERVICES[0]);
+                      setServiceInterest("Je ne sais pas encore");
                       setMessage("");
                     }}
                     className="mt-6 px-8 py-3 bg-primary-container text-on-primary-fixed font-bold uppercase text-xs tracking-widest hover:bg-primary-fixed-dim transition-all"
@@ -136,10 +132,11 @@ function ContactPageInner() {
                 <form onSubmit={handleSubmit} className="space-y-8 md:space-y-12">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                     <div className="flex flex-col gap-2">
-                      <label className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
+                      <label htmlFor="contact-name" className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
                         Identit&eacute;
                       </label>
                       <input
+                        id="contact-name"
                         className="bg-transparent border-t-0 border-x-0 border-b border-outline-variant py-4 px-0 transition-all placeholder:text-outline-variant"
                         placeholder="Votre nom complet"
                         type="text"
@@ -149,10 +146,11 @@ function ContactPageInner() {
                       />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <label className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
+                      <label htmlFor="contact-email" className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
                         Contact Email
                       </label>
                       <input
+                        id="contact-email"
                         className="bg-transparent border-t-0 border-x-0 border-b border-outline-variant py-4 px-0 transition-all placeholder:text-outline-variant"
                         placeholder="votre@email.com"
                         type="email"
@@ -164,10 +162,11 @@ function ContactPageInner() {
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
+                    <label htmlFor="contact-phone" className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
                       T&eacute;l&eacute;phone (Mobile)
                     </label>
                     <input
+                      id="contact-phone"
                       className="bg-transparent border-t-0 border-x-0 border-b border-outline-variant py-4 px-0 transition-all placeholder:text-outline-variant"
                       placeholder="+221 7X XXX XX XX"
                       type="tel"
@@ -176,35 +175,36 @@ function ContactPageInner() {
                     />
                   </div>
 
-                  <div className="flex flex-col gap-4">
-                    <label className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
-                      Domaine d&apos;intervention
-                    </label>
+                  <fieldset className="flex flex-col gap-4">
+                    <legend className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
+                      Quel service vous intéresse ?
+                    </legend>
                     <div className="flex flex-wrap gap-3">
                       {SERVICES.map((service) => (
                         <label key={service} className="cursor-pointer">
                           <input
                             checked={serviceInterest === service}
                             onChange={() => setServiceInterest(service)}
-                            className="hidden peer"
+                            className="sr-only peer"
                             name="service"
                             type="radio"
                           />
-                          <span className="px-5 py-2.5 bg-secondary-container text-on-secondary-container font-bold uppercase text-[0.65rem] tracking-widest peer-checked:bg-primary-container peer-checked:text-on-primary-fixed transition-all">
+                          <span className="inline-block px-5 py-2.5 bg-secondary-container text-on-secondary-container font-bold uppercase text-[0.65rem] tracking-widest peer-checked:bg-primary-container peer-checked:text-on-primary-fixed peer-focus-visible:outline-2 peer-focus-visible:outline-on-surface transition-all">
                             {service}
                           </span>
                         </label>
                       ))}
                     </div>
-                  </div>
+                  </fieldset>
 
                   <div className="flex flex-col gap-2">
-                    <label className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
-                      D&eacute;tails de votre demande
+                    <label htmlFor="contact-message" className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface-variant">
+                      Votre besoin ou votre question
                     </label>
                     <textarea
+                      id="contact-message"
                       className="bg-transparent border-t-0 border-x-0 border-b border-outline-variant py-4 px-0 transition-all placeholder:text-outline-variant resize-none"
-                      placeholder="D&eacute;crivez votre projet, vos objectifs et vos d&eacute;lais..."
+                      placeholder="Expliquez-nous votre objectif, même si votre projet n'est pas encore défini..."
                       rows={4}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
@@ -212,7 +212,7 @@ function ContactPageInner() {
                   </div>
 
                   {error && (
-                    <p className="text-red-500 text-sm font-medium">{error}</p>
+                    <p role="alert" className="text-red-500 text-sm font-medium">{error}</p>
                   )}
 
                   <button
@@ -222,7 +222,7 @@ function ContactPageInner() {
                   >
                     {submitting
                       ? "Envoi en cours..."
-                      : "D\u00e9marrez l\u2019aventure \u2192"}
+                      : "Envoyer ma demande \u2192"}
                   </button>
                 </form>
               )}

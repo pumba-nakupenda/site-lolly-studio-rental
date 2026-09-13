@@ -7,8 +7,8 @@ import Logo from "./Logo";
 
 const mainLinks = [
   { href: "/studio", label: "Studio" },
-  { href: "/academy", label: "Academy" },
   { href: "/production", label: "Production" },
+  { href: "/academy", label: "Academy" },
   { href: "/about", label: "À Propos" },
   { href: "/contact", label: "Contact" },
 ];

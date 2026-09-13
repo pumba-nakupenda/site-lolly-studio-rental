@@ -46,12 +46,6 @@ const ecosystem = [
   },
   {
     badge: "",
-    title: "LOLLY Academy",
-    desc: "Masterclass, ateliers et parcours pratiques pour apprendre à communiquer avec méthode.",
-    tags: ["Masterclass", "Ateliers", "Formation"],
-  },
-  {
-    badge: "",
     title: "LOLLY Studio",
     desc: "Nous produisons les images, vidéos et contenus nécessaires à votre communication.",
     tags: ["Vidéo", "Design", "Photographie"],
@@ -61,6 +55,12 @@ const ecosystem = [
     title: "LOLLY Production",
     desc: "Espaces et matériel audiovisuel pour vos tournages, événements et formations.",
     tags: ["Studios", "Salles", "Matériel"],
+  },
+  {
+    badge: "",
+    title: "LOLLY Academy",
+    desc: "Masterclass, ateliers et parcours pratiques pour apprendre à communiquer avec méthode.",
+    tags: ["Masterclass", "Ateliers", "Formation"],
   },
 ];
 

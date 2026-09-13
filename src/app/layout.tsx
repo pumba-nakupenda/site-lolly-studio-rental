@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import "./globals.css";
 
 const montserrat = localFont({
@@ -71,6 +72,7 @@ export default function RootLayout({
           Aller au contenu principal
         </a>
         {children}
+        <FloatingWhatsApp />
         <Analytics />
       </body>
     </html>

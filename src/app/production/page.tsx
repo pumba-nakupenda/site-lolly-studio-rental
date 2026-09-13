@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import ProductionQuoteCTA from "@/components/ProductionQuoteCTA";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
 import FilterableGrid from "@/components/FilterableGrid";
@@ -393,25 +394,10 @@ export default async function ProductionPage() {
               Prêt pour la Production ?
             </h2>
             <p className="text-lg text-surface-dim mb-10">
-              Studio ou matériel — soumettez votre liste pour un devis
-              personnalisé et des remises multi-jours.
+              Vous avez sélectionné du matériel ? Envoyez votre liste pour un devis.
+              Sinon, décrivez-nous votre besoin et nous vous orienterons.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link
-                href="/contact"
-                className="bg-primary-fixed text-on-primary-fixed font-black uppercase px-12 py-5 text-sm tracking-widest hover:bg-primary-fixed-dim transition-all"
-              >
-                Demander un devis
-              </Link>
-              <a
-                href="https://wa.me/+221772354747?text=Bonjour%20LOLLY%2C%20je%20souhaiterais%20un%20devis%20pour%20de%20la%20location."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border border-white text-white font-black uppercase px-12 py-5 text-sm tracking-widest hover:bg-white hover:text-on-surface transition-all"
-              >
-                WhatsApp
-              </a>
-            </div>
+            <ProductionQuoteCTA />
           </div>
         </section>
       </main>
