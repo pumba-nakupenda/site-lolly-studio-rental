@@ -15,6 +15,12 @@ export default function Footer() {
           </p>
           <div className="flex flex-wrap gap-x-8 gap-y-2">
             <Link
+              href="/academy"
+              className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
+            >
+              Academy
+            </Link>
+            <Link
               href="/studio"
               className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
             >
@@ -25,12 +31,6 @@ export default function Footer() {
               className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
             >
               Production
-            </Link>
-            <Link
-              href="/academy"
-              className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
-            >
-              Academy
             </Link>
             <Link
               href="/about"

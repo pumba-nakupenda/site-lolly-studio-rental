@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import Logo from "./Logo";
 
 const mainLinks = [
+  { href: "/academy", label: "Academy" },
   { href: "/studio", label: "Studio" },
   { href: "/production", label: "Production" },
-  { href: "/academy", label: "Academy" },
   { href: "/about", label: "À Propos" },
   { href: "/contact", label: "Contact" },
 ];
@@ -83,6 +83,16 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-12">
+          <Link
+            href="/academy"
+            className={`text-sm uppercase font-bold tracking-tight transition-colors ${
+              pathname.startsWith("/academy")
+                ? "text-primary-fixed border-b-2 border-primary-fixed pb-1"
+                : "text-on-surface hover:text-primary-fixed"
+            }`}
+          >
+            Academy
+          </Link>
           {/* Studio with dropdown */}
           <div
             className="relative"
@@ -126,7 +136,7 @@ export default function Navbar() {
           </div>
 
           {/* Other links */}
-          {mainLinks.slice(1).map((link) => {
+          {mainLinks.slice(2).map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -227,6 +237,15 @@ export default function Navbar() {
         }`}
       >
         <div className="flex flex-col px-6 py-6 gap-1">
+          <Link
+            href="/academy"
+            onClick={() => setOpen(false)}
+            className={`text-sm uppercase font-bold tracking-tight py-2 transition-colors ${
+              pathname.startsWith("/academy") ? "text-primary-fixed" : "text-on-surface"
+            }`}
+          >
+            Academy
+          </Link>
           {/* Studio + sous-lien Projets */}
           <Link
             href="/studio"
@@ -248,10 +267,19 @@ export default function Navbar() {
           >
             Projets
           </Link>
+          <Link
+            href="/production"
+            onClick={() => setOpen(false)}
+            className={`text-sm uppercase font-bold tracking-tight py-2 transition-colors ${
+              pathname.startsWith("/production") ? "text-primary-fixed" : "text-on-surface"
+            }`}
+          >
+            Production
+          </Link>
 
           <div className="h-px bg-outline-variant/15 my-3" />
 
-          {mainLinks.slice(1).map((link) => {
+          {mainLinks.slice(3).map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
