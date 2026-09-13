@@ -27,10 +27,10 @@ export default function Footer() {
               Academy
             </Link>
             <Link
-              href="/rental"
+              href="/production"
               className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
             >
-              Rental
+              Production
             </Link>
             <Link
               href="/about"

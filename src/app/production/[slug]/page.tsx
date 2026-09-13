@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { data } = await supabase.from("rental_equipment").select("name, brand, description").eq("slug", slug).single();
   if (!data) return { title: "Équipement introuvable" };
   return {
-    title: `${data.brand} ${data.name} | LOLLY Rental`,
+    title: `${data.brand} ${data.name} | LOLLY Production`,
     description: data.description || `Location ${data.brand} ${data.name} à Dakar.`,
   };
 }
@@ -81,7 +81,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Info — 5 cols */}
             <div className="md:col-span-5">
-              <Link href="/rental" className="text-[0.6rem] uppercase tracking-widest text-secondary hover:text-primary transition-colors mb-4 block">
+              <Link href="/production" className="text-[0.6rem] uppercase tracking-widest text-secondary hover:text-primary transition-colors mb-4 block">
                 ← Retour au catalogue
               </Link>
               <span className="text-[0.6rem] uppercase tracking-widest text-secondary font-bold block mb-1">

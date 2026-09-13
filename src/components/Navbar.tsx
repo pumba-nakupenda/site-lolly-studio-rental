@@ -8,7 +8,7 @@ import Logo from "./Logo";
 const mainLinks = [
   { href: "/studio", label: "Studio" },
   { href: "/academy", label: "Academy" },
-  { href: "/rental", label: "Rental" },
+  { href: "/production", label: "Production" },
   { href: "/about", label: "À Propos" },
   { href: "/contact", label: "Contact" },
 ];
@@ -21,7 +21,8 @@ function getBreadcrumbs(pathname: string) {
 
   const labels: Record<string, string> = {
     studio: "Studio",
-    rental: "Rental",
+    rental: "Production",
+    production: "Production",
     academy: "Academy",
     about: "À Propos",
     contact: "Contact",
@@ -64,12 +65,6 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setOpen(false);
-    setStudioOpen(false);
-  }, [pathname]);
-
   // Lock body scroll while mobile menu open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -96,6 +91,7 @@ export default function Navbar() {
           >
             <Link
               href="/studio"
+              onClick={() => setStudioOpen(false)}
               className={`text-sm uppercase font-bold tracking-tight transition-colors ${
                 isStudioActive
                   ? "text-primary-fixed border-b-2 border-primary-fixed pb-1"
@@ -116,6 +112,7 @@ export default function Navbar() {
               <div className="bg-on-surface min-w-[160px] py-2 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.2)]">
                 <Link
                   href="/studio/projets"
+                  onClick={() => setStudioOpen(false)}
                   className={`block px-6 py-3 text-xs uppercase tracking-widest font-bold transition-colors ${
                     pathname.startsWith("/studio/projets")
                       ? "text-primary-fixed"

@@ -5,10 +5,11 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 import { CONTACT, EVENT_TOPICS, OFFERS, getOffer, reserveWhatsappUrl, type Offer } from '../_lib/offers';
 import { track } from '../_components/Track';
 
-type RegistrationSlug = Offer['slug'] | 'masterclass';
+type RegistrationSlug = Offer['slug'] | 'masterclass' | 'conseil';
 type FormState = { offer: RegistrationSlug; topic: string; sessionPreference: string; nom: string; prenom: string; email: string; whatsapp: string; entreprise: string; message: string; website: string };
 
 const REGISTRATION_OPTIONS: { slug: RegistrationSlug; name: string; durationLine: string }[] = [
+  { slug: 'conseil', name: 'Échange conseil après diagnostic', durationLine: 'Gratuit · sans engagement' },
   { slug: 'masterclass', name: 'Les Masterclass de LOLLY', durationLine: 'Tous les samedis · gratuit' },
   ...OFFERS.map(({ slug, name, durationLine }) => ({ slug, name, durationLine })),
 ];
@@ -17,7 +18,7 @@ function getRegistrationOption(slug: string) {
   return REGISTRATION_OPTIONS.find((option) => option.slug === slug);
 }
 
-export default function InscriptionForm({ initialOffer }: { initialOffer: string }) {
+export default function InscriptionForm({ initialOffer, initialDiagnostic = '' }: { initialOffer: string; initialDiagnostic?: string }) {
   const validInitialOffer = getRegistrationOption(initialOffer)?.slug ?? OFFERS[0].slug;
   const [form, setForm] = useState<FormState>({ offer: validInitialOffer, topic: '', sessionPreference: '', nom: '', prenom: '', email: '', whatsapp: '', entreprise: '', message: '', website: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
@@ -53,7 +54,7 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
           email: form.email,
           phone: form.whatsapp,
           service_interest: `LOLLY Academy — ${registration.name}`,
-          message: form.message,
+          message: initialDiagnostic ? `${initialDiagnostic}${form.message.trim() ? `\n\nPrécisions :\n${form.message.trim()}` : ''}` : form.message,
           request_type: 'academy_registration',
           request_data: { offer: registration.slug, offer_name: registration.name, company: form.entreprise, topic: form.topic, session_preference: form.offer === 'masterclass' ? form.sessionPreference : '' },
           website: form.website,
@@ -72,13 +73,13 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
   const selectedRegistration = getRegistrationOption(form.offer) ?? REGISTRATION_OPTIONS[0];
   const successWhatsappUrl = selectedOffer
     ? reserveWhatsappUrl(selectedOffer)
-    : `https://wa.me/${CONTACT.whatsappDigits}?text=${encodeURIComponent('Bonjour LOLLY Academy, je viens de m’inscrire aux Masterclass de LOLLY sur le site. Je souhaite connaître le thème et l’horaire du prochain samedi. Merci.')}`;
+    : `https://wa.me/${CONTACT.whatsappDigits}?text=${encodeURIComponent(form.offer === 'conseil' ? 'Bonjour LOLLY Academy, je viens de transmettre mon diagnostic sur le site et souhaite en discuter avec vous.' : 'Bonjour LOLLY Academy, je viens de m’inscrire aux Masterclass de LOLLY sur le site. Je souhaite connaître le thème et l’horaire du prochain samedi. Merci.')}`;
   const showTopic = form.offer === 'masterclass' || form.offer === 'ateliers';
 
   return (
     <section className="px-6 md:px-12 py-12 md:py-20 max-w-3xl mx-auto">
-      <span className="inline-block bg-primary-fixed text-on-primary-fixed text-[0.65rem] uppercase tracking-[0.22em] font-bold px-3 py-1.5 mb-6">Demande d’inscription</span>
-      <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter leading-[1.05]">Dis-nous où tu veux avancer.</h1>
+      <span className="inline-block bg-primary-fixed text-on-primary-fixed text-[0.65rem] uppercase tracking-[0.22em] font-bold px-3 py-1.5 mb-6">{form.offer === 'conseil' ? 'Demande de conseil' : 'Demande d’inscription'}</span>
+      <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter leading-[1.05]">{form.offer === 'conseil' ? 'Parlons de ton diagnostic.' : 'Dis-nous où tu veux avancer.'}</h1>
       <p className="mt-5 text-base md:text-lg text-on-surface-variant max-w-2xl">Cette demande ne déclenche aucun paiement. Pour les Masterclass et ateliers, la date, l’horaire et la place seront confirmés par l’équipe LOLLY.</p>
 
       {status !== 'success' ? (
@@ -94,7 +95,8 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
           <Field label="Email"><input type="email" className={inputClass} required maxLength={160} autoComplete="email" value={form.email} onChange={(event) => update('email', event.target.value)} /></Field>
           <Field label="WhatsApp"><input type="tel" className={inputClass} required maxLength={40} autoComplete="tel" placeholder="+221 ..." value={form.whatsapp} onChange={(event) => update('whatsapp', event.target.value)} /></Field>
           <Field label="Entreprise (optionnel)"><input className={inputClass} maxLength={120} autoComplete="organization" value={form.entreprise} onChange={(event) => update('entreprise', event.target.value)} /></Field>
-          <Field label="Ton objectif ou ton besoin (optionnel)"><textarea className={`${inputClass} min-h-[120px] resize-y`} maxLength={1200} value={form.message} onChange={(event) => update('message', event.target.value)} /></Field>
+          {initialDiagnostic && <div className="border-l-4 border-primary-fixed bg-white p-5"><p className="text-xs font-black uppercase tracking-wider">Synthèse jointe à ta demande</p><pre className="mt-3 whitespace-pre-wrap break-words font-sans text-sm text-on-surface-variant">{initialDiagnostic}</pre></div>}
+          <Field label={form.offer === 'conseil' ? 'Une précision sur ton diagnostic (optionnel)' : 'Ton objectif ou ton besoin (optionnel)'}><textarea className={`${inputClass} min-h-[120px] resize-y`} maxLength={initialDiagnostic ? 600 : 1200} value={form.message} onChange={(event) => update('message', event.target.value)} /></Field>
           <p className="text-xs text-secondary">Les informations sont utilisées uniquement pour enregistrer ta demande et te communiquer les prochaines informations pratiques.</p>
           {status === 'error' && <p role="alert" className="border-l-4 border-error pl-3 text-sm text-error">{error}</p>}
           <div><button type="submit" disabled={status === 'sending'} className="bg-on-surface text-primary-fixed font-black uppercase px-8 py-4 text-xs tracking-[0.18em] disabled:opacity-60">{status === 'sending' ? 'Envoi en cours…' : 'Envoyer ma demande →'}</button></div>
@@ -102,7 +104,7 @@ export default function InscriptionForm({ initialOffer }: { initialOffer: string
       ) : (
         <div role="status" className="mt-10 border-t-4 border-primary-fixed bg-white p-7 md:p-10">
           <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter">Demande bien reçue.</h2>
-          <p className="mt-4 text-on-surface-variant">Ta demande pour « {selectedRegistration.name} » est enregistrée. L’équipe LOLLY te recontactera pour confirmer la date, l’horaire et la disponibilité de la place.</p>
+          <p className="mt-4 text-on-surface-variant">{form.offer === 'conseil' ? 'Ton diagnostic est transmis à l’équipe LOLLY. Nous te recontacterons pour en parler avant de proposer une solution.' : `Ta demande pour « ${selectedRegistration.name} » est enregistrée. L’équipe LOLLY te recontactera pour confirmer la date, l’horaire et la disponibilité de la place.`}</p>
           <div className="mt-7 flex flex-col sm:flex-row gap-3"><a href={successWhatsappUrl} target="_blank" rel="noopener noreferrer" className="bg-on-surface text-primary-fixed font-black uppercase px-7 py-4 text-xs tracking-[0.18em]">Continuer sur WhatsApp →</a><Link href="/academy" className="border-2 border-on-surface px-7 py-4 font-black uppercase text-xs tracking-[0.18em]">Retour à Academy</Link></div>
         </div>
       )}

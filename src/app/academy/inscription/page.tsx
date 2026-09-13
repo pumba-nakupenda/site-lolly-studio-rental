@@ -8,9 +8,9 @@ export const metadata = {
 export default async function InscriptionPage({
   searchParams,
 }: {
-  searchParams: Promise<{ offre?: string }>;
+  searchParams: Promise<{ offre?: string; diagnostic?: string }>;
 }) {
   const sp = await searchParams;
   const offerSlug = (sp?.offre || '').toString();
-  return <InscriptionForm initialOffer={offerSlug} />;
+  return <InscriptionForm initialOffer={offerSlug} initialDiagnostic={(sp?.diagnostic || '').toString().slice(0, 1200)} />;
 }

@@ -58,7 +58,7 @@ const ecosystem = [
   },
   {
     badge: "",
-    title: "LOLLY Rental",
+    title: "LOLLY Production",
     desc: "Espaces et matériel audiovisuel pour vos tournages, événements et formations.",
     tags: ["Studios", "Salles", "Matériel"],
   },
@@ -123,7 +123,7 @@ export default function AboutPage() {
                   <h3 className="font-bold text-on-surface mb-2">L&apos;Évolution</h3>
                   <p>
                     Le conseil reste notre point de départ. Le studio, Academy
-                    et Rental permettent ensuite de produire, de transmettre
+                    et Production permettent ensuite de produire, de transmettre
                     et de disposer des bons moyens au bon moment.
                   </p>
                 </div>

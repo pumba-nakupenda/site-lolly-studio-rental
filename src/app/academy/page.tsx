@@ -152,7 +152,7 @@ export default function AcademyHome() {
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[0.65rem] uppercase tracking-[0.22em] text-secondary font-bold mb-4">Tu hésites encore ?</p>
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">Commence par comprendre ton besoin.</h2>
-          <p className="mt-4 text-on-surface-variant max-w-2xl mx-auto">Quatre réponses suffisent pour recevoir une recommandation et avancer sans choisir une offre au hasard.</p>
+          <p className="mt-4 text-on-surface-variant max-w-2xl mx-auto">Parle-nous de ton activité, de tes clients et de tes canaux pour recevoir une première orientation sans choisir une offre au hasard.</p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
             <Link href="/academy/diagnostic" className="bg-on-surface text-primary-fixed px-8 py-4 font-black uppercase text-xs tracking-[0.18em]">Faire mon diagnostic gratuit →</Link>
             <a href="#conseil" className="border-2 border-on-surface text-on-surface px-8 py-4 font-black uppercase text-xs tracking-[0.18em]">Parler à un conseiller</a>

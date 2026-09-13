@@ -75,7 +75,7 @@ export default function AdminContactsPage() {
     { value: "all", label: "Toutes" },
     { value: "academy", label: "Academy" },
     { value: "agency", label: "Agence" },
-    { value: "rental", label: "Rental" },
+    { value: "rental", label: "Production" },
   ];
 
   if (loading) return <p className="text-secondary">Chargement...</p>;

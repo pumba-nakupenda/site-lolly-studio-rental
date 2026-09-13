@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: BASE, lastModified: new Date(), changeFrequency: "monthly", priority: 1 },
     { url: `${BASE}/studio`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE}/studio/projets`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE}/rental`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE}/production`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE}/academy`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE}/academy/formation-intensive`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/academy/accompagnement`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const equipmentPages: MetadataRoute.Sitemap = (equipment ?? [])
     .filter((e) => e.slug)
     .map((e) => ({
-      url: `${BASE}/rental/${e.slug}`,
+      url: `${BASE}/production/${e.slug}`,
       lastModified: e.created_at ? new Date(e.created_at) : new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.5,

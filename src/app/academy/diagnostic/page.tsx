@@ -1,9 +1,9 @@
 import DiagnosticClient from './DiagnosticClient';
 
 export const metadata = {
-  title: 'Diagnostic 2 minutes',
+  title: 'Diagnostic gratuit en communication',
   description:
-    '4 questions pour identifier le format LOLLY Academy adapté à ton objectif, ton temps et ton besoin de suivi.',
+    'Un premier diagnostic gratuit de ton activité, de ton public, de tes objectifs et de tes canaux de communication.',
 };
 
 export default function DiagnosticPage() {

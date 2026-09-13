@@ -2,13 +2,20 @@ import { createClient } from "@supabase/supabase-js";
 import { readFileSync, statSync } from "fs";
 import { basename } from "path";
 
+const uploadEmail = process.env.LOLLY_UPLOAD_EMAIL;
+const uploadPassword = process.env.LOLLY_UPLOAD_PASSWORD;
+if (!uploadEmail || !uploadPassword) {
+  console.error("Set LOLLY_UPLOAD_EMAIL and LOLLY_UPLOAD_PASSWORD before running this script.");
+  process.exit(1);
+}
+
 const supabase = createClient(
   "https://mrycrcktcetlffxdpvvf.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yeWNyY2t0Y2V0bGZmeGRwdnZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0OTk5NTUsImV4cCI6MjA4OTA3NTk1NX0.eqF-yfGCT9BPijP4-2ChS4qRUo8MsGQUlfIH3M-5CkY"
 );
 
 const { error: authError } = await supabase.auth.signInWithPassword({
-  email: "oudama@lolly.sn", password: "781227",
+  email: uploadEmail, password: uploadPassword
 });
 if (authError) { console.error("Auth failed:", authError.message); process.exit(1); }
 console.log("Authenticated ✓\n");

@@ -11,7 +11,7 @@ import BookingForm from "@/components/BookingForm";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Rental | LOLLY — Location Matériel & Studio Shooting",
+  title: "Production | LOLLY — Studios et matériel audiovisuel",
   description:
     "Location d'équipement cinéma premium et studio shooting à Dakar. ARRI, RED, Cooke, Aputure, DJI. Plateaux photo et vidéo équipés.",
 };
@@ -28,7 +28,7 @@ const categories = [
   "Stabilisation",
 ];
 
-export default async function RentalPage() {
+export default async function ProductionPage() {
   const supabase = await createClient();
   const { data: products } = await supabase
     .from("rental_equipment")
@@ -49,7 +49,7 @@ export default async function RentalPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             <div className="md:col-span-7">
               <span className="text-[0.75rem] uppercase tracking-[0.2em] text-secondary mb-4 block">
-                Location Matériel &amp; Studio
+                LOLLY Production · Studios et matériel
               </span>
               <h1 className="text-[2.5rem] md:text-[5.5rem] font-black leading-[0.9] tracking-[-0.04em] uppercase mb-8">
                 Équipez.
@@ -175,7 +175,7 @@ export default async function RentalPage() {
               {(products || []).map((p) => (
                 <div key={p.id} className="group bg-surface-container-lowest">
                   {/* Image — cliquable */}
-                  <Link href={p.slug ? `/rental/${p.slug}` : "#"} className="block aspect-square bg-[#f0f0f0] overflow-hidden relative">
+                  <Link href={p.slug ? `/production/${p.slug}` : "#"} className="block aspect-square bg-[#f0f0f0] overflow-hidden relative">
                     {p.image ? (
                       <Image
                         className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
@@ -211,7 +211,7 @@ export default async function RentalPage() {
                     <span className="text-[0.6rem] uppercase tracking-widest text-secondary font-bold">
                       {p.brand}
                     </span>
-                    <Link href={p.slug ? `/rental/${p.slug}` : "#"} className="block">
+                    <Link href={p.slug ? `/production/${p.slug}` : "#"} className="block">
                       <h3 className="text-base font-bold uppercase tracking-tight mt-1 hover:text-primary transition-colors">
                         {p.name}
                       </h3>

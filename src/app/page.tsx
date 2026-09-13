@@ -23,13 +23,19 @@ export default async function Home() {
     link: "/studio",
     image: null,
   };
-  const rental = data?.find((b) => b.id === "rental") ?? {
+  const rentalBlock = data?.find((b) => b.id === "rental") ?? {
     label: "Espaces & matériel",
-    title: "Rental.",
+    title: "Production.",
     description: "Les espaces et les équipements utiles à vos projets audiovisuels.",
-    cta_text: "Découvrir Rental",
-    link: "/rental",
+    cta_text: "Découvrir Production",
+    link: "/production",
     image: null,
+  };
+  const production = {
+    ...rentalBlock,
+    title: rentalBlock.title.replace(/rental/gi, "Production"),
+    cta_text: rentalBlock.cta_text?.replace(/rental/gi, "Production") ?? "Découvrir Production",
+    link: rentalBlock.link.replace(/^\/rental(?=\/|$)/, "/production"),
   };
 
   return (
@@ -112,23 +118,23 @@ export default async function Home() {
             </Link>
           )}
 
-          {/* Rental Block */}
-          {rental && (
+          {/* Production Block */}
+          {production && (
             <Link
-              href={rental.link}
+              href={production.link}
               className="relative min-h-[390px] md:min-h-[520px] flex flex-col group overflow-hidden bg-on-surface border-b md:border-b-0 md:border-r border-white/15"
             >
-              {rental.image && (
+              {production.image && (
                 <div
                   className="absolute inset-0 opacity-40 group-hover:opacity-65 transition-opacity duration-700 bg-cover bg-center"
-                  style={{ backgroundImage: `url('${rental.image}')` }}
+                  style={{ backgroundImage: `url('${production.image}')` }}
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-on-surface via-on-surface/70 to-transparent" />
               <div className="relative flex-1 flex flex-col justify-between p-10 md:p-8 lg:p-12 xl:p-16 z-10">
                 <div className="flex items-start justify-between">
                   <span className="text-[0.65rem] font-bold tracking-[0.3em] uppercase text-surface-variant">
-                    {rental.label}
+                    {production.label}
                   </span>
                   <span className="w-8 h-8 border border-white/20 flex items-center justify-center group-hover:bg-primary-fixed group-hover:border-primary-fixed transition-all">
                     <span className="material-symbols-outlined text-sm text-white group-hover:text-on-surface">
@@ -138,14 +144,14 @@ export default async function Home() {
                 </div>
                 <div>
                   <h2 className="text-5xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tighter text-white mb-5 leading-[0.9]">
-                    {rental.title}
+                    {production.title}
                   </h2>
                   <p className="text-base md:text-lg max-w-md text-surface-dim mb-8 leading-relaxed min-h-[5.5rem]">
-                    {rental.description}
+                    {production.description}
                   </p>
                   <span className="inline-flex items-center">
                     <span className="text-xs md:text-sm font-black uppercase tracking-widest border-b-2 border-primary-fixed text-white pb-1">
-                      {rental.cta_text}
+                      {production.cta_text}
                     </span>
                     <span className="material-symbols-outlined ml-3 text-white group-hover:translate-x-2 transition-transform">
                       arrow_forward

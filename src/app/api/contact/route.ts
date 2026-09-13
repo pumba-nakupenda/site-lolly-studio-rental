@@ -12,6 +12,7 @@ const SUBJECT_MAP: Record<string, string> = {
 
 const ALLOWED_TYPES = new Set(Object.keys(SUBJECT_MAP));
 const ACADEMY_OFFER_NAMES: Record<string, string> = {
+  conseil: 'Échange conseil après diagnostic',
   masterclass: 'Les Masterclass de LOLLY',
   'formation-intensive': 'Formation intensive',
   accompagnement: 'Accompagnement',
@@ -34,7 +35,8 @@ function escapeHtml(value: unknown) {
 
 function requestDetailsHtml(requestType: string, details: Record<string, unknown>) {
   if (requestType === 'academy_registration') {
-    return `<p><strong>Rendez-vous ou offre :</strong> ${escapeHtml(details.offer_name)}</p><p><strong>Sujet souhaité :</strong> ${escapeHtml(details.topic) || 'Prochain thème'}</p><p><strong>Samedi souhaité :</strong> ${escapeHtml(details.session_preference) || 'Prochaine date à communiquer'}</p><p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>`;
+    const eventDetails = details.offer === 'masterclass' || details.offer === 'ateliers' ? `<p><strong>Sujet souhaité :</strong> ${escapeHtml(details.topic) || 'Prochain thème'}</p>${details.offer === 'masterclass' ? `<p><strong>Samedi souhaité :</strong> ${escapeHtml(details.session_preference) || 'Prochaine date à communiquer'}</p>` : ''}` : '';
+    return `<p><strong>Rendez-vous ou offre :</strong> ${escapeHtml(details.offer_name)}</p>${eventDetails}<p><strong>Entreprise :</strong> ${escapeHtml(details.company) || 'Non précisée'}</p>`;
   }
   if (requestType === 'studio_booking') {
     return `<p><strong>Studio :</strong> ${escapeHtml(details.studio)}</p><p><strong>Date :</strong> ${escapeHtml(details.date)} — ${escapeHtml(details.duration)}</p>${details.needs ? `<p><strong>Besoins :</strong> ${escapeHtml(details.needs)}</p>` : ''}`;
