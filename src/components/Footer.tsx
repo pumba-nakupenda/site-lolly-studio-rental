@@ -10,10 +10,16 @@ export default function Footer() {
             <Logo height={24} color="black" />
           </Link>
           <p className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface max-w-xs">
-            Agence de Conseil en Communication. Votre partenaire stratégique
-            pour une communication à fort impact.
+            Conseil, création et formation à Dakar. Des solutions concrètes
+            pour faire avancer votre activité.
           </p>
           <div className="flex flex-wrap gap-x-8 gap-y-2">
+            <Link
+              href="/academy"
+              className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
+            >
+              Academy
+            </Link>
             <Link
               href="/studio"
               className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
@@ -21,10 +27,10 @@ export default function Footer() {
               Studio
             </Link>
             <Link
-              href="/rental"
+              href="/production"
               className="text-[0.75rem] uppercase tracking-[0.1em] text-on-surface hover:text-primary-fixed transition-colors"
             >
-              Rental
+              Production
             </Link>
             <Link
               href="/about"

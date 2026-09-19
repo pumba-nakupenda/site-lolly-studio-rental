@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
@@ -20,8 +21,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { data } = await supabase.from("rental_equipment").select("name, brand, description").eq("slug", slug).single();
   if (!data) return { title: "Équipement introuvable" };
   return {
-    title: `${data.brand} ${data.name} | LOLLY Rental`,
+    title: `${data.brand} ${data.name} | LOLLY Production`,
     description: data.description || `Location ${data.brand} ${data.name} à Dakar.`,
+    alternates: { canonical: `/production/${slug}` },
+    openGraph: {
+      title: `${data.brand} ${data.name} | LOLLY Production`,
+      description: data.description || `Location ${data.brand} ${data.name} à Dakar.`,
+      url: `https://lolly.sn/production/${slug}`,
+      type: "website",
+    },
   };
 }
 
@@ -50,9 +58,16 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
             {/* Image — 7 cols */}
             <div className="md:col-span-7">
-              <div className="aspect-square bg-[#f0f0f0] overflow-hidden">
+              <div className="relative aspect-square bg-[#f0f0f0] overflow-hidden">
                 {equipment.image ? (
-                  <img src={equipment.image} alt={equipment.name} className="w-full h-full object-contain p-8" />
+                  <Image
+                    src={equipment.image}
+                    alt={equipment.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 58vw"
+                    className="object-contain p-8"
+                    priority
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="material-symbols-outlined text-6xl text-outline-variant/30">videocam</span>
@@ -63,8 +78,8 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               {gallery.length > 0 && (
                 <div className="grid grid-cols-4 gap-2 mt-2">
                   {gallery.map((img, i) => (
-                    <div key={i} className="aspect-square bg-[#f0f0f0] overflow-hidden">
-                      <img src={img} alt={`${equipment.name} — ${i + 1}`} className="w-full h-full object-contain p-2" />
+                    <div key={i} className="relative aspect-square bg-[#f0f0f0] overflow-hidden">
+                      <Image src={img} alt={`${equipment.name} — ${i + 1}`} fill sizes="(max-width: 768px) 25vw, 15vw" className="object-contain p-2" />
                     </div>
                   ))}
                 </div>
@@ -73,7 +88,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Info — 5 cols */}
             <div className="md:col-span-5">
-              <Link href="/rental" className="text-[0.6rem] uppercase tracking-widest text-secondary hover:text-primary transition-colors mb-4 block">
+              <Link href="/production" className="text-[0.6rem] uppercase tracking-widest text-secondary hover:text-primary transition-colors mb-4 block">
                 ← Retour au catalogue
               </Link>
               <span className="text-[0.6rem] uppercase tracking-widest text-secondary font-bold block mb-1">

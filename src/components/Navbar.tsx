@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logo from "./Logo";
 
 const mainLinks = [
+  { href: "/academy", label: "Academy" },
   { href: "/studio", label: "Studio" },
-  { href: "/rental", label: "Rental" },
+  { href: "/production", label: "Production" },
   { href: "/about", label: "À Propos" },
   { href: "/contact", label: "Contact" },
 ];
@@ -20,10 +21,18 @@ function getBreadcrumbs(pathname: string) {
 
   const labels: Record<string, string> = {
     studio: "Studio",
-    rental: "Rental",
+    rental: "Production",
+    production: "Production",
+    academy: "Academy",
     about: "À Propos",
     contact: "Contact",
     projets: "Projets",
+    diagnostic: "Diagnostic",
+    inscription: "Inscription",
+    fondations: "Fondations",
+    "reprise-en-main": "Reprise en main",
+    pilotage: "Pilotage",
+    posture: "Posture",
   };
 
   let path = "";
@@ -44,6 +53,26 @@ export default function Navbar() {
   const isStudioActive = pathname.startsWith("/studio");
   const breadcrumbs = getBreadcrumbs(pathname);
 
+  // ESC key closes menus
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        setStudioOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Lock body scroll while mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <nav className="w-full top-0 left-0 sticky z-50 bg-surface">
       {/* Main bar */}
@@ -54,6 +83,16 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-12">
+          <Link
+            href="/academy"
+            className={`text-sm uppercase font-bold tracking-tight transition-colors ${
+              pathname.startsWith("/academy")
+                ? "text-primary-fixed border-b-2 border-primary-fixed pb-1"
+                : "text-on-surface hover:text-primary-fixed"
+            }`}
+          >
+            Academy
+          </Link>
           {/* Studio with dropdown */}
           <div
             className="relative"
@@ -62,6 +101,7 @@ export default function Navbar() {
           >
             <Link
               href="/studio"
+              onClick={() => setStudioOpen(false)}
               className={`text-sm uppercase font-bold tracking-tight transition-colors ${
                 isStudioActive
                   ? "text-primary-fixed border-b-2 border-primary-fixed pb-1"
@@ -82,6 +122,7 @@ export default function Navbar() {
               <div className="bg-on-surface min-w-[160px] py-2 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.2)]">
                 <Link
                   href="/studio/projets"
+                  onClick={() => setStudioOpen(false)}
                   className={`block px-6 py-3 text-xs uppercase tracking-widest font-bold transition-colors ${
                     pathname.startsWith("/studio/projets")
                       ? "text-primary-fixed"
@@ -95,7 +136,7 @@ export default function Navbar() {
           </div>
 
           {/* Other links */}
-          {mainLinks.slice(1).map((link) => {
+          {mainLinks.slice(2).map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -178,13 +219,33 @@ export default function Navbar() {
         </div>
       )}
 
+      {/* Mobile menu overlay — click to close */}
+      <button
+        aria-label="Fermer le menu"
+        aria-hidden={!open}
+        tabIndex={-1}
+        onClick={() => setOpen(false)}
+        className={`md:hidden fixed inset-x-0 bottom-0 top-[88px] bg-on-surface/30 backdrop-blur-sm transition-opacity duration-300 ${
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      />
+
       {/* Mobile menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 bg-surface border-t border-outline-variant/15 ${
+        className={`md:hidden overflow-hidden transition-all duration-300 bg-surface border-t border-outline-variant/15 relative ${
           open ? "max-h-[500px]" : "max-h-0"
         }`}
       >
         <div className="flex flex-col px-6 py-6 gap-1">
+          <Link
+            href="/academy"
+            onClick={() => setOpen(false)}
+            className={`text-sm uppercase font-bold tracking-tight py-2 transition-colors ${
+              pathname.startsWith("/academy") ? "text-primary-fixed" : "text-on-surface"
+            }`}
+          >
+            Academy
+          </Link>
           {/* Studio + sous-lien Projets */}
           <Link
             href="/studio"
@@ -206,10 +267,19 @@ export default function Navbar() {
           >
             Projets
           </Link>
+          <Link
+            href="/production"
+            onClick={() => setOpen(false)}
+            className={`text-sm uppercase font-bold tracking-tight py-2 transition-colors ${
+              pathname.startsWith("/production") ? "text-primary-fixed" : "text-on-surface"
+            }`}
+          >
+            Production
+          </Link>
 
           <div className="h-px bg-outline-variant/15 my-3" />
 
-          {mainLinks.slice(1).map((link) => {
+          {mainLinks.slice(3).map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link

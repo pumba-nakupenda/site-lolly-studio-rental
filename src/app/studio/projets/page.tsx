@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { createClient } from "@/lib/supabase/server";
@@ -11,6 +12,13 @@ export const metadata: Metadata = {
   title: "Portfolio | LOLLY Agence — Nos Réalisations",
   description:
     "Découvrez l'impact de LOLLY Agency à travers nos projets en branding, stratégie digitale et production audiovisuelle au Sénégal.",
+  alternates: { canonical: "/studio/projets" },
+  openGraph: {
+    title: "Réalisations | LOLLY Studio",
+    description: "Parcourez nos projets de communication, branding et production audiovisuelle au Sénégal.",
+    url: "https://lolly.sn/studio/projets",
+    type: "website",
+  },
 };
 
 const fallbackSpan: Record<number, { span: string; ratio: string }> = {
@@ -54,7 +62,7 @@ export default async function ProjetsPage() {
             <FilterableGrid
               categories={categories}
               items={items.map((p) => ({ category: p.category }))}
-              className="grid grid-cols-1 md:grid-cols-12 gap-3"
+              className="grid grid-cols-1 md:grid-cols-12 md:auto-rows-[18rem] gap-3"
             >
               {items.map((p, index) => {
                 const layout = {
@@ -65,16 +73,19 @@ export default async function ProjetsPage() {
                   <Link
                     key={p.slug}
                     href={`/studio/projets/${p.slug}`}
-                    className={`${layout.span} group relative overflow-hidden bg-surface-container-lowest`}
+                    className={`${layout.span} ${layout.ratio} md:aspect-auto md:h-full group relative overflow-hidden bg-surface-container-lowest`}
                   >
                     {p.main_image ? (
-                      <img
-                        className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ${layout.ratio}`}
+                      <Image
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
                         src={p.main_image}
                         alt={p.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px"
+                        priority={index === 0}
                       />
                     ) : (
-                      <div className={`w-full bg-surface-container flex items-center justify-center ${layout.ratio}`}>
+                      <div className="w-full h-full bg-surface-container flex items-center justify-center">
                         <span className="text-2xl font-black text-outline-variant/20">{p.title?.charAt(0)}</span>
                       </div>
                     )}
@@ -109,7 +120,7 @@ export default async function ProjetsPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/contact"
+                href="/contact?service=Studio"
                 className="bg-primary-fixed text-on-primary-fixed font-black uppercase px-12 py-5 text-sm tracking-widest hover:bg-primary-fixed-dim transition-all"
               >
                 Parlons de votre projet

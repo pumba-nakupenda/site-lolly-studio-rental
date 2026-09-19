@@ -1,7 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/rental", destination: "/production", permanent: true },
+      { source: "/rental/:slug", destination: "/production/:slug", permanent: true },
+    ];
+  },
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    deviceSizes: [640, 768, 1024, 1280, 1536, 1920],
+    imageSizes: [96, 128, 256, 384, 512, 768],
     remotePatterns: [
       { protocol: "https", hostname: "mrycrcktcetlffxdpvvf.supabase.co" },
       { protocol: "https", hostname: "cdn.sanity.io" },
