@@ -3,9 +3,9 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export const metadata: Metadata = {
-  title: "Tous les liens LOLLY | Conseil, création et formation",
+  title: "Tous les liens LOLLY | Agence, production et formation",
   description:
-    "Le point de départ pour échanger avec LOLLY, faire votre diagnostic gratuit, rejoindre les Masterclass et découvrir nos réalisations à Dakar.",
+    "Confiez votre projet à LOLLY, découvrez nos réalisations, formez votre équipe ou accédez à nos moyens de production à Dakar.",
   alternates: { canonical: "/bio" },
   openGraph: {
     title: "LOLLY — Tous nos liens au même endroit",
@@ -15,7 +15,10 @@ export const metadata: Metadata = {
   },
 };
 
-const whatsappUrl = `https://wa.me/221772354747?text=${encodeURIComponent("Bonjour LOLLY, je viens de votre bio et j'aimerais échanger sur mon projet.")}`;
+const agencyRequestMessage =
+  "Bonjour, je viens de la page bio et je souhaite confier un projet à LOLLY. Mon objectif est : …";
+const agencyRequestUrl = `/contact?service=Studio&message=${encodeURIComponent(agencyRequestMessage)}`;
+const whatsappUrl = `https://wa.me/221772354747?text=${encodeURIComponent("Bonjour LOLLY, je viens de votre bio et je souhaite vous confier un projet de communication. Mon besoin concerne : …")}`;
 
 const socialLinks = [
   { label: "Instagram", href: "https://www.instagram.com/agence_lolly/" },
@@ -68,17 +71,17 @@ export default function BioPage() {
           <Link href="/" aria-label="LOLLY — Voir le site" className="inline-flex focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FED700]">
             <Logo height={43} color="white" />
           </Link>
-          <p className="mt-8 font-headline text-xs font-bold uppercase tracking-[0.18em] text-[#FED700]">Conseil · Création · Formation · Dakar</p>
+          <p className="mt-8 font-headline text-xs font-bold uppercase tracking-[0.18em] text-[#FED700]">Agence · Production · Formation · Dakar</p>
           <h1 className="mt-3 font-headline text-4xl font-black uppercase leading-[0.98] tracking-[-0.055em] sm:text-5xl">
             Fais avancer <span className="text-[#FED700]">ton projet.</span>
           </h1>
           <p className="mt-4 max-w-md text-base leading-relaxed text-white/75">
-            Une idée ou un business à faire grandir ? On commence par comprendre ton besoin.
+            Un projet de communication, de contenu ou d&apos;image ? Dis-nous ce que tu veux faire avancer.
           </p>
         </header>
 
         <nav aria-label="Les liens essentiels de LOLLY" className="mt-6 grid gap-3">
-          <LinkCard href="/academy/diagnostic" number="01" title="Faire mon diagnostic gratuit" description="Clarifions ton activité et tes canaux en 4 minutes." featured />
+          <LinkCard href={agencyRequestUrl} number="01" title="Confier un projet à LOLLY" description="Décris ton objectif : notre équipe te conseille avant de proposer la bonne solution." featured />
           <div className="grid grid-cols-2 gap-3" aria-label="Contacter LOLLY">
             <a href="tel:+221772354747" className="flex min-h-24 flex-col justify-center border border-[#FED700] px-4 py-3 text-white transition-colors hover:bg-[#FED700] hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FED700]">
               <span className="font-headline text-sm font-black uppercase sm:text-base">Appeler LOLLY</span>
@@ -89,23 +92,17 @@ export default function BioPage() {
               <span className="mt-1 text-sm">Écrire à l’équipe ↗</span>
             </a>
           </div>
-          <LinkCard href="/academy/inscription?offre=masterclass" number="02" title="Les Masterclass de LOLLY" description="Un rendez-vous gratuit chaque samedi. Inscription sur le site." />
-          <LinkCard href="/studio/projets" number="03" title="Voir nos réalisations" description="Des projets de communication et de création menés avec nos clients." />
+          <LinkCard href="/studio/projets" number="02" title="Voir nos réalisations" description="Découvre nos projets de stratégie, d’image, de contenu et de production." />
+          <LinkCard href="/academy" number="03" title="Se former ou former son équipe" description="Formations, accompagnements, ateliers et Masterclass de LOLLY Academy." />
+          <LinkCard href="/production" number="04" title="Production et location" description="Studios, matériel audiovisuel et moyens techniques pour passer à l’action." />
         </nav>
 
         <section aria-labelledby="services-title" className="mt-9 border-t border-white/20 pt-6">
-          <h2 id="services-title" className="font-headline text-xs font-bold uppercase tracking-[0.18em] text-white/55">Explorer LOLLY</h2>
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            {[
-              { label: "Academy", href: "/academy" },
-              { label: "Studio", href: "/studio" },
-              { label: "Production", href: "/production" },
-            ].map(({ label, href }) => (
-              <Link key={href} href={href} className="border border-white/25 px-2 py-3 text-center font-headline text-xs font-bold uppercase tracking-tight transition-colors hover:border-[#FED700] hover:text-[#FED700] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FED700] sm:text-sm">
-                {label}
-              </Link>
-            ))}
-          </div>
+          <h2 id="services-title" className="font-headline text-xs font-bold uppercase tracking-[0.18em] text-white/55">Découvrir l’agence</h2>
+          <Link href="/studio" className="mt-4 flex items-center justify-between border border-white/25 px-5 py-4 font-headline text-sm font-bold uppercase transition-colors hover:border-[#FED700] hover:text-[#FED700] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FED700]">
+            <span>Voir toutes les prestations</span>
+            <span aria-hidden="true">→</span>
+          </Link>
         </section>
 
         <footer className="mt-9 border-t border-white/20 pt-6">
